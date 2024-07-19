@@ -17,6 +17,20 @@ const SettingsScreen = ({ route }) => {
         <Text style={styles.buttonLogOut}>Log Out</Text>
      </TouchableOpacity>
     </ScrollView>
+      <View style={styles.menu}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home', { username })}>
+          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/wallet.png')} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Analytics', { username })}>
+          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/chart.png')} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Notifications', { username })}>
+          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/bell.png')} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings', { username })}>
+          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/gears-filled.png')} />
+        </TouchableOpacity>
+      </View>
    </View>
   );
 };
@@ -24,8 +38,6 @@ const SettingsScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
     paddingTop: 60,
     padding: 20,
     flex: 1,
@@ -50,6 +62,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
     fontWeight: 'bold',
+  },
+  menu: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#5a1cef',
+    padding: 20,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  menuItem: {
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconsMenu: {
+    height: 30,
+    width: 30,
   },
 });
 

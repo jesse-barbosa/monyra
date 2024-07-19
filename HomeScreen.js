@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './config';
@@ -11,50 +11,61 @@ const HomeScreen = ({ route }) => {
   const [userGoals, setUserGoals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  useEffect(() => {
-    // Fetch user data
-    axios.post(`${API_URL}`, {
-      action: 'getUserData',
-      username
-    })
-    .then(response => {
-      const { success, message, user } = response.data;
-      if (success) {
-        setUserData(user);
-        // Fetch user goals after fetching user data
-        fetchUserGoals(user.codUser);
-      } else {
-        setError(message);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching user data:', error);
-      setError('An error occurred while fetching user data.');
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-  }, [username]);
+useEffect(() => {
+  // Fetch user data
+  axios.post(`${API_URL}`, {
+    action: 'getUserData',
+    username
+  })
+  .then(response => {
+    const { success, message, user } = response.data;
+    if (success) {
+      setUserData(user);
+      fetchUserGoals(user.codUser);
+    } else {
+      setError(message);
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching user data:', error);
+    setError('An error occurred while fetching user data.');
+  })
+  .finally(() => {
+    setLoading(false);
+  });
+}, [username]);
 
-  // Function to fetch user goals
-  const fetchUserGoals = (userCod) => {
-        axios.post('http://192.168.43.161/wallet/classes/manipularDados.php', {
-      action: 'getUserGoals',
-      userCod
-    })
-    .then(response => {
-      const { success, message, goals } = response.data;
-      if (success) {
-        setUserGoals(goals);
-      } else {
-        setError(message);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching user goals:', error);
-      setError('An error occurred while fetching user goals.');
-    });
+// Function to fetch user goals
+const fetchUserGoals = (userCod) => {
+  axios.post(`${API_URL}`, {
+    action: 'getUserGoals',
+    userCod
+  })
+  .then(response => {
+    const { success, message, goals } = response.data;
+    if (success) {
+      setUserGoals(goals);
+    } else {
+      setError(message);
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching user goals:', error);
+    setError('An error occurred while fetching user goals.');
+  });
+};
+
+
+  const handleOutsideClick = () => {
+    if (dropdownVisible) {
+      setDropdownVisible(false);
+    }
+  };
+
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
   };
 
   if (loading) {
@@ -74,7 +85,8 @@ const HomeScreen = ({ route }) => {
     );
   }
 
-  return (
+return (
+  <TouchableWithoutFeedback onPress={handleOutsideClick}>
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.header}>
@@ -120,6 +132,21 @@ const HomeScreen = ({ route }) => {
           )}
         </View>
       </ScrollView>
+      <View style={styles.operationContainer}>
+        <TouchableOpacity onPress={toggleDropdown}>
+          <Image style={[styles.btnAdd]} source={require('./assets/img/icons/btn-add.png')} />
+        </TouchableOpacity>
+        {dropdownVisible && (
+          <View style={styles.dropdown}>
+            <TouchableOpacity onPress={() => navigation.navigate('Transfer', { username, operation: 'Deposito' })}>
+              <Text style={styles.dropdownItem}>Depositar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Transfer', { username, operation: 'Saque' })}>
+              <Text style={styles.dropdownItem}>Sacar</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
       {/* Menu */}
       <View style={styles.menu}>
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home', { username })}>
@@ -136,10 +163,42 @@ const HomeScreen = ({ route }) => {
         </TouchableOpacity>
       </View>
     </View>
-  );
+  </TouchableWithoutFeedback>
+);
+
 };
 
 const styles = StyleSheet.create({
+  operationContainer: {
+    position: 'absolute',
+    bottom: 120,
+    right: 10,
+    zIndex: 1,
+  },
+  btnAdd: {
+    width: 50,
+    height: 50,
+  },
+  dropdown: {
+    position: 'absolute',
+    top: -70,
+    right: 50,
+    width: 130,
+    backgroundColor: '#f9f7f7',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 20,
+    zIndex: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  dropdownItem: {
+    padding: 10,
+    textAlign: 'center',
+  },
   container: {
     paddingTop: 60,
     padding: 20,

@@ -14,6 +14,20 @@ const AnalyticsScreen = ({ route }) => {
       <Text style={styles.dataText}>Bem-vindo à página de Notifications</Text>
       {username && <Text style={styles.dataText}>Usuário: {username}</Text>}
     </ScrollView>
+      <View style={styles.menu}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home', { username })}>
+          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/wallet.png')} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Analytics', { username })}>
+          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/chart.png')} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Notifications', { username })}>
+          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/bell-filled.png')} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings', { username })}>
+          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/gears.png')} />
+        </TouchableOpacity>
+      </View>
    </View>
   );
 };
@@ -34,7 +48,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   menu: {
-
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#5a1cef',
