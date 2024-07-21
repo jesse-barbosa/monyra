@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { API_URL } from './config';
+import { API_URL } from './apiConfig';
 
 const AnalyticsScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -51,9 +51,9 @@ const styles = StyleSheet.create({
   menu: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#5a1cef',
+    backgroundColor: '#5019d4',
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 30,
     marginTop: 20,
   },
   menuItem: {

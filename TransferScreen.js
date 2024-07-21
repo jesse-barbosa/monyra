@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import { API_URL } from './config';
+import { API_URL } from './apiConfig';
 
 const TransferScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -88,16 +88,15 @@ const TransferScreen = ({ route }) => {
             <Text style={styles.value}>R$ {inputValue}</Text>
           </View>
         </View>
-            <Text style={styles.operation}>{operation}</Text>
         <View style={styles.main}>
           <View style={styles.keyboard}>
-            {['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'].map((item, index) => (
+            {['1', '2', '3', '4', '5', '6', '7', '8', '9', '00', '0'].map((item, index) => (
               <TouchableOpacity key={index} style={styles.key} onPress={() => handleKeyPress(item)}>
                 <Text style={styles.keyText}>{item}</Text>
               </TouchableOpacity>
             ))}
             <TouchableOpacity style={styles.key} onPress={() => handleKeyPress('⌫')}>
-              <Text style={styles.keyText}>⌫</Text>
+              <Image source={require('./assets/img/icons/close-circle.png')} style={styles.keyText}/>
             </TouchableOpacity>
           </View>
         </View>
@@ -113,6 +112,7 @@ const styles = StyleSheet.create({
    operation: {
     textAlign: 'center',
     fontWeight: '500',
+    marginBottom: 50,
    },
   Button: {
     backgroundColor: '#6630F3',
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingTop: 60,
+    paddingTop: 40,
     padding: 20,
   },
   header: {
@@ -147,25 +147,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   keyboard: {
-  marginTop: '40%',
+    marginTop: '40%',
     width: 340,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
   },
   key: {
-    width: '30%',
-    margin: '1.5%',
+    width: '20%',
+    margin: '5%',
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   keyText: {
     fontSize: 24,

@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import axios from 'axios';
-import { API_URL } from './config';
+import { API_URL } from './apiConfig';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
   const handleRegister = () => {
     if (username && password && email) {
@@ -63,7 +69,14 @@ const RegisterScreen = ({ navigation }) => {
               onChangeText={setPassword}
               value={password}
             />
-            <Image source={require('./assets/img/icons/form-icons/Eye-slash.png')} style={styles.image} />
+            <TouchableOpacity onPress={togglePasswordVisibility}>
+              <Icon
+                name={isPasswordVisible ? 'eye-off' : 'eye'}
+                size={24}
+                color="gray"
+                style={styles.eyePassword}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.inputContainer}>
             <Image source={require('./assets/img/icons/form-icons/email.png')} style={styles.image} />
@@ -133,12 +146,14 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     fontSize: 16,
   },
-  image: {
-    width: 20,
-    height: 20,
+  eyePassword: {
+    width: 30,
+    height: 25,
+    resizeMode: 'contain',
+    opacity: 0.6,
   },
   Button: {
-    backgroundColor: '#6630F3',
+    backgroundColor: '#5019d4',
     borderRadius: 15,
     paddingVertical: 20,
     paddingHorizontal: 10,
@@ -149,7 +164,7 @@ const styles = StyleSheet.create({
   },
   ButtonLogin: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   goLogin: {
@@ -158,7 +173,7 @@ const styles = StyleSheet.create({
     color: '#808080',
   },
   link: {
-    color: '#6630F3',
+    color: '#5019d4',
     fontWeight: 'bold',
   },
 });

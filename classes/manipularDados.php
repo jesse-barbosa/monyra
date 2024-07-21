@@ -10,34 +10,94 @@ class ManipularDados extends Conexao {
         parent::__construct();
     }
 
-    public function handleRequest() {
-        $method = $_SERVER['REQUEST_METHOD'];
-        $input = json_decode(file_get_contents("php://input"), true);
+    private function getUserData($input) {
+        if (isset($input['username'])) {
+            $username = $input['username'];
 
-        if ($method == 'POST' && isset($input['action'])) {
-            $action = $input['action'];
+            $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE nameUser = ?");
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-            switch ($action) {
-                case 'login':
-                    $this->login($input);
-                    break;
-                case 'getUserData':
-                    $this->getUserData($input);
-                    break;
-                case 'getUserGoals':
-                    $this->getUserGoals($input);
-                    break;
-                case 'register':
-                    $this->register($input);
-                    break;
-                default:
-                    echo json_encode(["success" => false, "message" => "Invalid action"]);
+            if ($result->num_rows > 0) {
+                $user = $result->fetch_assoc();
+                echo json_encode(["success" => true, "message" => "User data retrieved", "user" => $user]);
+            } else {
+                echo json_encode(["success" => false, "message" => "User not found"]);
+            }
+
+            $stmt->close();
+        } else {
+            echo json_encode(["success" => false, "message" => "Please provide username"]);
+        }
+    }
+
+    private function getUserGoals($input) {
+        if (isset($input['userCod'])) {
+            $userCod = $input['userCod'];
+
+            $stmt = $this->conn->prepare("
+                SELECT g.codGoal, g.nameGoal, g.amountSaved, g.amountRemaining, GROUP_CONCAT(u.nameUser) AS userNames
+                FROM tbgoals g
+                LEFT JOIN user_goals ug ON g.codGoal = ug.goalCod
+                LEFT JOIN tbusers u ON ug.userCod = u.codUser
+                WHERE g.codGoal IN (
+                    SELECT goalCod
+                    FROM user_goals
+                    WHERE userCod = ?
+                )
+                GROUP BY g.codGoal
+            ");
+            $stmt->bind_param("i", $userCod);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            $goals = [];
+            while ($row = $result->fetch_assoc()) {
+                // Split the comma-separated user names into an array
+                $row['userNames'] = explode(',', $row['userNames']);
+                $goals[] = $row;
+            }
+
+            if (!empty($goals)) {
+                echo json_encode(["success" => true, "message" => "User goals retrieved", "goals" => $goals]);
+            } else {
+                echo json_encode(["success" => true, "message" => "No goals found", "goals" => []]);
+            }
+
+            $stmt->close();
+        } else {
+            echo json_encode(["success" => false, "message" => "Please provide userCod"]);
+        }
+    }
+
+    private function assignGoalToUser($input) {
+        if (isset($input['userCod']) && isset($input['goalCod'])) {
+            $userCod = $input['userCod'];
+            $goalCod = $input['goalCod'];
+
+            // Verifica se a associação já existe
+            $stmt = $this->conn->prepare("SELECT * FROM user_goals WHERE userCod = ? AND goalCod = ?");
+            $stmt->bind_param("ii", $userCod, $goalCod);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                echo json_encode(["success" => false, "message" => "Goal already assigned to user"]);
+            } else {
+                // Insere nova associação
+                $stmt = $this->conn->prepare("INSERT INTO user_goals (userCod, goalCod) VALUES (?, ?)");
+                $stmt->bind_param("ii", $userCod, $goalCod);
+                if ($stmt->execute()) {
+                    echo json_encode(["success" => true, "message" => "Goal assigned to user successfully"]);
+                } else {
+                    echo json_encode(["success" => false, "message" => "Error assigning goal to user"]);
+                }
+                $stmt->close();
             }
         } else {
-            echo json_encode(["success" => false, "message" => "Invalid request method or missing action"]);
+            echo json_encode(["success" => false, "message" => "Please provide userCod and goalCod"]);
         }
-
-        $this->close();
     }
 
     private function login($input) {
@@ -69,54 +129,6 @@ class ManipularDados extends Conexao {
         }
     }
 
-    private function getUserData($input) {
-        if (isset($input['username'])) {
-            $username = $input['username'];
-
-            $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE nameUser = ?");
-            $stmt->bind_param("s", $username);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                $user = $result->fetch_assoc();
-                echo json_encode(["success" => true, "message" => "User data retrieved", "user" => $user]);
-            } else {
-                echo json_encode(["success" => false, "message" => "User not found"]);
-            }
-
-            $stmt->close();
-        } else {
-            echo json_encode(["success" => false, "message" => "Please provide username"]);
-        }
-    }
-
-    private function getUserGoals($input) {
-        if (isset($input['userCod'])) {
-            $userCod = $input['userCod'];
-
-            $stmt = $this->conn->prepare("SELECT * FROM tbgoals WHERE userGoalCod = ?");
-            $stmt->bind_param("i", $userCod);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            $goals = [];
-            while ($row = $result->fetch_assoc()) {
-                $goals[] = $row;
-            }
-
-            if (!empty($goals)) {
-                echo json_encode(["success" => true, "message" => "User goals retrieved", "goals" => $goals]);
-            } else {
-                echo json_encode(["success" => false]);
-            }
-
-            $stmt->close();
-        } else {
-            echo json_encode(["success" => false, "message" => "Please provide userCod"]);
-        }
-    }
-
     private function register($input) {
         if (isset($input['username']) && isset($input['password']) && isset($input['email'])) {
             $username = $input['username'];
@@ -143,6 +155,32 @@ class ManipularDados extends Conexao {
             }
         } else {
             echo json_encode(["success" => false, "message" => "Please provide username, password, and email"]);
+        }
+    }
+
+    public function handleRequest() {
+        $input = json_decode(file_get_contents("php://input"), true);
+        $action = isset($input['action']) ? $input['action'] : '';
+
+        switch ($action) {
+            case 'getUserData':
+                $this->getUserData($input);
+                break;
+            case 'getUserGoals':
+                $this->getUserGoals($input);
+                break;
+            case 'assignGoalToUser':
+                $this->assignGoalToUser($input);
+                break;
+            case 'login':
+                $this->login($input);
+                break;
+            case 'register':
+                $this->register($input);
+                break;
+            default:
+                echo json_encode(["success" => false, "message" => "Invalid action"]);
+                break;
         }
     }
 }
