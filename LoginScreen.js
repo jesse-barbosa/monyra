@@ -44,14 +44,14 @@ const LoginScreen = ({ navigation }) => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
-          <Text style={styles.title}>Welcome back</Text>
+          <Text style={styles.title}>Bem vindo de volta</Text>
         </View>
         <View style={styles.inputs}>
           <View style={styles.inputContainer}>
             <Image source={require('./assets/img/icons/form-icons/profile.png')} style={styles.image} />
             <TextInput
               style={styles.input}
-              placeholder="Username"
+              placeholder="Usuário"
               autoCapitalize="none"
               onChangeText={setUsername}
               value={username}
@@ -61,7 +61,7 @@ const LoginScreen = ({ navigation }) => {
             <Image source={require('./assets/img/icons/form-icons/key-square.png')} style={styles.image} />
             <TextInput
               style={styles.input}
-              placeholder="Password"
+              placeholder="Senha"
               autoCapitalize="none"
               secureTextEntry={!isPasswordVisible}
               onChangeText={setPassword}
@@ -78,17 +78,16 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </View>
         <TouchableOpacity style={styles.Button} onPress={handlePress}>
-          <Text style={styles.ButtonLogin}>Login</Text>
+          <Text style={styles.ButtonLogin}>Entrar</Text>
         </TouchableOpacity>
         <Text style={styles.goRegister}>
-          Don't have an account?
-          <Text style={styles.link} onPress={() => navigation.navigate('Register')}> Register</Text>
+          Ainda não tem uma conta?
+          <Text style={styles.link} onPress={() => navigation.navigate('Register')}> Crie uma</Text>
         </Text>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

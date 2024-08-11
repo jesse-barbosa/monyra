@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 import { API_URL } from './apiConfig';
 
 const TransferScreen = ({ route }) => {
@@ -12,6 +13,8 @@ const TransferScreen = ({ route }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [inputValue, setInputValue] = useState('');
+  const [category, setCategoryValue] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     axios.post(`${API_URL}`, {
@@ -35,6 +38,12 @@ const TransferScreen = ({ route }) => {
       setLoading(false);
     });
   }, [username]);
+
+  useEffect(() => {
+    if (userGoals.length > 0) {
+      setCategoryValue(userGoals[0].category);
+    }
+  }, [userGoals]);
 
   const fetchUserGoals = (userCod) => {
     axios.post(`${API_URL}`, {
@@ -80,12 +89,84 @@ const TransferScreen = ({ route }) => {
     );
   }
 
+  const handlePress = () => {
+    if (inputValue && category) {
+      axios.post(`${API_URL}`, {
+        action: 'transfer',
+        value: inputValue,
+        operation,
+        category,
+        description
+      })
+      .then(response => {
+        const { success, message, user } = response.data;
+        if (success) {
+          if (user && user.nameUser) {
+            navigation.navigate('Home', { username: user.nameUser });
+          } else {
+            Alert.alert('Transfer Failed', 'User data is not available.');
+          }
+        } else {
+          Alert.alert('Transfer Failed', message);
+        }
+      })
+      .catch(error => {
+        console.error('Error transferring in:', error);
+        Alert.alert('Transfer Error', 'An error occurred while transferring in.');
+      });
+    } else {
+      Alert.alert('Campos vazios!', 'Por favor, preencha todos os campos.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.header}>
           <View style={styles.title}>
             <Text style={styles.value}>R$ {inputValue}</Text>
+          </View>
+        </View>
+        <View style={styles.inputs}>
+          <View style={styles.inputContainer}>
+              {operation === 'expense' ? (
+              <Picker
+              selectedValue={category}
+              style={styles.picker}
+              onValueChange={(itemValue) => setCategoryValue(itemValue)}
+              >
+              <Picker.Item label="Selecione uma categoria" value="" />
+                <Picker.Item label="Moradia" value="Moradia" />
+                <Picker.Item label="Alimentação" value="Alimentação" />
+                <Picker.Item label="Transporte" value="Transporte" />
+                <Picker.Item label="Saúde" value="Saúde" />
+                <Picker.Item label="Educação" value="Educação" />
+                <Picker.Item label="Lazer" value="Lazer" />
+                <Picker.Item label="Vestuário" value="Vestuário" />
+                <Picker.Item label="Economia ou Investimentos" value="Economia" />
+              </Picker>
+            ) : (
+              <Picker
+              selectedValue={category}
+              style={styles.picker}
+              onValueChange={(itemValue) => setCategoryValue(itemValue)}
+              >
+              <Picker.Item label="Selecione uma categoria" value="" />
+                <Picker.Item label="Salário ou Remunerações" value="Remunerações" />
+                <Picker.Item label="Investimentos (rendimentos)" value="Rendimentos" />
+                <Picker.Item label="Empreendimentos" value="Empreendimentos" />
+                <Picker.Item label="Benefícios" value="Benefícios" />
+            </Picker>
+            )}
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              maxLength={50}
+              style={styles.input}
+              placeholder="Descrição (opcional)"
+              onChangeText={setDescription}
+              value={description}
+            />
           </View>
         </View>
         <View style={styles.main}>
@@ -101,19 +182,42 @@ const TransferScreen = ({ route }) => {
           </View>
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.Button}>
-        <Text style={styles.ButtonTransfer}>Transfer</Text>
+      <TouchableOpacity style={styles.Button} onPress={handlePress}>
+        <Text style={styles.ButtonTransfer}>Confirmar</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-   operation: {
-    textAlign: 'center',
-    fontWeight: '500',
-    marginBottom: 50,
-   },
+  inputs: {
+    marginTop: '15%',
+    marginBottom: '5%',
+    width: '100%',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: 'gray',
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    backgroundColor: '#F2F2F2',
+    width: '100%',
+    marginBottom: 10,
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 15,
+    fontSize: 16,
+  },
+  picker: {
+    flex: 1,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 15,
+  },
   Button: {
     backgroundColor: '#6630F3',
     borderRadius: 15,
@@ -134,7 +238,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingTop: 40,
     padding: 20,
   },
   header: {
@@ -144,10 +247,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
   },
   keyboard: {
-    marginTop: '40%',
     width: 340,
     flexDirection: 'row',
     flexWrap: 'wrap',

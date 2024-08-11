@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Alert } from 'react-native';
-import axios from 'axios';
-import { API_URL } from './apiConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -15,27 +14,14 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   const handleRegister = () => {
-    if (username && password && email) {
-      axios.post(`${API_URL}`, {
-        action: 'register',
-        username,
-        password,
-        email
-      })
-      .then(response => {
-        const { success, message } = response.data;
-        if (success) {
-          navigation.navigate('Login');
-        } else {
-          Alert.alert('Registration Failed', message);
-        }
-      })
-      .catch(error => {
-        console.error('Error registering:', error);
-        Alert.alert('Registration Error', 'An error occurred while registering.');
-      });
+    if (username && email && password) {
+        navigation.navigate('RegisterStep2', {
+          username,
+          email,
+          password,
+        });
     } else {
-      Alert.alert('Invalid Input', 'Please fill in all fields.');
+      Alert.alert('Campos vazios!', 'Por favor, preencha todos os campos.');
     }
   };
 
@@ -46,26 +32,36 @@ const RegisterScreen = ({ navigation }) => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
-          <Text style={styles.title}>Create Account</Text>
+          <Text style={styles.title}>Crie uma conta</Text>
         </View>
         <View style={styles.inputs}>
           <View style={styles.inputContainer}>
             <Image source={require('./assets/img/icons/form-icons/profile.png')} style={styles.image} />
             <TextInput
               style={styles.input}
-              placeholder="Username"
+              placeholder="Usuário"
               autoCapitalize="none"
               onChangeText={setUsername}
               value={username}
             />
           </View>
           <View style={styles.inputContainer}>
+            <Image source={require('./assets/img/icons/form-icons/email.png')} style={styles.image} />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              autoCapitalize="none"
+              onChangeText={setEmail}
+              value={email}
+            />
+          </View>
+          <View style={styles.inputContainer}>
             <Image source={require('./assets/img/icons/form-icons/key-square.png')} style={styles.image} />
             <TextInput
               style={styles.input}
-              placeholder="Password"
+              placeholder="Senha"
               autoCapitalize="none"
-              secureTextEntry
+              secureTextEntry={!isPasswordVisible}
               onChangeText={setPassword}
               value={password}
             />
@@ -78,23 +74,13 @@ const RegisterScreen = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.inputContainer}>
-            <Image source={require('./assets/img/icons/form-icons/email.png')} style={styles.image} />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              autoCapitalize="none"
-              onChangeText={setEmail}
-              value={email}
-            />
-          </View>
         </View>
         <TouchableOpacity style={styles.Button} onPress={handleRegister}>
-          <Text style={styles.ButtonLogin}>Register</Text>
+          <Text style={styles.ButtonLogin}>Criar</Text>
         </TouchableOpacity>
         <Text style={styles.goLogin}>
-          Already have an account?
-            <Text style={styles.link} onPress={() => navigation.navigate('Login')}> Login</Text>
+          Já tem uma conta?
+            <Text style={styles.link} onPress={() => navigation.navigate('Login')}> Entrar</Text>
         </Text>
       </ScrollView>
     </KeyboardAvoidingView>

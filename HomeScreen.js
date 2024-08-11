@@ -129,7 +129,7 @@ const HomeScreen = ({ route }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.balanceContainer}>
-            <Text style={styles.balanceText}>This month you saved:</Text>
+            <Text style={styles.balanceText}>Economia deste mês: </Text>
             {userData && (
               <Text style={styles.balance}>
                 R$ {userData.balanceUser}
@@ -138,7 +138,6 @@ const HomeScreen = ({ route }) => {
           </View>
           <View style={styles.topic}>
             <Text style={styles.secondTitle}>Goals</Text>
-            <Text style={styles.viewAll}>View All</Text>
           </View>
           <View style={styles.goals}>
             {userGoals.length > 0 ? (
@@ -155,7 +154,7 @@ const HomeScreen = ({ route }) => {
                 </View>
               ))
             ) : (
-              <Text>No Goals found.</Text>
+              <Text>Não foram encontradas metas.</Text>
             )}
           </View>
         </ScrollView>
@@ -165,11 +164,11 @@ const HomeScreen = ({ route }) => {
           </TouchableOpacity>
           {dropdownVisible && (
             <View style={styles.dropdown}>
-              <TouchableOpacity onPress={() => navigation.navigate('Transfer', { username, operation: 'Deposito' })}>
-                <Text style={styles.dropdownItem}>Depositar</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Transfer', { username, operation: 'gain' })}>
+                <Text style={styles.dropdownItem}>Adicionar Ganho</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('Transfer', { username, operation: 'Saque' })}>
-                <Text style={styles.dropdownItem}>Sacar</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Transfer', { username, operation: 'expense' })}>
+                <Text style={styles.dropdownItem}>Adicionar Gasto</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -213,13 +212,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f7f7',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 20,
+    borderRadius: 5,
     zIndex: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   dropdownItem: {
     padding: 10,
@@ -281,14 +275,9 @@ const styles = StyleSheet.create({
   },
   secondTitle: {
     color: '#120630',
-    fontWeight: '600',
-    fontSize: 22,
+    fontWeight: '700',
+    fontSize: 24,
     lineHeight: 32,
-  },
-  viewAll: {
-    color: '#6655e3',
-    fontWeight: '600',
-    fontSize: 16,
   },
   goals: {
     padding: 15,
@@ -296,7 +285,7 @@ const styles = StyleSheet.create({
   goalCard: {
     backgroundColor: '#EEEEEE',
     borderRadius: 17,
-    padding: 20,
+    padding: 15,
     marginBottom: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

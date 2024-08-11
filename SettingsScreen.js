@@ -10,11 +10,11 @@ const SettingsScreen = ({ route }) => {
   return (
   <View style={styles.container}>
     <ScrollView>
-      <Text style={styles.title}>Settings</Text>
+      <Text style={styles.title}>Configurações</Text>
 
     </ScrollView>
          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.buttonLogOut}>Log Out</Text>
+            <Text style={styles.buttonLogOut}>Log out</Text>
          </TouchableOpacity>
       <View style={styles.menu}>
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home', { username })}>
