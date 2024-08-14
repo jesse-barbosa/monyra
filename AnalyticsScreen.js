@@ -18,7 +18,7 @@ const getCategoryColor = (category) => {
     Remunerações: '#7FFF00',
     Rendimentos: '#DC143C',
     Empreendimentos: '#00BFFF',
-    Beneficios: '#FF1493',
+    Benefícios: '#FF1493',
   };
   return colors[category] || '#cccccc';
 };
@@ -71,8 +71,11 @@ const AnalyticsScreen = ({ route }) => {
       });
   };
 
-  const handlePress = () => {
-    navigation.navigate('ViewTransfer')
+  const handlePress = (transaction) => {
+    navigation.navigate('ViewTransfer', {
+      username,
+      transaction,
+    })
   }
 
   const truncateCategoryName = (name) => {
@@ -200,7 +203,7 @@ const AnalyticsScreen = ({ route }) => {
           {(selectedOption === 'expenses' ? expenses : gains).length > 0 ? (
             filteredTransactions.map((transaction, index) => (
               <View key={index} style={styles.expensesCard}>
-                <TouchableOpacity onPress={handlePress}>
+                <TouchableOpacity onPress={() => handlePress(transaction)}>
                 <View style={styles.expensesContent}>
                   <View style={styles.expenseInfo}>
                     <Text style={styles.expenseDate}>{transaction.created_at}</Text>

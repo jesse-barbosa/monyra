@@ -117,7 +117,7 @@ const HomeScreen = ({ route }) => {
         <ScrollView>
           <View style={styles.header}>
             <View style={styles.titles}>
-              <Text style={styles.title}>My Wallet</Text>
+              <Text style={styles.title}>Monyra</Text>
               {userData && (
                 <Text style={styles.subtitle}>
                   {userData.nameUser}

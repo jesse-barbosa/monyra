@@ -25,7 +25,7 @@ export default function App() {
         <Stack.Screen name="Analytics" component={AnalyticsScreen} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="Notifications" component={NotificationsScreen} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false, animationEnabled: false,}} />
-        <Stack.Screen name="Transfer" component={TransferScreen} options={{ animationEnabled: false, }} />
+        <Stack.Screen name="Transfer" component={TransferScreen} options={{ headerTitle: "Transferir", animationEnabled: false, }} />
         <Stack.Screen name="ViewTransfer" component={ViewTransferScreen} options={{ headerShown: false, animationEnabled: false, }} />
       </Stack.Navigator>
     </NavigationContainer>

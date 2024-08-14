@@ -9,7 +9,7 @@ class Conexao {
         $servername = "localhost";
         $username = "root";
         $password = "";
-        $dbname = "dbwallet";
+        $dbname = "dbmonyra";
 
         // Cria conexão
         $this->conn = new mysqli($servername, $username, $password, $dbname);

@@ -87,7 +87,7 @@ class ManipularDados extends Conexao {
                 $stmt->close();
 
                 $stmt = $this->conn->prepare("
-                    SELECT descTransaction, valueTransaction, typeTransaction, created_at
+                    SELECT codTransaction, descTransaction, valueTransaction, typeTransaction, categoryTransaction, created_at
                     FROM tbtransactions
                     WHERE userCod = ?
                 ");
@@ -299,7 +299,30 @@ class ManipularDados extends Conexao {
             echo json_encode(['success' => false, 'message' => 'Dados inválidos.']);
         }
     }
+    private function deleteTransaction($input) {
+        if (isset($input['transactionId'])) {
+            $transactionId = $input['transactionId'];
     
+            // Verifique se a sessão está iniciada e se o código do usuário está definido
+            if (isset($_SESSION['userCod'])) {
+                $userCod = $_SESSION['userCod'];
+    
+                $stmt = $this->conn->prepare("DELETE FROM tbtransactions WHERE codTransaction = ? AND userCod = ?");
+                $stmt->bind_param("ii", $transactionId, $userCod);
+    
+                if ($stmt->execute()) {
+                    echo json_encode(["success" => true, "message" => "Transferência excluída com sucesso!"]);
+                } else {
+                    echo json_encode(["success" => false, "message" => "Erro ao excluir a transferência."]);
+                }
+                $stmt->close();
+            } else {
+                echo json_encode(["success" => false, "message" => "Usuário não autenticado."]);
+            }
+        } else {
+            echo json_encode(["success" => false, "message" => "ID da transferência não fornecido."]);
+        }
+    }    
 
     private function login($input) {
         if (isset($input['username']) && isset($input['password'])) {
@@ -388,6 +411,9 @@ class ManipularDados extends Conexao {
                 break;
             case 'transfer':
                 $this->transfer($input);
+                break;
+            case 'deleteTransaction':
+                $this->deleteTransaction($input);
                 break;
             case 'getMonthlyExpenses':
                 $this->getMonthlyExpenses($input);

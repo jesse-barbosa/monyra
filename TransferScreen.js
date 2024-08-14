@@ -161,7 +161,7 @@ const TransferScreen = ({ route }) => {
           </View>
           <View style={styles.inputContainer}>
             <TextInput
-              maxLength={50}
+              maxLength={30}
               style={styles.input}
               placeholder="Descrição (opcional)"
               onChangeText={setDescription}
