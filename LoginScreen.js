@@ -78,7 +78,7 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </View>
         <TouchableOpacity style={styles.Button} onPress={handlePress}>
-          <Text style={styles.ButtonLogin}>Entrar</Text>
+          <Text style={styles.ButtonText}>Entrar</Text>
         </TouchableOpacity>
         <Text style={styles.goRegister}>
           Ainda não tem uma conta?
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 'auto',
   },
-  ButtonLogin: {
+  ButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',

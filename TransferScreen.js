@@ -171,7 +171,7 @@ const TransferScreen = ({ route }) => {
         </View>
         <View style={styles.main}>
           <View style={styles.keyboard}>
-            {['1', '2', '3', '4', '5', '6', '7', '8', '9', '00', '0'].map((item, index) => (
+            {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0'].map((item, index) => (
               <TouchableOpacity key={index} style={styles.key} onPress={() => handleKeyPress(item)}>
                 <Text style={styles.keyText}>{item}</Text>
               </TouchableOpacity>

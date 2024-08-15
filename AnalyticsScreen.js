@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, Dimensions
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
 import { BarChart, PieChart } from 'react-native-chart-kit';
-import { Dropdown } from 'react-native-element-dropdown'; // Certifique-se de ter a biblioteca instalada
+import { Dropdown } from 'react-native-element-dropdown';
 
 const getCategoryColor = (category) => {
   const colors = {
@@ -13,7 +13,7 @@ const getCategoryColor = (category) => {
     Saúde: '#FF4500',
     Educação: '#6A5ACD',
     Lazer: '#FFD700',
-    Vestuario: '#FF69B4',
+    Vestuário: '#FF69B4',
     Economia: '#8A2BE2',
     Remunerações: '#7FFF00',
     Rendimentos: '#DC143C',
@@ -31,7 +31,7 @@ const AnalyticsScreen = ({ route }) => {
   const [transactions, setTransactions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('expenses');
   const [chartType, setChartType] = useState('pie');
-  const [hoveredCategory, setHoveredCategory] = useState(''); // Adicionado para tooltip
+  const [hoveredCategory, setHoveredCategory] = useState('');
 
   useEffect(() => {
     if (username) {
@@ -182,6 +182,7 @@ const AnalyticsScreen = ({ route }) => {
             <Text style={styles.dataText}>Nenhum dado encontrado para este mês.</Text>
           )
         ) : (
+          (selectedOption === 'expenses' ? expenses : gains).length > 0 ? (
           <View style={styles.pieChartContainer}>
             <PieChart
               data={pieData}
@@ -197,7 +198,10 @@ const AnalyticsScreen = ({ route }) => {
               }}
             />
           </View>
-        )}
+        ) : (
+          <Text style={styles.dataText}>Nenhum dado encontrado para este mês.</Text>
+        )
+      )}
         <View style={styles.expenses}>
           <Text style={styles.titleExpenses}>Suas Transações</Text>
           {(selectedOption === 'expenses' ? expenses : gains).length > 0 ? (

@@ -3,18 +3,19 @@ import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
+import * as Progress from 'react-native-progress';
 
 const ViewTransferScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { transaction } = route.params;
+  const { goal } = route.params;
 
-  const formattedDate = transaction.created_at.split(' ')[0];
-  const formattedTime = transaction.created_at.split(' ')[1];
-
-  const deleteTransaction = () => {
+  const formattedDate = goal.created_at.split(' ')[0];
+  const formattedTime = goal.created_at.split(' ')[1];
+  
+  const deleteGoal = () => {
     Alert.alert(
       "Confirmar Exclusão",
-      "Você tem certeza de que deseja excluir esta transferência?",
+      "Você tem certeza de que deseja excluir esta meta?",
       [
         {
           text: "Cancelar",
@@ -29,21 +30,21 @@ const ViewTransferScreen = ({ route }) => {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                action: 'deleteTransaction',
-                transactionId: transaction.codTransaction,
+                action: 'deleteGoal',
+                goalId: goal.codGoal,
               }),
             })
               .then(response => response.json())
               .then(data => {
                 if (data.success) {
-                  Alert.alert("Sucesso", "Transferência excluída com sucesso!");
+                  Alert.alert("Sucesso", "Meta excluída com sucesso!");
                   navigation.goBack();
                 } else {
-                  Alert.alert("Erro", "Não foi possível excluir a transferência.");
+                  Alert.alert("Erro", "Não foi possível excluir a meta.");
                 }
               })
               .catch(error => {
-                Alert.alert("Erro", "Ocorreu um erro ao excluir a transferência.");
+                Alert.alert("Erro", "Ocorreu um erro ao excluir a meta.");
                 console.error(error);
               });
           }
@@ -51,17 +52,15 @@ const ViewTransferScreen = ({ route }) => {
       ]
     );
   };
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
           <Ionicons name="arrow-back" size={24} color="#5A67D8" />
         </TouchableOpacity>
-        <Text style={transaction.typeTransaction === 'expense' ? styles.titleExpense : styles.titleGain}>
-          {transaction.typeTransaction === 'expense' ? '- ' : '+ '} 
-          R$ {transaction.valueTransaction}
-        </Text>
-        <TouchableOpacity onPress={deleteTransaction} style={styles.iconButton}>
+        <Text style={styles.title}>{goal.nameGoal}</Text>
+        <TouchableOpacity style={styles.iconButton}>
           <Ionicons name="trash" size={24} color="#FF3838" />
         </TouchableOpacity>
       </View>
@@ -69,43 +68,29 @@ const ViewTransferScreen = ({ route }) => {
       <View style={styles.card}>
         <View style={styles.infoRow}>
           <Ionicons name="cash-outline" size={20} color="#5A67D8" />
-          <Text style={styles.label}>Valor:</Text>
-          <Text style={styles.value}>R$ {transaction.valueTransaction}</Text>
+          <Text style={styles.label}>Total acumulado:</Text>
+          <Text style={styles.value}>R$ {goal.amountSaved}</Text>
         </View>
-        
+
         <View style={styles.infoRow}>
-          <Ionicons name="trending-up-outline" size={20} color="#5A67D8"/>
-          <Text style={styles.label}>Tipo:</Text>
-          <Text style={styles.value}>{transaction.typeTransaction === 'expense' ? 'Gasto' : 'Ganho'}</Text>
+          <Ionicons name="cash-outline" size={20} color="#5A67D8" />
+          <Text style={styles.label}>Total restante:</Text>
+          <Text style={styles.value}>R$ {goal.amountRemaining - goal.amountSaved}</Text>
         </View>
-        
+
         <View style={styles.infoRow}>
           <Ionicons name="calendar-outline" size={20} color="#5A67D8" />
           <Text style={styles.label}>Data:</Text>
           <Text style={styles.value}>{formattedDate}</Text>
         </View>
-        
+
         <View style={styles.infoRow}>
           <Ionicons name="time-outline" size={20} color="#5A67D8" />
           <Text style={styles.label}>Horário:</Text>
           <Text style={styles.value}>{formattedTime}</Text>
         </View>
-
-        <View style={styles.infoRow}>
-          <Ionicons name="pricetag-outline" size={20} color="#5A67D8" />
-          <Text style={styles.label}>Categoria:</Text>
-          <Text style={styles.value}>{transaction.categoryTransaction}</Text>
-        </View>
-
-        <View style={styles.infoRowDescription}>
-          <Ionicons name="information-circle-outline" size={20} color="#5A67D8" />
-          <Text style={styles.label}>Descrição:</Text>
-          <Text style={styles.valueDescription}>
-            {transaction.descTransaction.length > 0 ? transaction.descTransaction : 'Sem descrição'}
-          </Text>
-        </View>
+      <Progress.Bar progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)} width={290} height={30} color="#642de8" style={styles.goalBarProgress}/>
       </View>
-
       <TouchableOpacity style={styles.saveButton}>
         <Text style={styles.saveButtonText}>Salvar</Text>
       </TouchableOpacity>
@@ -128,17 +113,10 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: 10,
   },
-  titleExpense: {
-    color: '#FF3838',
+  title: {
+    color: '#2F1155',
     fontWeight: 'bold',
-    fontSize: 28,
-    textAlign: 'center',
-    flex: 1,
-  },
-  titleGain: {
-    color: '#6af054',
-    fontWeight: 'bold',
-    fontSize: 28,
+    fontSize: 22,
     textAlign: 'center',
     flex: 1,
   },
@@ -146,7 +124,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 30,
-    paddingVertical: 100,
+    paddingTop: 120,
+    paddingBottom: 30,
     marginHorizontal: 10,
     marginVertical: 40,
     flex: 1,
@@ -194,6 +173,17 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     flex: 1,
     marginTop: 5,
+  },
+  goalBarProgress: {
+    marginTop: 'auto',
+    height: 30,
+    borderWidth: 0,
+    backgroundColor: '#C7C7C7',
+  },
+  goalRemaining: {
+    marginLeft: 'auto',
+    fontSize: 16,
+    color: 'gray',
   },
   saveButton: {
     backgroundColor: '#6630F3',

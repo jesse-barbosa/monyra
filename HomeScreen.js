@@ -129,7 +129,7 @@ const HomeScreen = ({ route }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.balanceContainer}>
-            <Text style={styles.balanceText}>Economia deste mês: </Text>
+            <Text style={styles.balanceText}>Seu saldo atual: </Text>
             {userData && (
               <Text style={styles.balance}>
                 R$ {userData.balanceUser}
@@ -137,12 +137,13 @@ const HomeScreen = ({ route }) => {
             )}
           </View>
           <View style={styles.topic}>
-            <Text style={styles.secondTitle}>Goals</Text>
+            <Text style={styles.secondTitle}>Metas</Text>
           </View>
           <View style={styles.goals}>
             {userGoals.length > 0 ? (
               userGoals.map(goal => (
                 <View key={goal.codGoal} style={styles.goalCard}>
+                  <TouchableOpacity onPress={() => navigation.navigate('ViewGoal', { goal } )}>
                   <Text style={styles.goalTitle}>{goal.nameGoal}</Text>
                   <Text style={styles.goalUser}>
                     • {formatUserNames(goal.userNames || [])}
@@ -151,6 +152,7 @@ const HomeScreen = ({ route }) => {
                     R${goal.amountRemaining.toFixed(2)}
                   </Text>
                   <Progress.Bar progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)} width={290} color="#642de8" style={styles.goalBarProgress}/>
+                  </TouchableOpacity>
                 </View>
               ))
             ) : (

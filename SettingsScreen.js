@@ -1,21 +1,57 @@
 import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { API_URL } from './apiConfig';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const SettingsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { username } = route.params || {};
-
+    const menuItems = [
+      { icon:
+      <Icon
+        name='person'
+        size={24}
+        color="gray"
+        style={styles.eyePassword}
+      />,
+       label:'Perfil',
+       navigateTo: 'ProfileSettings' },
+      { icon: 
+        <Icon
+        name='notifications'
+        size={24}
+        color="gray"
+      />,
+        label: 'Notificações' },
+      { icon: 
+        <Icon
+        name='settings'
+        size={24}
+        color="gray"
+      />,
+        label: 'Autenticação' },
+      { icon: 
+        <Icon
+        name='wallet'
+        size={24}
+        color="gray"
+        />,
+          label: 'Sua carteira' },
+    ];
   return (
   <View style={styles.container}>
     <ScrollView>
       <Text style={styles.title}>Configurações</Text>
-
+      <View style={styles.options}>
+      {menuItems.map((item, index) => (
+        <TouchableOpacity key={index} style={styles.option} onPress={() => navigation.navigate(item.navigateTo, {username})}>
+          <Text style={styles.icon}>{item.icon}</Text>
+          <Text style={styles.label}>{item.label}</Text>
+          <Text style={styles.arrow}>➔</Text>
+        </TouchableOpacity>
+      ))}
+      </View>
     </ScrollView>
-         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.buttonLogOut}>Log out</Text>
-         </TouchableOpacity>
       <View style={styles.menu}>
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home', { username })}>
           <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/wallet.png')} />
@@ -53,6 +89,30 @@ const styles = StyleSheet.create({
   dataText: {
     textAlign: 'center',
     fontSize: 16,
+  },
+  options: {
+    marginTop: 75,
+    paddingHorizontal: 10,
+  },
+  option: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 25,
+  },
+  icon: {
+    fontSize: 24,
+    marginRight: 12,
+  },
+  label: {
+    marginLeft: 20,
+    fontWeight: '500',
+    fontSize: 16,
+    color: '#2F1155',
+  },
+  arrow: {
+    marginLeft: 'auto',
+    fontSize: 16,
+    color: '#000',
   },
   button: {
     borderRadius: 15,

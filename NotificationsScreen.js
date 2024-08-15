@@ -31,6 +31,12 @@ const NotificationsScreen = ({ route }) => {
     }
   }, [username]);
 
+  const handlePress = (transaction) => {
+    navigation.navigate('ViewTransfer', {
+      username,
+      transaction,
+    })
+  }
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -39,6 +45,7 @@ const NotificationsScreen = ({ route }) => {
           {transactions.length > 0 ? (
           transactions.map((transaction, index) => (
             <View key={index} style={styles.notificationsCard}>
+              <TouchableOpacity onPress={() => handlePress(transaction)}>
               <View style={styles.notificationsContent}>
                 <View style={styles.notificationInfo}>
                   <Text style={styles.notificationDate}>{transaction.created_at}</Text>
@@ -49,6 +56,7 @@ const NotificationsScreen = ({ route }) => {
                   <Image source={transaction.typeTransaction === 'expense' ? require('./assets/img/icons/arrowDown.png') : require('./assets/img/icons/arrowUp.png')} />
                 </View>
               </View>
+              </TouchableOpacity>
             </View>
           ))
           

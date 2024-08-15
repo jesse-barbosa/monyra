@@ -38,7 +38,7 @@ class ManipularDados extends Conexao {
             $userCod = $input['userCod'];
 
             $stmt = $this->conn->prepare("
-                SELECT g.codGoal, g.nameGoal, g.amountSaved, g.amountRemaining, GROUP_CONCAT(u.nameUser) AS userNames
+                SELECT g.codGoal, g.nameGoal, g.amountSaved, g.amountRemaining, g.created_at, GROUP_CONCAT(u.nameUser) AS userNames
                 FROM tbgoals g
                 LEFT JOIN user_goals ug ON g.codGoal = ug.goalCod
                 LEFT JOIN tbusers u ON ug.userCod = u.codUser
@@ -70,51 +70,6 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Please provide userCod"]);
         }
     }
-
-    private function getUserTransactions($input) {
-        if (isset($input['username'])) {
-            $username = $input['username'];
-
-            $stmt = $this->conn->prepare("SELECT codUser FROM tbusers WHERE nameUser = ?");
-            $stmt->bind_param("s", $username);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                $user = $result->fetch_assoc();
-                $userCod = $user['codUser'];
-
-                $stmt->close();
-
-                $stmt = $this->conn->prepare("
-                    SELECT codTransaction, descTransaction, valueTransaction, typeTransaction, categoryTransaction, created_at
-                    FROM tbtransactions
-                    WHERE userCod = ?
-                ");
-                $stmt->bind_param("i", $userCod);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                $transactions = [];
-                while ($row = $result->fetch_assoc()) {
-                    $transactions[] = $row;
-                }
-
-                if (!empty($transactions)) {
-                    echo json_encode(["success" => true, "transactions" => $transactions]);
-                } else {
-                    echo json_encode(["success" => true, "transactions" => []]);
-                }
-
-                $stmt->close();
-            } else {
-                echo json_encode(["success" => false, "message" => "User not found"]);
-            }
-        } else {
-            echo json_encode(["success" => false, "message" => "Please provide username"]);
-        }
-    }
-
     private function getMonthlyExpenses($input) {
         if (isset($input['username'])) {
             $username = $input['username'];
@@ -237,6 +192,51 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Missing parameters"]);
         }
     }
+    private function getUserTransactions($input) {
+        if (isset($input['username'])) {
+            $username = $input['username'];
+
+            $stmt = $this->conn->prepare("SELECT codUser FROM tbusers WHERE nameUser = ?");
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $user = $result->fetch_assoc();
+                $userCod = $user['codUser'];
+
+                $stmt->close();
+
+                $stmt = $this->conn->prepare("
+                    SELECT codTransaction, descTransaction, valueTransaction, typeTransaction, categoryTransaction, created_at
+                    FROM tbtransactions
+                    WHERE userCod = ?
+                ");
+                $stmt->bind_param("i", $userCod);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                $transactions = [];
+                while ($row = $result->fetch_assoc()) {
+                    $transactions[] = $row;
+                }
+
+                if (!empty($transactions)) {
+                    echo json_encode(["success" => true, "transactions" => $transactions]);
+                } else {
+                    echo json_encode(["success" => true, "transactions" => []]);
+                }
+
+                $stmt->close();
+            } else {
+                echo json_encode(["success" => false, "message" => "User not found"]);
+            }
+        } else {
+            echo json_encode(["success" => false, "message" => "Please provide username"]);
+        }
+    }
+
+
 
     private function assignGoalToUser($input) {
         if (isset($input['userCod']) && isset($input['goalCod'])) {
@@ -264,66 +264,6 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Please provide userCod and goalCod"]);
         }
     }
-
-    private function transfer($input) {
-        if (isset($input['value']) && isset($input['category'])) {
-            $value = $input['value'];
-            $category = $input['category'];
-            $description = isset($input['description']) ? $input['description'] : ''; // Obtém a descrição, se fornecida
-    
-            // Verifique se a sessão está iniciada e se o código do usuário está definido
-            if (isset($_SESSION['userCod'])) {
-                $userCod = $_SESSION['userCod'];
-    
-                $sql = "INSERT INTO tbtransactions (valueTransaction, descTransaction, typeTransaction, categoryTransaction, userCod) VALUES (?, ?, ?, ?, ?)";
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bind_param('dsssi', $value, $description, $input['operation'], $category, $userCod);
-    
-                if ($stmt->execute()) {
-                    // Retorna a informação do usuário após a transferência
-                    $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE codUser = ?");
-                    $stmt->bind_param("i", $userCod);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    $user = $result->fetch_assoc();
-                    
-                    echo json_encode(['success' => true, 'message' => 'Transferência realizada com sucesso!', 'user' => $user]);
-                } else {
-                    echo json_encode(['success' => false, 'message' => 'Erro ao realizar a transferência.']);
-                }
-                $stmt->close();
-            } else {
-                echo json_encode(["success" => false, "message" => "User not authenticated"]);
-            }
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Dados inválidos.']);
-        }
-    }
-    private function deleteTransaction($input) {
-        if (isset($input['transactionId'])) {
-            $transactionId = $input['transactionId'];
-    
-            // Verifique se a sessão está iniciada e se o código do usuário está definido
-            if (isset($_SESSION['userCod'])) {
-                $userCod = $_SESSION['userCod'];
-    
-                $stmt = $this->conn->prepare("DELETE FROM tbtransactions WHERE codTransaction = ? AND userCod = ?");
-                $stmt->bind_param("ii", $transactionId, $userCod);
-    
-                if ($stmt->execute()) {
-                    echo json_encode(["success" => true, "message" => "Transferência excluída com sucesso!"]);
-                } else {
-                    echo json_encode(["success" => false, "message" => "Erro ao excluir a transferência."]);
-                }
-                $stmt->close();
-            } else {
-                echo json_encode(["success" => false, "message" => "Usuário não autenticado."]);
-            }
-        } else {
-            echo json_encode(["success" => false, "message" => "ID da transferência não fornecido."]);
-        }
-    }    
-
     private function login($input) {
         if (isset($input['username']) && isset($input['password'])) {
             $username = $input['username'];
@@ -387,8 +327,65 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Please provide username, password, email, and income"]);
         }
     }
+    private function transfer($input) {
+        if (isset($input['value']) && isset($input['category'])) {
+            $value = $input['value'];
+            $category = $input['category'];
+            $description = isset($input['description']) ? $input['description'] : ''; // Obtém a descrição, se fornecida
     
-
+            // Verifique se a sessão está iniciada e se o código do usuário está definido
+            if (isset($_SESSION['userCod'])) {
+                $userCod = $_SESSION['userCod'];
+    
+                $sql = "INSERT INTO tbtransactions (valueTransaction, descTransaction, typeTransaction, categoryTransaction, userCod) VALUES (?, ?, ?, ?, ?)";
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bind_param('dsssi', $value, $description, $input['operation'], $category, $userCod);
+    
+                if ($stmt->execute()) {
+                    // Retorna a informação do usuário após a transferência
+                    $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE codUser = ?");
+                    $stmt->bind_param("i", $userCod);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $user = $result->fetch_assoc();
+                    
+                    echo json_encode(['success' => true, 'message' => 'Transferência realizada com sucesso!', 'user' => $user]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Erro ao realizar a transferência.']);
+                }
+                $stmt->close();
+            } else {
+                echo json_encode(["success" => false, "message" => "User not authenticated"]);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Dados inválidos.']);
+        }
+    }
+    private function deleteTransaction($input) {
+        if (isset($input['transactionId'])) {
+            $transactionId = $input['transactionId'];
+    
+            // Verifique se a sessão está iniciada e se o código do usuário está definido
+            if (isset($_SESSION['userCod'])) {
+                $userCod = $_SESSION['userCod'];
+    
+                $stmt = $this->conn->prepare("DELETE FROM tbtransactions WHERE codTransaction = ? AND userCod = ?");
+                $stmt->bind_param("ii", $transactionId, $userCod);
+    
+                if ($stmt->execute()) {
+                    echo json_encode(["success" => true, "message" => "Transferência excluída com sucesso!"]);
+                } else {
+                    echo json_encode(["success" => false, "message" => "Erro ao excluir a transferência."]);
+                }
+                $stmt->close();
+            } else {
+                echo json_encode(["success" => false, "message" => "Usuário não autenticado."]);
+            }
+        } else {
+            echo json_encode(["success" => false, "message" => "ID da transferência não fornecido."]);
+        }
+    }
+    // Função HandleRequest: Lida com a solicitação
     public function handleRequest() {
         $input = json_decode(file_get_contents("php://input"), true);
         $action = isset($input['action']) ? $input['action'] : '';
@@ -399,6 +396,15 @@ class ManipularDados extends Conexao {
                 break;
             case 'getUserGoals':
                 $this->getUserGoals($input);
+                break;
+            case 'getMonthlyExpenses':
+                $this->getMonthlyExpenses($input);
+                break;
+            case 'getMonthlyGains':
+                $this->getMonthlyGains($input);
+                break;
+            case 'getUserTransactions':
+                $this->getUserTransactions($input);
                 break;
             case 'assignGoalToUser':
                 $this->assignGoalToUser($input);
@@ -414,15 +420,6 @@ class ManipularDados extends Conexao {
                 break;
             case 'deleteTransaction':
                 $this->deleteTransaction($input);
-                break;
-            case 'getMonthlyExpenses':
-                $this->getMonthlyExpenses($input);
-                break;
-            case 'getMonthlyGains':
-                $this->getMonthlyGains($input);
-                break;
-            case 'getUserTransactions':
-                $this->getUserTransactions($input);
                 break;
             default:
                 echo json_encode(["success" => false, "message" => "Invalid action"]);

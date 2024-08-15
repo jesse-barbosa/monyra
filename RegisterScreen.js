@@ -76,7 +76,7 @@ const RegisterScreen = ({ navigation }) => {
           </View>
         </View>
         <TouchableOpacity style={styles.Button} onPress={handleRegister}>
-          <Text style={styles.ButtonLogin}>Criar</Text>
+          <Text style={styles.ButtonText}>Criar</Text>
         </TouchableOpacity>
         <Text style={styles.goLogin}>
           Já tem uma conta?
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 'auto',
   },
-  ButtonLogin: {
+  ButtonText: {
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
