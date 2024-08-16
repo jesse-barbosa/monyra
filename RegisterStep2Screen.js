@@ -27,10 +27,11 @@ const RegisterStep2Screen = ({ navigation, route }) => {
         username,
         email,
         password,
-        incomeUser: selectedIncome,
+        incomeUser: selectedIncome
       })
       .then(response => {
         const { success, message } = response.data;
+
         if (success) {
           navigation.navigate('Home', {
             username
@@ -40,9 +41,9 @@ const RegisterStep2Screen = ({ navigation, route }) => {
         }
       })
       .catch(error => {
-        console.error('Error registering:', error);
         Alert.alert('Registration Error', 'An error occurred while registering.');
       });
+      
     } else {
       Alert.alert('Seleção Inválida', 'Por favor, selecione uma opção de renda.');
     }

@@ -153,6 +153,11 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
   },
+  dataText: {
+    textAlign: 'center',
+    marginTop: 20,
+    color: '#666',
+  },
 });
 
 export default NotificationsScreen;

@@ -238,7 +238,7 @@ const AnalyticsScreen = ({ route }) => {
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Notifications', { username })}>
           <Image style={styles.iconsMenu} source={require('./assets/img/icons/menu-icons/bell.png')} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Profile', { username })}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings', { username })}>
           <Image style={styles.iconsMenu} source={require('./assets/img/icons/menu-icons/gears.png')} />
         </TouchableOpacity>
       </View>

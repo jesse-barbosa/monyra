@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 14/08/2024 às 12:50
+-- Tempo de geração: 16/08/2024 às 20:39
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -29,21 +29,20 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `tbgoals` (
   `codGoal` int(11) NOT NULL,
-  `userGoalCod` int(11) DEFAULT NULL,
   `categoryGoal` char(25) DEFAULT NULL,
   `nameGoal` char(30) DEFAULT NULL,
+  `descGoal` char(50) NOT NULL,
   `amountSaved` double NOT NULL DEFAULT 0,
   `amountRemaining` double NOT NULL DEFAULT 0,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Despejando dados para a tabela `tbgoals`
 --
 
-INSERT INTO `tbgoals` (`codGoal`, `userGoalCod`, `categoryGoal`, `nameGoal`, `amountSaved`, `amountRemaining`, `created_at`, `updated_at`) VALUES
-(2, 1, 'Economia ou Investimentos', 'Reserva de emergência', 100, 1000, '2024-07-19 15:20:34', '2024-07-19 15:20:34');
+INSERT INTO `tbgoals` (`codGoal`, `categoryGoal`, `nameGoal`, `descGoal`, `amountSaved`, `amountRemaining`, `created_at`) VALUES
+(55, 'Economia ou Investimentos', 'Reserva de emergência', '', 2000, 12000, '2024-08-16 11:15:31');
 
 -- --------------------------------------------------------
 
@@ -54,11 +53,10 @@ INSERT INTO `tbgoals` (`codGoal`, `userGoalCod`, `categoryGoal`, `nameGoal`, `am
 CREATE TABLE `tbtransactions` (
   `codTransaction` int(11) NOT NULL,
   `valueTransaction` float NOT NULL,
-  `descTransaction` char(50) NOT NULL,
+  `descTransaction` char(30) NOT NULL,
   `typeTransaction` char(10) NOT NULL,
   `categoryTransaction` char(25) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   `userCod` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -66,12 +64,13 @@ CREATE TABLE `tbtransactions` (
 -- Despejando dados para a tabela `tbtransactions`
 --
 
-INSERT INTO `tbtransactions` (`codTransaction`, `valueTransaction`, `descTransaction`, `typeTransaction`, `categoryTransaction`, `created_at`, `updated_at`, `userCod`) VALUES
-(15, 100, 'Lorem ipsum', 'expense', 'Saúde', '2024-08-08 10:57:38', '2024-08-08 10:57:38', 1),
-(18, 100, 'Teste', 'gain', 'Empreendimentos', '2024-08-08 11:21:42', '2024-08-08 11:21:42', 1),
-(21, 75, 'Teste', 'gain', 'Benefícios', '2024-08-08 11:26:20', '2024-08-08 11:26:20', 1),
-(24, 100, 'Lorem ipsum Dolor Lorem ipsum Dolor Lore', 'expense', 'Moradia', '2024-08-10 11:11:11', '2024-08-10 11:11:11', 1),
-(25, 100, 'Lorem ipsum Dolor Lorem ipsum Dolor Lorem ipsum Do', 'gain', 'Remunerações', '2024-08-10 11:15:47', '2024-08-10 11:15:47', 1);
+INSERT INTO `tbtransactions` (`codTransaction`, `valueTransaction`, `descTransaction`, `typeTransaction`, `categoryTransaction`, `created_at`, `userCod`) VALUES
+(32, 12.5, 'Refrigerante', 'expense', 'Alimentação', '2024-08-14 22:38:58', 1),
+(34, 80, 'Blusa Lacoste', 'expense', 'Vestuário', '2024-08-15 06:52:30', 1),
+(35, 350, 'Viagem para São Paulo', 'expense', 'Transporte', '2024-08-16 15:29:40', 1),
+(36, 120, 'Pagamento atrasado', 'gain', 'Remunerações', '2024-08-16 15:28:19', 1),
+(37, 200, 'Benefícios do Governo', 'gain', 'Benefícios', '2024-08-16 15:29:19', 1),
+(38, 700, 'Salário', 'gain', 'Remunerações', '2024-08-16 15:29:55', 1);
 
 -- --------------------------------------------------------
 
@@ -94,7 +93,7 @@ CREATE TABLE `tbusers` (
 --
 
 INSERT INTO `tbusers` (`codUser`, `nameUser`, `emailUser`, `passwordUser`, `incomeUser`, `balanceUser`, `created_at`) VALUES
-(1, 'Jesse Barbosa', 'barbosajesse419@gmail.com', '$2y$10$JdJ1aK4zWKFGQERuuvMGuurg7ht4JG16Cb7mv5j2z2uFAPJ9D2YGm', '', 31.6, '2024-07-17 13:52:30');
+(1, 'Jessé Barbosa', 'barbosajesse419@gmail.com', '$2y$10$JdJ1aK4zWKFGQERuuvMGuurg7ht4JG16Cb7mv5j2z2uFAPJ9D2YGm', '4000', 577.5, '2024-07-17 13:52:30');
 
 -- --------------------------------------------------------
 
@@ -113,7 +112,7 @@ CREATE TABLE `user_goals` (
 --
 
 INSERT INTO `user_goals` (`id`, `userCod`, `goalCod`) VALUES
-(6, 1, 2);
+(12, 1, 55);
 
 --
 -- Índices para tabelas despejadas
@@ -123,8 +122,7 @@ INSERT INTO `user_goals` (`id`, `userCod`, `goalCod`) VALUES
 -- Índices de tabela `tbgoals`
 --
 ALTER TABLE `tbgoals`
-  ADD PRIMARY KEY (`codGoal`),
-  ADD KEY `userGoalCod` (`userGoalCod`);
+  ADD PRIMARY KEY (`codGoal`);
 
 --
 -- Índices de tabela `tbtransactions`
@@ -155,35 +153,29 @@ ALTER TABLE `user_goals`
 -- AUTO_INCREMENT de tabela `tbgoals`
 --
 ALTER TABLE `tbgoals`
-  MODIFY `codGoal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `codGoal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT de tabela `tbtransactions`
 --
 ALTER TABLE `tbtransactions`
-  MODIFY `codTransaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `codTransaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT de tabela `tbusers`
 --
 ALTER TABLE `tbusers`
-  MODIFY `codUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `codUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT de tabela `user_goals`
 --
 ALTER TABLE `user_goals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Restrições para tabelas despejadas
 --
-
---
--- Restrições para tabelas `tbgoals`
---
-ALTER TABLE `tbgoals`
-  ADD CONSTRAINT `tbgoals_ibfk_1` FOREIGN KEY (`userGoalCod`) REFERENCES `tbusers` (`codUser`);
 
 --
 -- Restrições para tabelas `tbtransactions`

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
 import * as Progress from 'react-native-progress';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -69,7 +70,7 @@ const HomeScreen = ({ route }) => {
       const { success, message } = response.data;
       if (success) {
         console.log("Goal assigned to user successfully");
-        fetchUserGoals(userCod); // Atualiza a lista de metas
+        fetchUserGoals(userCod);
       } else {
         console.error("Error assigning goal to user:", message);
       }
@@ -89,7 +90,14 @@ const HomeScreen = ({ route }) => {
     setDropdownVisible(!dropdownVisible);
   };
 
-  // Function to format user names as comma-separated string
+const formatCurrency = (value) => {
+  const formatter = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  });
+  return formatter.format(value);
+};
+
   const formatUserNames = (userNames) => {
     return userNames.join(', ');
   };
@@ -124,7 +132,7 @@ const HomeScreen = ({ route }) => {
                 </Text>
               )}
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+            <TouchableOpacity onPress={() => navigation.navigate('ProfileSettings', { username })}>
               <Image style={styles.userImage} source={require('./assets/img/icons/user.png')} />
             </TouchableOpacity>
           </View>
@@ -132,7 +140,7 @@ const HomeScreen = ({ route }) => {
             <Text style={styles.balanceText}>Seu saldo atual: </Text>
             {userData && (
               <Text style={styles.balance}>
-                R$ {userData.balanceUser}
+                {formatCurrency(userData.balanceUser)}
               </Text>
             )}
           </View>
@@ -156,8 +164,14 @@ const HomeScreen = ({ route }) => {
                 </View>
               ))
             ) : (
-              <Text>Não foram encontradas metas.</Text>
+              <Text>Você não possui metas.</Text>
             )}
+            <View style={styles.addGoalCard}>
+              <TouchableOpacity onPress={() => navigation.navigate('CreateGoal', { username } )} style={styles.addGoalContent}>
+              <Icon name='add-circle' size={24} color="#642de8" style={styles.addGoalIcon}/>
+                <Text style={styles.addGoalText}>Adicionar Meta...</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
         <View style={styles.operationContainer}>
@@ -314,6 +328,37 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     fontSize: 16,
     color: 'gray',
+  },
+  addGoalCard: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#ccc',
+    borderRadius: 17,
+    padding: 10,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  addGoalContent: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addGoalText: {
+    fontSize: 18,
+    marginBottom: 5,
+    opacity: 0.7,
+    color: '#642de8',
+  },
+  addGoalIcon: {
+    marginRight: 10,
+    opacity: 0.7,
+    marginBottom: 'auto',
   },
   menu: {
     flexDirection: 'row',

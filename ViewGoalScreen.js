@@ -24,15 +24,16 @@ const ViewTransferScreen = ({ route }) => {
         {
           text: "Excluir",
           onPress: () => {
+        console.log("Cod do goal para ser deletado: ", goal.codGoal)
             fetch(`${API_URL}`, {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
               },
               body: JSON.stringify({
                 action: 'deleteGoal',
-                goalId: goal.codGoal,
-              }),
+                goalId: goal.codGoal
+              })
             })
               .then(response => response.json())
               .then(data => {
@@ -60,7 +61,7 @@ const ViewTransferScreen = ({ route }) => {
           <Ionicons name="arrow-back" size={24} color="#5A67D8" />
         </TouchableOpacity>
         <Text style={styles.title}>{goal.nameGoal}</Text>
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity onPress={deleteGoal} style={styles.iconButton}>
           <Ionicons name="trash" size={24} color="#FF3838" />
         </TouchableOpacity>
       </View>

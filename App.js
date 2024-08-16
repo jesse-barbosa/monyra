@@ -11,6 +11,7 @@ import SettingsScreen from './SettingsScreen';
 import ProfileSettingsScreen from './ProfileSettingsScreen';
 import TransferScreen from './TransferScreen';
 import ViewTransferScreen from './ViewTransferScreen';
+import CreateGoalScreen from './CreateGoalScreen';
 import ViewGoalScreen from './ViewGoalScreen';
 
 
@@ -30,6 +31,7 @@ export default function App() {
         <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} options={{ headerTitle: "Configurações de perfil", animationEnabled: false,}} />
         <Stack.Screen name="Transfer" component={TransferScreen} options={{ headerTitle: "Transferir", animationEnabled: false, }} />
         <Stack.Screen name="ViewTransfer" component={ViewTransferScreen} options={{ headerShown: false, animationEnabled: false, }} />
+        <Stack.Screen name="CreateGoal" component={CreateGoalScreen} options={{ headerTitle: "Criar meta", animationEnabled: false, }} />
         <Stack.Screen name="ViewGoal" component={ViewGoalScreen} options={{ headerShown: false, animationEnabled: false, }} />
       </Stack.Navigator>
     </NavigationContainer>
