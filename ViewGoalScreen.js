@@ -24,7 +24,6 @@ const ViewTransferScreen = ({ route }) => {
         {
           text: "Excluir",
           onPress: () => {
-        console.log("Cod do goal para ser deletado: ", goal.codGoal)
             fetch(`${API_URL}`, {
               method: 'POST',
               headers: {
