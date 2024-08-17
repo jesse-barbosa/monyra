@@ -1,5 +1,4 @@
 <?php
-session_start(); 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -235,9 +234,6 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Please provide username"]);
         }
     }
-
-
-
     private function assignGoalToUser($input) {
         if (isset($input['userCod']) && isset($input['goalCod'])) {
             $userCod = $input['userCod'];
@@ -279,8 +275,7 @@ class ManipularDados extends Conexao {
                 $storedPassword = $user['passwordUser'];
     
                 if (password_verify($password, $storedPassword)) {
-                    // Inicia a sessão e armazena o código do usuário
-                    session_start();
+                    session_start(); // Inicia a sessão apenas aqui
                     $_SESSION['userCod'] = $user['codUser'];
     
                     echo json_encode(["success" => true, "message" => "Login successful", "user" => $user]);

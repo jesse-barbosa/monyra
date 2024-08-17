@@ -29,8 +29,14 @@ const LoginScreen = ({ navigation }) => {
         }
       })
       .catch(error => {
-        console.error('Error logging in:', error);
-        Alert.alert('Login Error', 'An error occurred while logging in.');
+
+        if (error.response) {
+          // Handle server error here
+          Alert.alert('Login Error', error.response.data.message);
+        } else {
+          // Handle network error here
+          Alert.alert('Login Error', 'An error occurred while logging in.');
+        }
       });
     } else {
       Alert.alert('Invalid Input', 'Please enter both username and password.');
