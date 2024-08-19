@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 16/08/2024 às 20:39
+-- Tempo de geração: 19/08/2024 às 13:04
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -85,6 +85,7 @@ CREATE TABLE `tbusers` (
   `passwordUser` char(60) NOT NULL,
   `incomeUser` char(10) NOT NULL,
   `balanceUser` float DEFAULT 0,
+  `iconUser` char(50) NOT NULL DEFAULT '''/assets/img/icons/profile/user.png''',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -92,8 +93,8 @@ CREATE TABLE `tbusers` (
 -- Despejando dados para a tabela `tbusers`
 --
 
-INSERT INTO `tbusers` (`codUser`, `nameUser`, `emailUser`, `passwordUser`, `incomeUser`, `balanceUser`, `created_at`) VALUES
-(1, 'Jessé Barbosa', 'barbosajesse419@gmail.com', '$2y$10$JdJ1aK4zWKFGQERuuvMGuurg7ht4JG16Cb7mv5j2z2uFAPJ9D2YGm', '4000', 577.5, '2024-07-17 13:52:30');
+INSERT INTO `tbusers` (`codUser`, `nameUser`, `emailUser`, `passwordUser`, `incomeUser`, `balanceUser`, `iconUser`, `created_at`) VALUES
+(1, 'Jessé Barbosa', 'barbosajesse419@gmail.com', '$2y$10$JdJ1aK4zWKFGQERuuvMGuurg7ht4JG16Cb7mv5j2z2uFAPJ9D2YGm', '4000', 577.5, 'default', '2024-07-17 13:52:30');
 
 -- --------------------------------------------------------
 
