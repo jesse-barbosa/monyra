@@ -1,1 +1,1 @@
-export const API_URL = 'http://localhostt/monyra/classes/manipularDados.php';
+export const API_URL = 'http://192.168.43.161/monyra/classes/manipularDados.php';

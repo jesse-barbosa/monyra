@@ -97,10 +97,18 @@ const formatCurrency = (value) => {
   });
   return formatter.format(value);
 };
-
+ 
   const formatUserNames = (userNames) => {
     return userNames.join(', ');
   };
+  const images = {
+    user: require('./assets/img/icons/profile/user.png'),
+    default: require('./assets/img/icons/profile/default.png'),
+  };
+
+  // Conditionally set image source
+  const imageSource = userData ? images[userData.iconUser] || images['default'] : images['default'];
+
 
   if (loading) {
     return (
@@ -133,7 +141,7 @@ const formatCurrency = (value) => {
               )}
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('ProfileSettings', { username })}>
-              <Image style={styles.userImage} source={require('./assets/img/icons/user.png')} />
+        <Image style={styles.userImage} source={imageSource} />
             </TouchableOpacity>
           </View>
           <View style={styles.balanceContainer}>

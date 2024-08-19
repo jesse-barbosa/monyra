@@ -36,7 +36,12 @@ const RegisterScreen = ({ navigation }) => {
         </View>
         <View style={styles.inputs}>
           <View style={styles.inputContainer}>
-            <Image source={require('./assets/img/icons/form-icons/profile.png')} style={styles.image} />
+          <Icon
+              name='person-outline'
+              size={24}
+              color="gray"
+              style={styles.image}
+            />
             <TextInput
               style={styles.input}
               placeholder="Usuário"
@@ -46,7 +51,12 @@ const RegisterScreen = ({ navigation }) => {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Image source={require('./assets/img/icons/form-icons/email.png')} style={styles.image} />
+          <Icon
+              name='mail-outline'
+              size={24}
+              color="gray"
+              style={styles.image}
+            />
             <TextInput
               style={styles.input}
               placeholder="Email"
@@ -56,7 +66,12 @@ const RegisterScreen = ({ navigation }) => {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Image source={require('./assets/img/icons/form-icons/key-square.png')} style={styles.image} />
+          <Icon
+              name='key-outline'
+              size={24}
+              color="gray"
+              style={styles.image}
+            />
             <TextInput
               style={styles.input}
               placeholder="Senha"

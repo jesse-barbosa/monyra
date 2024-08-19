@@ -5,7 +5,7 @@ import { API_URL } from './apiConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -14,10 +14,10 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handlePress = () => {
-    if (username && password) {
+    if (email && password) {
       axios.post(`${API_URL}`, {
         action: 'login',
-        username,
+        email,
         password
       })
       .then(response => {
@@ -25,21 +25,19 @@ const LoginScreen = ({ navigation }) => {
         if (success) {
           navigation.navigate('Home', { username: user.nameUser });
         } else {
-          Alert.alert('Login Failed', message);
+          Alert.alert('Falha ao entrar :(', message);
         }
       })
       .catch(error => {
 
         if (error.response) {
-          // Handle server error here
           Alert.alert('Login Error', error.response.data.message);
         } else {
-          // Handle network error here
           Alert.alert('Login Error', 'An error occurred while logging in.');
         }
       });
     } else {
-      Alert.alert('Invalid Input', 'Please enter both username and password.');
+      Alert.alert('Resposta inválida', 'Por favor digite seu e-mail e sua senha.');
     }
   };
 
@@ -54,17 +52,27 @@ const LoginScreen = ({ navigation }) => {
         </View>
         <View style={styles.inputs}>
           <View style={styles.inputContainer}>
-            <Image source={require('./assets/img/icons/form-icons/profile.png')} style={styles.image} />
+            <Icon
+              name='mail-outline'
+              size={24}
+              color="gray"
+              style={styles.image}
+            />
             <TextInput
               style={styles.input}
-              placeholder="Usuário"
+              placeholder="Email"
               autoCapitalize="none"
-              onChangeText={setUsername}
-              value={username}
+              onChangeText={setEmail}
+              value={email}
             />
           </View>
           <View style={styles.inputContainer}>
-            <Image source={require('./assets/img/icons/form-icons/key-square.png')} style={styles.image} />
+          <Icon
+              name='key-outline'
+              size={24}
+              color="gray"
+              style={styles.image}
+            />
             <TextInput
               style={styles.input}
               placeholder="Senha"

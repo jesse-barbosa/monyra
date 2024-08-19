@@ -69,163 +69,41 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Please provide userCod"]);
         }
     }
-    private function getMonthlyExpenses($input) {
-        if (isset($input['username'])) {
-            $username = $input['username'];
-            $currentMonth = date('Y-m');
-            error_log("Current Month: " . $currentMonth);
-
-            $stmt = $this->conn->prepare("SELECT codUser FROM tbusers WHERE nameUser = ?");
-            $stmt->bind_param("s", $username);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                $user = $result->fetch_assoc();
-                $userCod = $user['codUser'];
-
-                $stmt->close();
-
-                $stmt = $this->conn->prepare("
-                    SELECT categoryTransaction, SUM(valueTransaction) as totalSpent
-                    FROM tbtransactions
-                    WHERE typeTransaction = 'expense' AND DATE_FORMAT(created_at, '%Y-%m') = ? AND userCod = ?
-                    GROUP BY categoryTransaction
-                ");
-                if (!$stmt) {
-                    error_log("Failed to prepare statement: " . $this->conn->error);
-                    echo json_encode(["success" => false, "message" => "Internal server error"]);
-                    return;
-                }
-
-                $stmt->bind_param("si", $currentMonth, $userCod);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if (!$result) {
-                    error_log("Failed to execute statement: " . $stmt->error);
-                    echo json_encode(["success" => false, "message" => "Internal server error"]);
-                    return;
-                }
-
-                $expenses = [];
-                while ($row = $result->fetch_assoc()) {
-                    $expenses[] = $row;
-                }
-
-                if (!empty($expenses)) {
-                    echo json_encode(["success" => true, "expenses" => $expenses]);
-                } else {
-                    echo json_encode(["success" => true, "expenses" => []]);
-                }
-
-                $stmt->close();
-            } else {
-                echo json_encode(["success" => false, "message" => "User not found"]);
-            }
-        } else {
-            echo json_encode(["success" => false, "message" => "Please provide username"]);
-        }
-    }
-
-    private function getMonthlyGains($input) {
-        error_log("getMonthlyGains called");
-        if (isset($input['username'])) {
-            $username = $input['username'];
-            $currentMonth = date('Y-m');
-            error_log("Current Month: " . $currentMonth);
-
-            $stmt = $this->conn->prepare("SELECT codUser FROM tbusers WHERE nameUser = ?");
-            $stmt->bind_param("s", $username);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            error_log("User query executed");
-
-            if ($result->num_rows > 0) {
-                $user = $result->fetch_assoc();
-                $userCod = $user['codUser'];
-
-                $stmt->close();
-                error_log("User found with codUser: " . $userCod);
-
-                $stmt = $this->conn->prepare("
-                    SELECT categoryTransaction, SUM(valueTransaction) as totalGained
-                    FROM tbtransactions
-                    WHERE typeTransaction = 'gain' AND DATE_FORMAT(created_at, '%Y-%m') = ? AND userCod = ?
-                    GROUP BY categoryTransaction
-                ");
-                if (!$stmt) {
-                    error_log("Failed to prepare statement: " . $this->conn->error);
-                    echo json_encode(["success" => false, "message" => "Internal server error"]);
-                    return;
-                }
-                error_log("Statement prepared successfully");
-
-                $stmt->bind_param("si", $currentMonth, $userCod);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                error_log("Gains query executed");
-
-                if (!$result) {
-                    error_log("Failed to execute statement: " . $stmt->error);
-                    echo json_encode(["success" => false, "message" => "Internal server error"]);
-                    return;
-                }
-
-                $gains = [];
-                while ($row = $result->fetch_assoc()) {
-                    $gains[] = $row;
-                }
-
-                $stmt->close();
-                error_log("Gains retrieved successfully");
-
-                echo json_encode(["success" => true, "gains" => $gains]);
-            } else {
-                $stmt->close();
-                error_log("User not found");
-                echo json_encode(["success" => false, "message" => "User not found"]);
-            }
-        } else {
-            error_log("Missing parameters");
-            echo json_encode(["success" => false, "message" => "Missing parameters"]);
-        }
-    }
     private function getUserTransactions($input) {
         if (isset($input['username'])) {
             $username = $input['username'];
-
+        
             $stmt = $this->conn->prepare("SELECT codUser FROM tbusers WHERE nameUser = ?");
+            if ($stmt === false) {
+                die('Prepare failed: ' . htmlspecialchars($this->conn->error));
+            }
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();
-
+        
             if ($result->num_rows > 0) {
                 $user = $result->fetch_assoc();
                 $userCod = $user['codUser'];
-
                 $stmt->close();
-
+        
                 $stmt = $this->conn->prepare("
                     SELECT codTransaction, descTransaction, valueTransaction, typeTransaction, categoryTransaction, created_at
                     FROM tbtransactions
                     WHERE userCod = ? ORDER BY created_at DESC
                 ");
+                if ($stmt === false) {
+                    die('Prepare failed: ' . htmlspecialchars($this->conn->error));
+                }
                 $stmt->bind_param("i", $userCod);
                 $stmt->execute();
                 $result = $stmt->get_result();
-
+        
                 $transactions = [];
                 while ($row = $result->fetch_assoc()) {
                     $transactions[] = $row;
                 }
-
-                if (!empty($transactions)) {
-                    echo json_encode(["success" => true, "transactions" => $transactions]);
-                } else {
-                    echo json_encode(["success" => true, "transactions" => []]);
-                }
-
+        
+                echo json_encode(["success" => true, "transactions" => $transactions]);
                 $stmt->close();
             } else {
                 echo json_encode(["success" => false, "message" => "User not found"]);
@@ -233,7 +111,8 @@ class ManipularDados extends Conexao {
         } else {
             echo json_encode(["success" => false, "message" => "Please provide username"]);
         }
-    }
+        
+}
     private function assignGoalToUser($input) {
         if (isset($input['userCod']) && isset($input['goalCod'])) {
             $userCod = $input['userCod'];
@@ -261,12 +140,11 @@ class ManipularDados extends Conexao {
         }
     }
     private function login($input) {
-        if (isset($input['username']) && isset($input['password'])) {
-            $username = $input['username'];
+            $email = $input['email'];
             $password = $input['password'];
     
-            $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE nameUser = ?");
-            $stmt->bind_param("s", $username);
+            $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE emailUser = ?");
+            $stmt->bind_param("s", $email);
             $stmt->execute();
             $result = $stmt->get_result();
     
@@ -275,25 +153,20 @@ class ManipularDados extends Conexao {
                 $storedPassword = $user['passwordUser'];
     
                 if (password_verify($password, $storedPassword)) {
-                    session_start(); // Inicia a sessão apenas aqui
+                    session_start();
                     $_SESSION['userCod'] = $user['codUser'];
     
                     echo json_encode(["success" => true, "message" => "Login successful", "user" => $user]);
                 } else {
-                    echo json_encode(["success" => false, "message" => "Invalid username or password"]);
+                    echo json_encode(["success" => false, "message" => "Verifique os campos e tente novamente."]);
                 }
             } else {
-                echo json_encode(["success" => false, "message" => "Invalid username or password"]);
+                echo json_encode(["success" => false, "message" => "Verifique os campos e tente novamente."]);
             }
-    
             $stmt->close();
-        } else {
-            echo json_encode(["success" => false, "message" => "Please provide username and password"]);
-        }
     }
     
     private function register($input) {
-        if (isset($input['username'], $input['email'], $input['password'], $input['incomeUser'])) {
             $username = $input['username'];
             $email = $input['email'];
             $password = password_hash($input['password'], PASSWORD_BCRYPT);
@@ -347,18 +220,14 @@ class ManipularDados extends Conexao {
     
                 $stmt->close();
             }
-        } else {
-            echo json_encode(["success" => false, "message" => "Please provide all required fields"]);
-        }
     }
     
     private function transfer($input) {
         if (isset($input['value']) && isset($input['category'])) {
             $value = $input['value'];
             $category = $input['category'];
-            $description = isset($input['description']) ? $input['description'] : ''; // Obtém a descrição, se fornecida
+            $description = isset($input['description']) ? $input['description'] : '';
     
-            // Verifique se a sessão está iniciada e se o código do usuário está definido
             if (isset($_SESSION['userCod'])) {
                 $userCod = $_SESSION['userCod'];
     
@@ -462,13 +331,13 @@ class ManipularDados extends Conexao {
                         if ($stmt->execute()) {
                             echo json_encode(["success" => true, "message" => "Meta excluída com sucesso."]);
                         } else {
-                            echo json_encode(["success" => false, "message" => "Erro ao excluir a meta da tabela tbgoals."]);
+                            echo json_encode(["success" => false, "message" => "Erro ao excluir a meta da tabela."]);
                         }
                     } else {
-                        echo json_encode(["success" => false, "message" => "Meta não encontrada na tabela user_goals."]);
+                        echo json_encode(["success" => false, "message" => "Meta não encontrada no banco"]);
                     }
                 } else {
-                    echo json_encode(["success" => false, "message" => "Erro ao excluir a meta da tabela user_goals."]);
+                    echo json_encode(["success" => false, "message" => "Erro ao excluir a meta."]);
                 }
                 $stmt->close();
             } else {
@@ -478,7 +347,8 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "ID da meta não fornecido."]);
         }
     }
-    // Função HandleRequest: Lida com a solicitação
+
+    // Função HandleRequest: Lida com as requisições do JavaScript
     public function handleRequest() {
         $input = json_decode(file_get_contents("php://input"), true);
         $action = isset($input['action']) ? $input['action'] : '';
@@ -489,12 +359,6 @@ class ManipularDados extends Conexao {
                 break;
             case 'getUserGoals':
                 $this->getUserGoals($input);
-                break;
-            case 'getMonthlyExpenses':
-                $this->getMonthlyExpenses($input);
-                break;
-            case 'getMonthlyGains':
-                $this->getMonthlyGains($input);
                 break;
             case 'getUserTransactions':
                 $this->getUserTransactions($input);
@@ -529,4 +393,5 @@ class ManipularDados extends Conexao {
 
 $manipularDados = new ManipularDados();
 $manipularDados->handleRequest();
+
 ?>

@@ -26,50 +26,48 @@ const getCategoryColor = (category) => {
 const AnalyticsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { username } = route.params || {};
-  const [expenses, setExpenses] = useState([]);
-  const [gains, setGains] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('expenses');
   const [chartType, setChartType] = useState('pie');
   const [hoveredCategory, setHoveredCategory] = useState('');
 
+  const filteredTransactions = transactions.filter((transaction) => {
+    const currentDate = new Date();
+    const transactionDate = new Date(transaction.created_at);
+    const isSameMonth = transactionDate.getMonth() === currentDate.getMonth();
+    const isExpense = transaction.typeTransaction === 'expense';
+    const isGain = transaction.typeTransaction === 'gain';
+    
+    return (selectedOption === 'expenses' && isExpense && isSameMonth) || (selectedOption === 'gains' && isGain && isSameMonth);
+  });
   useEffect(() => {
     if (username) {
-      fetchData('expenses', 'getMonthlyExpenses', setExpenses);
-      fetchData('transactions', 'getUserTransactions', setTransactions);
-      fetchData('gains', 'getMonthlyGains', setGains);
-    }
-  }, [username]);
-
-  const fetchData = (type, action, setData) => {
-    fetch(`${API_URL}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action, username }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
+      fetch(`${API_URL}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'getUserTransactions', username }),
       })
+      .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          if (type === 'transactions') {
-            setData(data.transactions || []);
-          } else {
-            setData(data[type] || []);
-          }
+          console.log('Transactions:', data.transactions);
+          setTransactions(data.transactions);
         } else {
           console.log(data.message);
         }
       })
       .catch((error) => {
-        console.error(`Error fetching ${type}:`, error);
+        console.error('Error fetching transactions:', error);
       });
-  };
+    }
+  }, [username]);
+  
+  useEffect(() => {
+    console.log('Filtered Transactions:', filteredTransactions);
+  }, [filteredTransactions]);
+  
 
   const handlePress = (transaction) => {
     navigation.navigate('ViewTransfer', {
@@ -82,22 +80,42 @@ const AnalyticsScreen = ({ route }) => {
     return name.length > 4 ? name.slice(0, 4) : name;
   };
 
+  const aggregatedData = filteredTransactions.reduce((acc, transaction) => {
+    const category = transaction.categoryTransaction || 'N/A';
+    const existingCategory = acc.find(item => item.category === category);
+  
+    if (existingCategory) {
+      existingCategory.value += transaction.valueTransaction;
+    } else {
+      acc.push({
+        category: category,
+        value: transaction.valueTransaction,
+        color: getCategoryColor(category),
+        legendFontColor: '#7F7F7F',
+        legendFontSize: 15,
+      });
+    }
+  
+    return acc;
+  }, []);
+
   const chartData = {
-    labels: (selectedOption === 'expenses' ? expenses : gains).map(item => truncateCategoryName(item.categoryTransaction || 'N/A')),
+    labels: aggregatedData.map(item => truncateCategoryName(item.category)),
     datasets: [
       {
-        data: (selectedOption === 'expenses' ? expenses : gains).map(item => item.totalSpent || item.totalGained || 0),
+        data: aggregatedData.map(item => item.value),
       },
     ],
   };
-
-  const pieData = (selectedOption === 'expenses' ? expenses : gains).map(item => ({
-    name: item.categoryTransaction || 'N/A',
-    value: item.totalSpent || item.totalGained || 0,
-    color: getCategoryColor(item.categoryTransaction || 'N/A'),
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
+  
+  const pieData = aggregatedData.map(item => ({
+    name: item.category,
+    value: item.value,
+    color: item.color,
+    legendFontColor: item.legendFontColor,
+    legendFontSize: item.legendFontSize,
   }));
+  
 
   const chartConfig = {
     backgroundColor: '#f7f7f7',
@@ -113,12 +131,8 @@ const AnalyticsScreen = ({ route }) => {
     paddingHorizontal: 0,
   };
 
-  const filteredTransactions = transactions.filter(transaction =>
-    selectedOption === 'expenses' ? transaction.typeTransaction === 'expense' : transaction.typeTransaction === 'gain'
-  );
-
   const handleBarPress = (index) => {
-    const category = (selectedOption === 'expenses' ? expenses : gains)[index].categoryTransaction || 'N/A';
+    const category = (filteredTransactions)[index].categoryTransaction || 'N/A';
     setHoveredCategory(category);
   };
 
@@ -158,7 +172,7 @@ const AnalyticsScreen = ({ route }) => {
           />
         </View>
         {chartType === 'bar' ? (
-          (selectedOption === 'expenses' ? expenses : gains).length > 0 ? (
+          (filteredTransactions).length > 0 ? (
             <ScrollView horizontal>
               <View style={styles.chartContainer}>
                 <BarChart
@@ -182,7 +196,7 @@ const AnalyticsScreen = ({ route }) => {
             <Text style={styles.dataText}>Nenhum dado encontrado para este mês.</Text>
           )
         ) : (
-          (selectedOption === 'expenses' ? expenses : gains).length > 0 ? (
+          (filteredTransactions).length > 0 ? (
           <View style={styles.pieChartContainer}>
             <PieChart
               data={pieData}
@@ -204,7 +218,7 @@ const AnalyticsScreen = ({ route }) => {
       )}
         <View style={styles.expenses}>
           <Text style={styles.titleExpenses}>Suas Transações</Text>
-          {(selectedOption === 'expenses' ? expenses : gains).length > 0 ? (
+          {(filteredTransactions).length > 0 ? (
             filteredTransactions.map((transaction, index) => (
               <View key={index} style={styles.expensesCard}>
                 <TouchableOpacity onPress={() => handlePress(transaction)}>
