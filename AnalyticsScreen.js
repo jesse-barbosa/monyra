@@ -63,11 +63,6 @@ const AnalyticsScreen = ({ route }) => {
       });
     }
   }, [username]);
-  
-  useEffect(() => {
-    console.log('Filtered Transactions:', filteredTransactions);
-  }, [filteredTransactions]);
-  
 
   const handlePress = (transaction) => {
     navigation.navigate('ViewTransfer', {
