@@ -1,11 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import axios from 'axios';
+import { API_URL } from './apiConfig';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const SettingsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { username } = route.params || {};
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // Fetch user data
+    axios.post(`${API_URL}`, {
+      action: 'getUserData',
+      username
+    })
+    .then(response => {
+      const { success, message, user } = response.data;
+      if (success) {
+        setUserData(user);
+        fetchUserGoals(user.codUser);
+      } else {
+        setError(message);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching user data:', error);
+      setError('An error occurred while fetching user data.');
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+  }, [username]);
+
+  const images = {
+    default: require('./assets/img/icons/profile/default.png'),
+    man: require('./assets/img/icons/profile/man.png'),
+    woman: require('./assets/img/icons/profile/woman.png'),
+
+  };
+  // Conditionally set image source
+  const imageSource = userData ? images[userData.iconUser] || images['default'] : images['default'];
+
   return (
   <View style={styles.container}>
     <ScrollView>

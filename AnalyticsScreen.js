@@ -52,7 +52,6 @@ const AnalyticsScreen = ({ route }) => {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          console.log('Transactions:', data.transactions);
           setTransactions(data.transactions);
         } else {
           console.log(data.message);
