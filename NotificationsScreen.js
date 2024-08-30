@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
+import Menu from './Menu'
 
 const NotificationsScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -65,20 +66,7 @@ const NotificationsScreen = ({ route }) => {
         )}
         </View>
       </ScrollView>
-      <View style={styles.menu}>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home', { username })}>
-          <Image style={styles.iconsMenu} source={require('./assets/img/icons/menu-icons/wallet.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Analytics', { username })}>
-          <Image style={styles.iconsMenu} source={require('./assets/img/icons/menu-icons/chart.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Notifications', { username })}>
-          <Image style={styles.iconsMenu} source={require('./assets/img/icons/menu-icons/bell-filled.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings', { username })}>
-          <Image style={styles.iconsMenu} source={require('./assets/img/icons/menu-icons/gears.png')} />
-        </TouchableOpacity>
-      </View>
+      <Menu username={username} />
     </SafeAreaView>
   );
 };
@@ -86,13 +74,13 @@ const NotificationsScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 60,
-    padding: 20,
     flex: 1,
     backgroundColor: '#fff',
   },
   title: {
     marginTop: 5,
     marginBottom: 10,
+    marginHorizontal: 20,
     color: '#2F1155',
     fontWeight: 'bold',
     fontSize: 26,
@@ -100,17 +88,13 @@ const styles = StyleSheet.create({
   },
   notifications: {
     marginTop: 10,
+    padding: 20,
   },
   notificationsCard: {
     backgroundColor: '#EEEEEE',
     borderRadius: 17,
     padding: 15,
     marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   notificationsContent: {
     display: 'flex',
@@ -134,24 +118,6 @@ const styles = StyleSheet.create({
   },
   notificationIcon: {
     marginLeft: 10,
-  },
-  menu: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#5019d4',
-    padding: 20,
-    borderRadius: 30,
-    marginTop: 20,
-  },
-  menuItem: {
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconsMenu: {
-    height: 30,
-    width: 30,
   },
   dataText: {
     textAlign: 'center',

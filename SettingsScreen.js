@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Menu from './Menu'
 
 const SettingsScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -16,6 +17,13 @@ const SettingsScreen = ({ route }) => {
       />,
        label:'Perfil',
        navigateTo: 'ProfileSettings' },
+       { icon: 
+        <Icon
+        name='settings'
+        size={24}
+        color="gray"
+      />,
+        label: 'Autenticação' },
       { icon: 
         <Icon
         name='notifications'
@@ -23,13 +31,6 @@ const SettingsScreen = ({ route }) => {
         color="gray"
       />,
         label: 'Notificações' },
-      { icon: 
-        <Icon
-        name='settings'
-        size={24}
-        color="gray"
-      />,
-        label: 'Autenticação' },
       { icon: 
         <Icon
         name='wallet'
@@ -52,20 +53,8 @@ const SettingsScreen = ({ route }) => {
       ))}
       </View>
     </ScrollView>
-      <View style={styles.menu}>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home', { username })}>
-          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/wallet.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Analytics', { username })}>
-          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/chart.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Notifications', { username })}>
-          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/bell.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings', { username })}>
-          <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/gears-filled.png')} />
-        </TouchableOpacity>
-      </View>
+    <Menu username={username} />
+
    </View>
   );
 };
@@ -74,7 +63,6 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     paddingTop: 60,
-    padding: 20,
     flex: 1,
     backgroundColor: '#fff',
   },
@@ -86,13 +74,10 @@ const styles = StyleSheet.create({
     lineHeight: 32,
     textAlign: 'center',
   },
-  dataText: {
-    textAlign: 'center',
-    fontSize: 16,
-  },
   options: {
     marginTop: 75,
-    paddingHorizontal: 10,
+    marginHorizontal: 10,
+    padding: 20,
   },
   option: {
     flexDirection: 'row',
@@ -126,23 +111,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  menu: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#5019d4',
-    padding: 20,
-    borderRadius: 30,
-    marginTop: 20,
-  },
-  menuItem: {
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconsMenu: {
-    height: 30,
-    width: 30,
+  dataText: {
+    textAlign: 'center',
+    fontSize: 16,
   },
 });
 

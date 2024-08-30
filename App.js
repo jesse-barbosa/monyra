@@ -14,7 +14,6 @@ import ViewTransferScreen from './ViewTransferScreen';
 import CreateGoalScreen from './CreateGoalScreen';
 import ViewGoalScreen from './ViewGoalScreen';
 
-
 const Stack = createStackNavigator();
 
 export default function App() {

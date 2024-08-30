@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, Text, Image, ScrollView, ImageBackground, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
+import Menu from './Menu'
 import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -80,12 +81,6 @@ const HomeScreen = ({ route }) => {
     });
   };
 
-  const handleOutsideClick = () => {
-    if (dropdownVisible) {
-      setDropdownVisible(false);
-    }
-  };
-
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
@@ -105,7 +100,6 @@ const formatCurrency = (value) => {
     default: require('./assets/img/icons/profile/default.png'),
     man: require('./assets/img/icons/profile/man.png'),
     woman: require('./assets/img/icons/profile/woman.png'),
-
   };
 
   // Conditionally set image source
@@ -129,14 +123,13 @@ const formatCurrency = (value) => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={handleOutsideClick}>
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView style={styles.scrollview}>
           <View style={styles.header}>
             <View style={styles.titles}>
               <Text style={styles.title}>Monyra</Text>
               {userData && (
-                <Text style={styles.subtitle}>
+                <Text style={styles.username}>
                   {userData.nameUser}
                 </Text>
               )}
@@ -146,14 +139,50 @@ const formatCurrency = (value) => {
             </TouchableOpacity>
           </View>
           <View style={styles.balanceContainer}>
-            <Text style={styles.balanceText}>Seu saldo atual: </Text>
-            {userData && (
-              <Text style={styles.balance}>
-                {formatCurrency(userData.balanceUser)}
-              </Text>
-            )}
-          </View>
-          <View style={styles.topic}>
+          <ImageBackground 
+            source={require('./assets/img/bg-gradient/balance.png')} 
+            style={styles.balance}
+            imageStyle={{ borderRadius: 30 }}
+          >
+            <Text style={styles.balanceTitle}>Saldo Total</Text>
+            <Text style={styles.balanceText}>{formatCurrency(userData.balanceUser)}</Text>
+          </ImageBackground>
+        </View>
+        <View style={styles.operations}>
+          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', { username, operation: 'gain' })}>
+            <Image style={[styles.btn]} source={require('./assets/img/icons/btn-adicionar-ganho.png')} />
+            <Text style={styles.descOperation}>Ganho</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', { username, operation: 'expense' })}>
+            <Image style={[styles.btn]} source={require('./assets/img/icons/btn-adicionar-gasto.png')} />
+            <Text style={styles.descOperation}>Gasto</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', { username, operation: 'default' })}>
+            <Image style={[styles.btn]} source={require('./assets/img/icons/btn-adicionar.png')} />
+            <Text style={styles.descOperation}>Adicionar</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.cards}>
+          <TouchableOpacity style={styles.cardContainer}>
+            <ImageBackground 
+              source={require('./assets/img/bg-gradient/gains.png')} 
+              style={styles.card}
+            >
+              <Text style={styles.cardTotal}>{formatCurrency(userData.balanceUser)}</Text>
+              <Text style={styles.cardCategory}>Ganhos</Text>
+            </ImageBackground>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardContainer}>
+            <ImageBackground 
+              source={require('./assets/img/bg-gradient/expenses.png')} 
+              style={styles.card}
+            >
+              <Text style={styles.cardTotal}>{formatCurrency(userData.balanceUser)}</Text>
+              <Text style={styles.cardCategory}>Gastos</Text>
+            </ImageBackground>
+          </TouchableOpacity>
+        </View>
+          <View style={styles.goalsTitle}>
             <Text style={styles.secondTitle}>Metas</Text>
           </View>
           <View style={styles.goals}>
@@ -173,90 +202,37 @@ const formatCurrency = (value) => {
                 </View>
               ))
             ) : (
-              <Text>Você não possui metas.</Text>
+              <Text style={styles.dataText}>Você não possui metas.</Text>
             )}
             <View style={styles.addGoalCard}>
               <TouchableOpacity onPress={() => navigation.navigate('CreateGoal', { username } )} style={styles.addGoalContent}>
               <Icon name='add-circle' size={24} color="#642de8" style={styles.addGoalIcon}/>
-                <Text style={styles.addGoalText}>Adicionar Meta...</Text>
+                <Text style={styles.addGoalText}>Adicionar Meta</Text>
               </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
-        <View style={styles.operationContainer}>
-          <TouchableOpacity onPress={toggleDropdown}>
-            <Image style={[styles.btnAdd]} source={require('./assets/img/icons/btn-add.png')} />
-          </TouchableOpacity>
-          {dropdownVisible && (
-            <View style={styles.dropdown}>
-              <TouchableOpacity onPress={() => navigation.navigate('Transfer', { username, operation: 'gain' })}>
-                <Text style={styles.dropdownItem}>Adicionar Ganho</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('Transfer', { username, operation: 'expense' })}>
-                <Text style={styles.dropdownItem}>Adicionar Gasto</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-        {/* Menu */}
-        <View style={styles.menu}>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home', { username })}>
-            <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/wallet-filled.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Analytics', { username })}>
-            <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/chart.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Notifications', { username })}>
-            <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/bell.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings', { username })}>
-            <Image style={[styles.iconsMenu]} source={require('./assets/img/icons/menu-icons/gears.png')} />
-          </TouchableOpacity>
-        </View>
+        <Menu username={username} />
       </View>
-    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  operationContainer: {
-    position: 'absolute',
-    bottom: 120,
-    right: 15,
-    zIndex: 1,
-  },
-  btnAdd: {
-    width: 60,
-    height: 60,
-  },
-  dropdown: {
-    position: 'absolute',
-    top: -70,
-    right: 50,
-    width: 130,
-    backgroundColor: '#f9f7f7',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    zIndex: 1,
-  },
-  dropdownItem: {
-    padding: 10,
-    textAlign: 'center',
-  },
+  // * Estilos pra tela
   container: {
-    paddingTop: 60,
-    padding: 20,
+    paddingTop: 40,
     flex: 1,
     backgroundColor: '#fff',
   },
+  scrollview: {
+    flexGrow: 1,
+  },
+  // * Estilos para o cabeçalho
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 15,
-  },
-  titles: {
-    flexDirection: 'column',
+    paddingVertical: 15,
+    paddingHorizontal: 25,
   },
   title: {
     color: '#120630',
@@ -264,7 +240,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     lineHeight: 32,
   },
-  subtitle: {
+  username: {
     color: 'gray',
     fontSize: 18,
     fontWeight: '400',
@@ -274,25 +250,75 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
+  // * Estilos para o saldo total
   balanceContainer: {
-    backgroundColor: '#642de8',
-    borderRadius: 50,
-    padding: 35,
-    marginTop: 20,
-    marginBottom: 20,
+    marginVertical: 20,
+    paddingHorizontal: 20,
   },
-  balanceText: {
-    color: 'white',
-    fontSize: 16,
+  balance: {
+    borderRadius: 30,
+    padding: 40,
+  },
+  balanceTitle: {
+    color: '#F7F7F7',
+    fontSize: 20,
     fontWeight: '600',
     opacity: 0.7,
   },
-  balance: {
+  balanceText: {
     color: 'white',
-    fontSize: 23,
+    fontSize: 34,
     fontWeight: 'bold',
   },
-  topic: {
+  // * Estilos para as opções de transferências
+  operations: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 60,
+    marginVertical: 10,
+  },
+  operation: {
+    marginHorizontal: 10,
+  },
+  btn: {
+    height: 60,
+    width: 60,
+  },
+  descOperation: {
+    textAlign: 'center',
+    fontSize:  14,
+    color: '#a9a9a9',
+    fontWeight: '400',
+  },
+  // * Estilos para os cards (total de ganhos e gastos)
+  cards: {
+    paddingHorizontal: 20,
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  cardContainer: {
+    borderRadius: 15
+  },
+  card: {
+    width: 175,
+    height: 170,
+    padding: 15,
+    alignItems: 'flex-start',
+  },
+  cardTotal: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 'auto',
+  },
+  cardCategory: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  // * Estilo para as metas do usuário
+  goalsTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -305,18 +331,14 @@ const styles = StyleSheet.create({
     lineHeight: 32,
   },
   goals: {
-    padding: 15,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
   },
   goalCard: {
     backgroundColor: '#EEEEEE',
     borderRadius: 17,
     padding: 15,
     marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   goalTitle: {
     fontSize: 18,
@@ -338,19 +360,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'gray',
   },
+  // * Estilo para a opção de adicionar uma meta
   addGoalCard: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#ccc',
+    backgroundColor: '#EEEEEE',
     borderRadius: 17,
     padding: 10,
     marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   addGoalContent: {
     flex: 1,
@@ -369,23 +384,10 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     marginBottom: 'auto',
   },
-  menu: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#5019d4',
-    padding: 20,
-    borderRadius: 30,
-    marginTop: 20,
-  },
-  menuItem: {
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconsMenu: {
-    height: 30,
-    width: 30,
+  // * Estilo para mensagem excepcional
+  dataText: {
+    textAlign: 'center',
+    marginBottom: 20,
   },
 });
 
