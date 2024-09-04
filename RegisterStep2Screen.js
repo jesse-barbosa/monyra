@@ -37,11 +37,11 @@ const RegisterStep2Screen = ({ navigation, route }) => {
             username
           });
         } else {
-          Alert.alert('Registration Failed', message);
+          Alert.alert('Falha ao criar :(', message);
         }
       })
       .catch(error => {
-        Alert.alert('Registration Error', 'An error occurred while registering.');
+        Alert.alert('Registration Error', `An error occurred while registering: ${error}`);
       });
       
     } else {

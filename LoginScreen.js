@@ -15,31 +15,36 @@ const LoginScreen = ({ navigation }) => {
 
   const handlePress = () => {
     if (email && password) {
-      axios.post(`${API_URL}`, {
-        action: 'login',
-        email,
-        password
-      })
-      .then(response => {
-        const { success, message, user } = response.data;
-        if (success) {
-          navigation.navigate('Home', { username: user.nameUser });
-        } else {
-          Alert.alert('Falha ao entrar :(', message);
-        }
-      })
-      .catch(error => {
-
-        if (error.response) {
-          Alert.alert('Login Error', error.response.data.message);
-        } else {
-          Alert.alert('Login Error', 'An error occurred while logging in.');
-        }
-      });
+        axios.post(`${API_URL}`, {
+            action: 'login',
+            email,
+            password
+        })
+        .then(response => {
+            const { success, message, user } = response.data;
+            if (success) {
+                navigation.navigate('Home', { username: user.nameUser });
+            } else {
+                Alert.alert('Falha ao entrar :(', message);
+            }
+        })
+        .catch(error => {
+            // Verifica se o erro tem uma resposta e é um erro do servidor (status 500 ou similar)
+            if (error.response && error.response.status >= 500) {
+                Alert.alert('Erro no servidor', 'Por favor, tente novamente mais tarde.');
+            } else if (error.response && error.response.data) {
+                // Mostra a mensagem de erro retornada pelo backend
+                Alert.alert('Erro de Login', error.response.data.message);
+            } else {
+                // Outro erro, como falta de conexão
+                Alert.alert('Erro', 'Não foi possível conectar ao servidor. Verifique sua conexão com a internet.');
+            }
+        });
     } else {
-      Alert.alert('Resposta inválida', 'Por favor digite seu e-mail e sua senha.');
+        Alert.alert('Resposta inválida', 'Por favor digite seu e-mail e sua senha.');
     }
-  };
+};
+
 
   return (
     <KeyboardAvoidingView

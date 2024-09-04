@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 19/08/2024 às 13:04
+-- Tempo de geração: 04/09/2024 às 04:10
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -29,20 +29,20 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `tbgoals` (
   `codGoal` int(11) NOT NULL,
-  `categoryGoal` char(25) DEFAULT NULL,
-  `nameGoal` char(30) DEFAULT NULL,
-  `descGoal` char(50) NOT NULL,
+  `nameGoal` char(30) NOT NULL,
+  `categoryGoal` char(25) NOT NULL,
+  `descGoal` char(75) NOT NULL,
   `amountSaved` double NOT NULL DEFAULT 0,
   `amountRemaining` double NOT NULL DEFAULT 0,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Despejando dados para a tabela `tbgoals`
 --
 
-INSERT INTO `tbgoals` (`codGoal`, `categoryGoal`, `nameGoal`, `descGoal`, `amountSaved`, `amountRemaining`, `created_at`) VALUES
-(55, 'Economia ou Investimentos', 'Reserva de emergência', '', 2000, 12000, '2024-08-16 11:15:31');
+INSERT INTO `tbgoals` (`codGoal`, `nameGoal`, `categoryGoal`, `descGoal`, `amountSaved`, `amountRemaining`, `created_at`) VALUES
+(69, 'Reserva de emergÃªncia', 'Economia ou Investimentos', '(Essa meta foi gerada automaticamente na criaÃ§Ã£o de sua conta)', 0, 18000, '2024-09-04 02:09:11');
 
 -- --------------------------------------------------------
 
@@ -60,18 +60,6 @@ CREATE TABLE `tbtransactions` (
   `userCod` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `tbtransactions`
---
-
-INSERT INTO `tbtransactions` (`codTransaction`, `valueTransaction`, `descTransaction`, `typeTransaction`, `categoryTransaction`, `created_at`, `userCod`) VALUES
-(32, 12.5, 'Refrigerante', 'expense', 'Alimentação', '2024-08-14 22:38:58', 1),
-(34, 80, 'Blusa Lacoste', 'expense', 'Vestuário', '2024-08-15 06:52:30', 1),
-(35, 350, 'Viagem para São Paulo', 'expense', 'Transporte', '2024-08-16 15:29:40', 1),
-(36, 120, 'Pagamento atrasado', 'gain', 'Remunerações', '2024-08-16 15:28:19', 1),
-(37, 200, 'Benefícios do Governo', 'gain', 'Benefícios', '2024-08-16 15:29:19', 1),
-(38, 700, 'Salário', 'gain', 'Remunerações', '2024-08-16 15:29:55', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -85,7 +73,7 @@ CREATE TABLE `tbusers` (
   `passwordUser` char(60) NOT NULL,
   `incomeUser` char(10) NOT NULL,
   `balanceUser` float DEFAULT 0,
-  `iconUser` char(50) NOT NULL DEFAULT '''/assets/img/icons/profile/user.png''',
+  `iconUser` char(50) NOT NULL DEFAULT 'default',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -94,7 +82,7 @@ CREATE TABLE `tbusers` (
 --
 
 INSERT INTO `tbusers` (`codUser`, `nameUser`, `emailUser`, `passwordUser`, `incomeUser`, `balanceUser`, `iconUser`, `created_at`) VALUES
-(1, 'Jessé Barbosa', 'barbosajesse419@gmail.com', '$2y$10$JdJ1aK4zWKFGQERuuvMGuurg7ht4JG16Cb7mv5j2z2uFAPJ9D2YGm', '4000', 577.5, 'default', '2024-07-17 13:52:30');
+(117, 'JessÃ© Barbosa', 'barbosajesse419@gmail.com', '$2y$10$wQSRUQp09iIA39EX6sCHSebSVi06B26GNFHpN3E9pvnNHPw.r/a7m', '6000', 0, 'default', '2024-09-04 02:09:11');
 
 -- --------------------------------------------------------
 
@@ -104,8 +92,8 @@ INSERT INTO `tbusers` (`codUser`, `nameUser`, `emailUser`, `passwordUser`, `inco
 
 CREATE TABLE `user_goals` (
   `id` int(11) NOT NULL,
-  `userCod` int(11) DEFAULT NULL,
-  `goalCod` int(11) DEFAULT NULL
+  `userCod` int(11) NOT NULL,
+  `goalCod` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -113,7 +101,7 @@ CREATE TABLE `user_goals` (
 --
 
 INSERT INTO `user_goals` (`id`, `userCod`, `goalCod`) VALUES
-(12, 1, 55);
+(26, 117, 69);
 
 --
 -- Índices para tabelas despejadas
@@ -154,7 +142,7 @@ ALTER TABLE `user_goals`
 -- AUTO_INCREMENT de tabela `tbgoals`
 --
 ALTER TABLE `tbgoals`
-  MODIFY `codGoal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `codGoal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT de tabela `tbtransactions`
@@ -166,13 +154,13 @@ ALTER TABLE `tbtransactions`
 -- AUTO_INCREMENT de tabela `tbusers`
 --
 ALTER TABLE `tbusers`
-  MODIFY `codUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `codUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
 
 --
 -- AUTO_INCREMENT de tabela `user_goals`
 --
 ALTER TABLE `user_goals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Restrições para tabelas despejadas
