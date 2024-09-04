@@ -139,14 +139,10 @@ const formatCurrency = (value) => {
             </TouchableOpacity>
           </View>
           <View style={styles.balanceContainer}>
-          <ImageBackground 
-            source={require('./assets/img/bg-gradient/balance.png')} 
-            style={styles.balance}
-            imageStyle={{ borderRadius: 30 }}
-          >
+          <View style={styles.balance}>
             <Text style={styles.balanceTitle}>Saldo Total</Text>
             <Text style={styles.balanceText}>{formatCurrency(userData.balanceUser)}</Text>
-          </ImageBackground>
+          </View>
         </View>
         <View style={styles.operations}>
           <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', { username, operation: 'gain' })}>
@@ -256,6 +252,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   balance: {
+    backgroundColor: '#5019d4',
     borderRadius: 30,
     padding: 40,
   },
