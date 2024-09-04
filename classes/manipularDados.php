@@ -176,13 +176,13 @@ class ManipularDados extends Conexao {
             $incomeUser = $input['incomeUser'];
 
             // Verifica se o usuário já existe
-            $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE nameUser = ?");
-            $stmt->bind_param("s", $username);
+            $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE emailUser = ?");
+            $stmt->bind_param("s", $email);
             $stmt->execute();
             $result = $stmt->get_result();
 
             if ($result->num_rows > 0) {
-                echo json_encode(["success" => false, "message" => "Username already taken"]);
+                echo json_encode(["success" => false, "message" => "Usuário já cadastrado no sistema"]);
             } else {
                 $stmt = $this->conn->prepare("INSERT INTO tbusers (nameUser, emailUser, passwordUser, incomeUser) VALUES (?, ?, ?, ?)");
                 $stmt->bind_param("ssss", $username, $email, $password, $incomeUser);
