@@ -12,10 +12,10 @@ class ManipularDados extends Conexao {
     }
 
     private function getUserData($input) {
-        if (isset($input['username'])) {
-            $username = $input['username'];
-            $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE nameUser = ?");
-            $stmt->bind_param("s", $username);
+        if (isset($input['email'])) {
+            $email = $input['email'];
+            $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE emailUser = ?");
+            $stmt->bind_param("s", $email);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -28,7 +28,7 @@ class ManipularDados extends Conexao {
 
             $stmt->close();
         } else {
-            echo json_encode(["success" => false, "message" => "Please provide username"]);
+            echo json_encode(["success" => false, "message" => "Please provide email"]);
         }
     }
 
@@ -291,9 +291,9 @@ class ManipularDados extends Conexao {
     }
 
     private function createGoal($input) {
-        if (isset($input['category']) && isset($input['name']) && isset($input['description']) && isset($input['amountSaved']) && isset($input['amountRemaining'])) {
-            $category = $input['category'];
+        if (isset($input['name']) && isset($input['category']) && isset($input['description']) && isset($input['amountSaved']) && isset($input['amountRemaining'])) {
             $name = $input['name'];
+            $category = $input['category'];
             $description = $input['description'];
             $amountSaved = $input['amountSaved'];
             $amountRemaining = $input['amountRemaining'];
@@ -301,8 +301,8 @@ class ManipularDados extends Conexao {
             if (isset($_SESSION['userCod'])) {
                 $userCod = $_SESSION['userCod'];
 
-                $stmt = $this->conn->prepare("INSERT INTO tbgoals (categoryGoal, nameGoal, descGoal, amountSaved, amountRemaining) VALUES (?, ?, ?, ?, ?)");
-                $stmt->bind_param("sssdd", $category, $name, $description, $amountSaved, $amountRemaining);
+                $stmt = $this->conn->prepare("INSERT INTO tbgoals (nameGoal, categoryGoal ,descGoal, amountSaved, amountRemaining) VALUES (?, ?, ?, ?, ?)");
+                $stmt->bind_param("sssdd", $name, $category, $description, $amountSaved, $amountRemaining);
                 
                 if ($stmt->execute()) {
                     $goalCod = $this->conn->insert_id;
@@ -362,7 +362,38 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Goal ID not provided."]);
         }
     }
+    private function addPeopleTogoal($input) {
+        if (isset($input['email'])) {
+            $email = $input['email'];
 
+            // Verifica se o usuário existe
+            $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE emailUser = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                echo json_encode(["success" => true, "message" => "Usuário encontrado no sistema"]);
+                $goalCod = $stmt->insert_id;
+                
+                $assignStmt = $this->conn->prepare("INSERT INTO user_goals (userCod, goalCod) VALUES (?, ?)");
+                if ($assignStmt === false) {
+                    die('Assign Goal Prepare failed: ' . htmlspecialchars($this->conn->error));
+                }
+                $assignStmt->bind_param("ii", $userCod, $goalCod);
+                if ($assignStmt->execute()) {
+                    echo json_encode(["success" => true, "message" => "Goal assigned successfully"]);
+                } else {
+                    echo json_encode(["success" => false, "message" => "Failed to assign goal to user"]);
+                }
+                $assignStmt->close();
+            } else {
+                echo json_encode(["success" => false, "message" => "Usuário não encontrado no sistema"]);
+            }
+        } else {
+            echo json_encode(["success" => false, "message" => "Missing parameters"]);
+        }
+    }
     public function handleRequest() {
         $input = json_decode(file_get_contents("php://input"), true);
         $action = isset($input['action']) ? $input['action'] : '';
@@ -398,6 +429,8 @@ class ManipularDados extends Conexao {
             case 'deleteGoal':
                 $this->deleteGoal($input);
                 break;
+            case 'addPeopleToGoal':
+                $this->addPeopleToGoal($input);
             default:
                 echo json_encode(["success" => false, "message" => "Invalid action"]);
                 break;

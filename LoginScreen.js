@@ -23,7 +23,9 @@ const LoginScreen = ({ navigation }) => {
         .then(response => {
             const { success, message, user } = response.data;
             if (success) {
-                navigation.navigate('Home', { username: user.nameUser });
+                navigation.navigate('Home', { 
+                  username: user.nameUser,
+                  email: user.emailUser });
             } else {
                 Alert.alert('Falha ao entrar :(', message);
             }

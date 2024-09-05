@@ -6,7 +6,7 @@ import Menu from './Menu'
 
 const SettingsScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { username } = route.params || {};
+  const { username, email } = route.params || {};
     const menuItems = [
       { icon:
       <Icon
@@ -17,14 +17,7 @@ const SettingsScreen = ({ route }) => {
       />,
        label:'Perfil',
        navigateTo: 'ProfileSettings' },
-       { icon: 
-        <Icon
-        name='settings'
-        size={24}
-        color="gray"
-      />,
-        label: 'Autenticação' },
-      { icon: 
+      { icon:
         <Icon
         name='notifications'
         size={24}
@@ -38,6 +31,15 @@ const SettingsScreen = ({ route }) => {
         color="gray"
         />,
           label: 'Sua carteira' },
+          { icon:
+            <Icon
+            name='settings'
+            size={24}
+            color="gray"
+          />,
+          label: 'Gerais',
+          navigateTo: 'GeneralSettings'
+          },
     ];
   return (
   <View style={styles.container}>
@@ -45,7 +47,7 @@ const SettingsScreen = ({ route }) => {
       <Text style={styles.title}>Configurações</Text>
       <View style={styles.options}>
       {menuItems.map((item, index) => (
-        <TouchableOpacity key={index} style={styles.option} onPress={() => navigation.navigate(item.navigateTo, {username})}>
+        <TouchableOpacity key={index} style={styles.option} onPress={() => navigation.navigate(item.navigateTo, {username, email})}>
           <Text style={styles.icon}>{item.icon}</Text>
           <Text style={styles.label}>{item.label}</Text>
           <Text style={styles.arrow}>➔</Text>

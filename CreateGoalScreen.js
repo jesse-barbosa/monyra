@@ -21,8 +21,8 @@ const TransferScreen = ({ route }) => {
       if( name && description && category && amountRemaining && amountSaved){
         axios.post(`${API_URL}`, {
           action: 'createGoal',
-          category,
           name,
+          category,
           description,
           amountSaved,
           amountRemaining,
@@ -60,15 +60,6 @@ const TransferScreen = ({ route }) => {
             />
         </View>
         <View style={styles.inputContainer}>
-            <TextInput
-              maxLength={50}
-              style={styles.input}
-              placeholder="Descrição (opcional)"
-              onChangeText={setDescription}
-              value={description}
-            />
-        </View>
-        <View style={styles.inputContainer}>
               <Picker
               selectedValue={category}
               style={styles.picker}
@@ -85,6 +76,15 @@ const TransferScreen = ({ route }) => {
                 <Picker.Item label="Economia ou Investimentos" value="Economia" />
               </Picker>
           </View>
+        <View style={styles.inputContainer}>
+            <TextInput
+              maxLength={50}
+              style={styles.input}
+              placeholder="Descrição (opcional)"
+              onChangeText={setDescription}
+              value={description}
+            />
+        </View>
         <View style={styles.inputContainer}>
             <TextInput
               maxLength={11}

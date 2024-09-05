@@ -34,7 +34,7 @@ const RegisterStep2Screen = ({ navigation, route }) => {
 
         if (success) {
           navigation.navigate('Home', {
-            username
+            username, email
           });
         } else {
           Alert.alert('Falha ao criar :(', message);

@@ -4,10 +4,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
 import * as Progress from 'react-native-progress';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const ViewTransferScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { goal } = route.params;
+  const { goal, username } = route.params;
 
   const formattedDate = goal.created_at.split(' ')[0];
   const formattedTime = goal.created_at.split(' ')[1];
@@ -90,6 +91,12 @@ const ViewTransferScreen = ({ route }) => {
           <Text style={styles.value}>{formattedTime}</Text>
         </View>
       <Progress.Bar progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)} width={290} height={30} color="#642de8" style={styles.goalBarProgress}/>
+      <View style={styles.addPeopleCard}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddPeople', { goal, username } )} style={styles.addPeopleContent}>
+              <Icon name='add-circle' size={24} color="#642de8" style={styles.addPeopleIcon}/>
+                <Text style={styles.addPeopleText}>Adicionar Pessoa</Text>
+              </TouchableOpacity>
+            </View>
       </View>
       <TouchableOpacity style={styles.saveButton}>
         <Text style={styles.saveButtonText}>Salvar</Text>
@@ -130,11 +137,6 @@ const styles = StyleSheet.create({
     marginVertical: 40,
     flex: 1,
     justifyContent: 'space-evenly',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
   },
   infoRow: {
     flexDirection: 'row',
@@ -201,6 +203,28 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  addPeopleCard: {
+    backgroundColor: '#EEEEEE',
+    borderRadius: 17,
+    padding: 10,
+    marginVertical: 15,
+  },
+  addPeopleContent: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addPeopleText: {
+    fontSize: 18,
+    marginBottom: 5,
+    opacity: 0.7,
+    color: '#642de8',
+  },
+  addPeopleIcon: {
+    marginRight: 10,
+    opacity: 0.7,
+    marginBottom: 'auto',
   },
 });
 

@@ -7,18 +7,17 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const ProfileSettingsScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { username } = route.params || {};
+  const { username, email } = route.params || {};
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedIconIndex, setSelectedIconIndex] = useState(0);
-
   const icons = ['default', 'man', 'woman'];
 
   useEffect(() => {
     axios.post(`${API_URL}`, {
       action: 'getUserData',
-      username
+      email
     })
     .then(response => {
       const { success, message, user } = response.data;

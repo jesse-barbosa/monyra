@@ -9,18 +9,17 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { username } = route.params;
+  const { username, email } = route.params;
   const [userData, setUserData] = useState(null);
   const [userGoals, setUserGoals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-
   useEffect(() => {
     // Fetch user data
     axios.post(`${API_URL}`, {
       action: 'getUserData',
-      username
+      email
     })
     .then(response => {
       const { success, message, user } = response.data;
@@ -185,7 +184,7 @@ const formatCurrency = (value) => {
             {userGoals.length > 0 ? (
               userGoals.map(goal => (
                 <View key={goal.codGoal} style={styles.goalCard}>
-                  <TouchableOpacity onPress={() => navigation.navigate('ViewGoal', { goal } )}>
+                  <TouchableOpacity onPress={() => navigation.navigate('ViewGoal', { goal, username } )}>
                   <Text style={styles.goalTitle}>{goal.nameGoal}</Text>
                   <Text style={styles.goalUser}>
                     • {formatUserNames(goal.userNames || [])}
@@ -208,7 +207,7 @@ const formatCurrency = (value) => {
             </View>
           </View>
         </ScrollView>
-        <Menu username={username} />
+        <Menu username={username} email={email} />
       </View>
   );
 };
