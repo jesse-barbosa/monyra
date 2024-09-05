@@ -4,31 +4,33 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
 
-const ViewTransferScreen = ({ route }) => {
+const AddPeopleScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { goal, username } = route.params;
-  const [email, setEmail] = useState('');
-
+  const { goal, username, email } = route.params;
+  const [emailFriend, setEmailFriend] = useState('');
+  const codGoal = goal.codGoal;
   const handlePress = () => {
-      if(email){
+      if(emailFriend){
         axios.post(`${API_URL}`, {
           action: 'addPeopleToGoal',
-          email
-        })
-        .then(response => {
-          const { success, message, user } = response.data;
+          emailFriend,
+          goalCod: codGoal
+      })
+      .then(response => {
+          const { success, message } = response.data;
           if (success) {
-            navigation.navigate('Home', { username });
+            Alert.alert('Parabéns!', 'Amigo adicionado com sucesso.');
+              navigation.navigate('Home', { username, email });
           } else {
-            Alert.alert('Add Failed', message);
+              Alert.alert('Add Failed', message);
           }
-        })
-        .catch(error => {
+      })
+      .catch(error => {
           console.error('Error adding in:', error);
           Alert.alert('Add Error', 'An error occurred while adding people.');
-        });
+      });      
     } else {
-      Alert.alert('Invalid Input', 'Please enter both username and email.');
+      Alert.alert('Invalid Input', 'Por favor, insira o email.');
     }
   }
   return (
@@ -43,8 +45,8 @@ const ViewTransferScreen = ({ route }) => {
                 maxLength={50}
                 style={styles.input}
                 placeholder="Email do usuário"
-                onChangeText={setEmail}
-                value={email}
+                onChangeText={setEmailFriend}
+                value={emailFriend}
               />
           </View>
         </View>
@@ -242,4 +244,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ViewTransferScreen;
+export default AddPeopleScreen;

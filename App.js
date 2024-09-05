@@ -35,7 +35,7 @@ export default function App() {
         <Stack.Screen name="ViewTransfer" component={ViewTransferScreen} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="CreateGoal" component={CreateGoalScreen} options={{ headerTitle: "Criar meta", animationEnabled: false, }} />
         <Stack.Screen name="ViewGoal" component={ViewGoalScreen} options={{ headerShown: false, animationEnabled: false, }} />
-        <Stack.Screen name="AddPeople" component={AddPeopleScreen} options={{ headerShown: false, animationEnabled: false, }} />
+        <Stack.Screen name="AddPeople" component={AddPeopleScreen} options={{ headerTitle: "Adicionar pessoas", animationEnabled: false, }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

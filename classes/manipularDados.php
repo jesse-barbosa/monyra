@@ -22,6 +22,7 @@ class ManipularDados extends Conexao {
             if ($result->num_rows > 0) {
                 $user = $result->fetch_assoc();
                 echo json_encode(["success" => true, "message" => "User data retrieved", "user" => $user]);
+                return $user;
             } else {
                 echo json_encode(["success" => false, "message" => "User not found"]);
             }
@@ -362,38 +363,59 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Goal ID not provided."]);
         }
     }
-    private function addPeopleTogoal($input) {
-        if (isset($input['email'])) {
-            $email = $input['email'];
-
-            // Verifica se o usuário existe
+    private function addPeopleToGoal($input) {
+        if (isset($input['emailFriend']) && isset($input['goalCod'])) {
+            $emailFriend = $input['emailFriend'];
+            $goalCod = $input['goalCod'];
+    
+            // Busca o amigo no banco de dados
             $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE emailUser = ?");
-            $stmt->bind_param("s", $email);
+            $stmt->bind_param("s", $emailFriend);
             $stmt->execute();
             $result = $stmt->get_result();
-
+    
             if ($result->num_rows > 0) {
-                echo json_encode(["success" => true, "message" => "Usuário encontrado no sistema"]);
-                $goalCod = $stmt->insert_id;
-                
+                $user = $result->fetch_assoc();
+                $codUserFriend = $user['codUser'];
+    
+                // Verifica se o amigo já está associado à meta
+                $checkStmt = $this->conn->prepare("SELECT * FROM user_goals WHERE userCod = ? AND goalCod = ?");
+                $checkStmt->bind_param("ii", $codUserFriend, $goalCod);
+                $checkStmt->execute();
+                $checkResult = $checkStmt->get_result();
+    
+                if ($checkResult->num_rows > 0) {
+                    // O amigo já está associado à meta
+                    echo json_encode(["success" => false, "message" => "Este usuário já está adicionado!"]);
+                    $checkStmt->close();
+                    $stmt->close();
+                    exit();
+                }
+    
+                // Associa o amigo ao objetivo
                 $assignStmt = $this->conn->prepare("INSERT INTO user_goals (userCod, goalCod) VALUES (?, ?)");
                 if ($assignStmt === false) {
-                    die('Assign Goal Prepare failed: ' . htmlspecialchars($this->conn->error));
-                }
-                $assignStmt->bind_param("ii", $userCod, $goalCod);
-                if ($assignStmt->execute()) {
-                    echo json_encode(["success" => true, "message" => "Goal assigned successfully"]);
+                    echo json_encode(["success" => false, "message" => 'Assign Goal Prepare failed: ' . htmlspecialchars($this->conn->error)]);
+                    exit();
                 } else {
-                    echo json_encode(["success" => false, "message" => "Failed to assign goal to user"]);
+                    $assignStmt->bind_param("ii", $codUserFriend, $goalCod);
+                    if ($assignStmt->execute()) {
+                        echo json_encode(["success" => true, "message" => "Goal assigned successfully"]);
+                    } else {
+                        echo json_encode(["success" => false, "message" => "Failed to assign goal to user"]);
+                    }
+                    $assignStmt->close();
                 }
-                $assignStmt->close();
+                $checkStmt->close();
             } else {
-                echo json_encode(["success" => false, "message" => "Usuário não encontrado no sistema"]);
+                echo json_encode(["success" => false, "message" => "User not found"]);
             }
+            $stmt->close();
         } else {
             echo json_encode(["success" => false, "message" => "Missing parameters"]);
         }
-    }
+    }    
+    
     public function handleRequest() {
         $input = json_decode(file_get_contents("php://input"), true);
         $action = isset($input['action']) ? $input['action'] : '';
@@ -431,6 +453,7 @@ class ManipularDados extends Conexao {
                 break;
             case 'addPeopleToGoal':
                 $this->addPeopleToGoal($input);
+                break;
             default:
                 echo json_encode(["success" => false, "message" => "Invalid action"]);
                 break;

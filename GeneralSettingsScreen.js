@@ -29,7 +29,6 @@ const GeneralSettingsScreen = ({ route }) => {
     );
   }
 
-
   return (
     <View style={styles.container}>
       <View style={styles.input}>

@@ -184,7 +184,7 @@ const formatCurrency = (value) => {
             {userGoals.length > 0 ? (
               userGoals.map(goal => (
                 <View key={goal.codGoal} style={styles.goalCard}>
-                  <TouchableOpacity onPress={() => navigation.navigate('ViewGoal', { goal, username } )}>
+                  <TouchableOpacity onPress={() => navigation.navigate('ViewGoal', { goal, username, email } )}>
                   <Text style={styles.goalTitle}>{goal.nameGoal}</Text>
                   <Text style={styles.goalUser}>
                     • {formatUserNames(goal.userNames || [])}
@@ -200,7 +200,7 @@ const formatCurrency = (value) => {
               <Text style={styles.dataText}>Você não possui metas.</Text>
             )}
             <View style={styles.addGoalCard}>
-              <TouchableOpacity onPress={() => navigation.navigate('CreateGoal', { username } )} style={styles.addGoalContent}>
+              <TouchableOpacity onPress={() => navigation.navigate('CreateGoal', { username, email } )} style={styles.addGoalContent}>
               <Icon name='add-circle' size={24} color="#642de8" style={styles.addGoalIcon}/>
                 <Text style={styles.addGoalText}>Adicionar Meta</Text>
               </TouchableOpacity>

@@ -8,8 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const ViewTransferScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { goal, username } = route.params;
-
+  const { goal, username, email } = route.params;
   const formattedDate = goal.created_at.split(' ')[0];
   const formattedTime = goal.created_at.split(' ')[1];
   
@@ -92,7 +91,7 @@ const ViewTransferScreen = ({ route }) => {
         </View>
       <Progress.Bar progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)} width={290} height={30} color="#642de8" style={styles.goalBarProgress}/>
       <View style={styles.addPeopleCard}>
-              <TouchableOpacity onPress={() => navigation.navigate('AddPeople', { goal, username } )} style={styles.addPeopleContent}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddPeople', { goal, username, email } )} style={styles.addPeopleContent}>
               <Icon name='add-circle' size={24} color="#642de8" style={styles.addPeopleIcon}/>
                 <Text style={styles.addPeopleText}>Adicionar Pessoa</Text>
               </TouchableOpacity>
