@@ -1,7 +1,7 @@
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const Menu = ({ username, email }) => {
+const Menu = ({ userData }) => {
     const navigation = useNavigation();
     const route = useRoute();
     
@@ -26,16 +26,16 @@ const Menu = ({ username, email }) => {
 
     return (
         <View style={styles.menu}>
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home', { username, email })}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home', { userData })}>
                 <Image style={styles.iconsMenu} source={route.name === 'Home' ? iconMap.Home.filled : iconMap.Home.default} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Analytics', { username, email })}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Analytics', { userData })}>
                 <Image style={styles.iconsMenu} source={route.name === 'Analytics' ? iconMap.Analytics.filled : iconMap.Analytics.default} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Notifications', { username, email })}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Notifications', { userData })}>
                 <Image style={styles.iconsMenu} source={route.name === 'Notifications' ? iconMap.Notifications.filled : iconMap.Notifications.default} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings', { username, email })}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings', { userData })}>
                 <Image style={styles.iconsMenu} source={route.name === 'Settings' ? iconMap.Settings.filled : iconMap.Settings.default} />
             </TouchableOpacity>
         </View>
@@ -46,9 +46,12 @@ const styles = StyleSheet.create({
     menu: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: '#5019d4',
+        backgroundColor: '#000',
         paddingHorizontal: 20,
-        paddingVertical: 10,
+        paddingVertical: 15,
+        marginHorizontal: 20,
+        marginBottom: 10,
+        borderRadius: 25,
     },
     menuItem: {
         width: 50,

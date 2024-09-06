@@ -1,49 +1,22 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, View, Text, Image, ScrollView, ImageBackground, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Image, Text, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
-import Menu from './Menu'
+import Menu from './Menu';
 import * as Progress from 'react-native-progress';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons'; // Biblioteca de ícones
 
 const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { username, email } = route.params;
-  const [userData, setUserData] = useState(null);
+  const { userData } = route.params;
   const [userGoals, setUserGoals] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-  useEffect(() => {
-    // Fetch user data
-    axios.post(`${API_URL}`, {
-      action: 'getUserData',
-      email
-    })
-    .then(response => {
-      const { success, message, user } = response.data;
-      if (success) {
-        setUserData(user);
-        fetchUserGoals(user.codUser);
-      } else {
-        setError(message);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching user data:', error);
-      setError('An error occurred while fetching user data.');
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-  }, [username]);
 
-  // Function to fetch user goals
   const fetchUserGoals = (userCod) => {
     axios.post(`${API_URL}`, {
       action: 'getUserGoals',
-      userCod
+      userCod: userCod, 
     })
     .then(response => {
       const { success, message, goals } = response.data;
@@ -59,161 +32,115 @@ const HomeScreen = ({ route }) => {
     });
   };
 
-  // Function to assign a goal to a user
-  const assignGoalToUser = (userCod, goalCod) => {
-    axios.post(`${API_URL}`, {
-      action: 'assignGoalToUser',
-      userCod,
-      goalCod
-    })
-    .then(response => {
-      const { success, message } = response.data;
-      if (success) {
-        console.log("Goal assigned to user successfully");
-        fetchUserGoals(userCod);
-      } else {
-        console.error("Error assigning goal to user:", message);
-      }
-    })
-    .catch(error => {
-      console.error("Error assigning goal to user:", error);
+  // useEffect para buscar metas assim que o componente é montado
+  useEffect(() => {
+    if (userData && userData.codUser) {
+      fetchUserGoals(userData.codUser);
+    }
+  }, [userData]);
+
+  const formatCurrency = (value) => {
+    const formatter = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
     });
+    return formatter.format(value);
   };
 
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
-  };
-
-const formatCurrency = (value) => {
-  const formatter = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  });
-  return formatter.format(value);
-};
- 
   const formatUserNames = (userNames) => {
     return userNames.join(', ');
   };
+
   const images = {
     default: require('./assets/img/icons/profile/default.png'),
     man: require('./assets/img/icons/profile/man.png'),
     woman: require('./assets/img/icons/profile/woman.png'),
   };
 
-  // Conditionally set image source
   const imageSource = userData ? images[userData.iconUser] || images['default'] : images['default'];
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text>Carregando dados...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text>Ocorreu um erro ao buscar os dados:</Text>
-        <Text>{error}</Text>
-      </View>
-    );
-  }
-
+  
   return (
-      <View style={styles.container}>
-        <ScrollView style={styles.scrollview}>
-          <View style={styles.header}>
-            <View style={styles.titles}>
-              <Text style={styles.title}>Monyra</Text>
-              {userData && (
-                <Text style={styles.username}>
-                  {userData.nameUser}
-                </Text>
-              )}
-            </View>
-            <TouchableOpacity onPress={() => navigation.navigate('ProfileSettings', { username })}>
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollview}>
+        <View style={styles.header}>
+          <View style={styles.titles}>
+            <Text style={styles.title}>Monyra</Text>
+            {userData && (
+              <Text style={styles.username}>
+                {userData.nameUser}
+              </Text>
+            )}
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('Settings', { userData })}>
               <Image style={styles.userImage} source={imageSource} />
             </TouchableOpacity>
-          </View>
-          <View style={styles.balanceContainer}>
+        </View>
+        <View style={styles.balanceContainer}>
           <View style={styles.balance}>
             <Text style={styles.balanceTitle}>Saldo Total</Text>
             <Text style={styles.balanceText}>{formatCurrency(userData.balanceUser)}</Text>
           </View>
         </View>
         <View style={styles.operations}>
-          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', { username, operation: 'gain' })}>
-            <Image style={[styles.btn]} source={require('./assets/img/icons/btn-adicionar-ganho.png')} />
+          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', {userData, operation: 'gain' })}>
+            <Icon name="arrow-up-outline" size={30} color="#000" style={styles.btn} />
             <Text style={styles.descOperation}>Ganho</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', { username, operation: 'expense' })}>
-            <Image style={[styles.btn]} source={require('./assets/img/icons/btn-adicionar-gasto.png')} />
+          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', {userData, operation: 'expense' })}>
+            <Icon name="arrow-down-outline" size={30} color="#000" style={styles.btn} />
             <Text style={styles.descOperation}>Gasto</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', { username, operation: 'default' })}>
-            <Image style={[styles.btn]} source={require('./assets/img/icons/btn-adicionar.png')} />
+          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', {userData, operation: 'default' })}>
+            <Icon name="add-circle-outline" size={30} color="#000" style={styles.btn} />
             <Text style={styles.descOperation}>Adicionar</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.cards}>
           <TouchableOpacity style={styles.cardContainer}>
-            <ImageBackground 
-              source={require('./assets/img/bg-gradient/gains.png')} 
-              style={styles.card}
-            >
-              <Text style={styles.cardTotal}>{formatCurrency(userData.balanceUser)}</Text>
-              <Text style={styles.cardCategory}>Ganhos</Text>
-            </ImageBackground>
+            <Text style={styles.cardTotal}>{formatCurrency(userData.balanceUser)}</Text>
+            <Text style={styles.cardCategory}>Ganhos</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cardContainer}>
-            <ImageBackground 
-              source={require('./assets/img/bg-gradient/expenses.png')} 
-              style={styles.card}
-            >
-              <Text style={styles.cardTotal}>{formatCurrency(userData.balanceUser)}</Text>
-              <Text style={styles.cardCategory}>Gastos</Text>
-            </ImageBackground>
+            <Text style={styles.cardTotal}>{formatCurrency(userData.balanceUser)}</Text>
+            <Text style={styles.cardCategory}>Gastos</Text>
           </TouchableOpacity>
         </View>
-          <View style={styles.goalsTitle}>
-            <Text style={styles.secondTitle}>Metas</Text>
-          </View>
-          <View style={styles.goals}>
-            {userGoals.length > 0 ? (
-              userGoals.map(goal => (
-                <View key={goal.codGoal} style={styles.goalCard}>
-                  <TouchableOpacity onPress={() => navigation.navigate('ViewGoal', { goal, username, email } )}>
+        <View style={styles.goalsTitle}>
+          <Text style={styles.secondTitle}>Metas</Text>
+        </View>
+        <View style={styles.goals}>
+          {userGoals.length > 0 ? (
+            userGoals.map(goal => (
+              <View key={goal.codGoal} style={styles.goal}>
+                <TouchableOpacity onPress={() => navigation.navigate('ViewGoal', { goal, username: userData.nameUser, email: userData.email })}>
                   <Text style={styles.goalTitle}>{goal.nameGoal}</Text>
                   <Text style={styles.goalUser}>
                     • {formatUserNames(goal.userNames || [])}
                   </Text>
-                  <Text style={styles.goalRemaining}>
+                  <Text style={styles.goalRemainingValue}>
                     R${goal.amountRemaining.toFixed(2)}
                   </Text>
-                  <Progress.Bar progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)} width={290} color="#642de8" style={styles.goalBarProgress}/>
-                  </TouchableOpacity>
-                </View>
-              ))
-            ) : (
-              <Text style={styles.dataText}>Você não possui metas.</Text>
-            )}
-            <View style={styles.addGoalCard}>
-              <TouchableOpacity onPress={() => navigation.navigate('CreateGoal', { username, email } )} style={styles.addGoalContent}>
-              <Icon name='add-circle' size={24} color="#642de8" style={styles.addGoalIcon}/>
-                <Text style={styles.addGoalText}>Adicionar Meta</Text>
-              </TouchableOpacity>
-            </View>
+                  <Progress.Bar progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)} width={290} color="#000" style={styles.goalBarProgress}/>
+                </TouchableOpacity>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.dataText}>Você não possui metas.</Text>
+          )}
+          <View style={styles.addGoalCard}>
+            <TouchableOpacity onPress={() => navigation.navigate('CreateGoal', { username: userData.nameUser, email: userData.email })} style={styles.addGoalContent}>
+              <Icon name='add-circle' size={24} color="#000" style={styles.addGoalIcon}/>
+              <Text style={styles.addGoalText}>Adicionar Meta</Text>
+            </TouchableOpacity>
           </View>
-        </ScrollView>
-        <Menu username={username} email={email} />
-      </View>
+        </View>
+      </ScrollView>
+      <Menu userData={userData} />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  // * Estilos pra tela
   container: {
     paddingTop: 40,
     flex: 1,
@@ -222,7 +149,6 @@ const styles = StyleSheet.create({
   scrollview: {
     flexGrow: 1,
   },
-  // * Estilos para o cabeçalho
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -236,57 +162,69 @@ const styles = StyleSheet.create({
     lineHeight: 32,
   },
   username: {
-    color: 'gray',
+    color: '000',
     fontSize: 18,
     fontWeight: '400',
-    opacity: 0.6,
+    opacity: 0.5,
   },
   userImage: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
   },
-  // * Estilos para o saldo total
   balanceContainer: {
     marginVertical: 20,
     paddingHorizontal: 20,
   },
   balance: {
-    backgroundColor: '#5019d4',
+    backgroundColor: '#000',
     borderRadius: 30,
-    padding: 40,
+    paddingHorizontal: 40,
+    paddingVertical: 35,
+    borderRadius: 15,
   },
   balanceTitle: {
-    color: '#F7F7F7',
+    color: '#fff',
     fontSize: 20,
     fontWeight: '600',
     opacity: 0.7,
+    fontFamily: 'monospace',
   },
   balanceText: {
-    color: 'white',
+    color: '#fff',
     fontSize: 34,
     fontWeight: 'bold',
+    fontFamily: 'monospace',
   },
-  // * Estilos para as opções de transferências
   operations: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 60,
+    paddingHorizontal: 20,
     marginVertical: 10,
   },
   operation: {
+    width: 100,
+    height: 95,
+    backgroundColor: '#fff',
     marginHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderBottomWidth: 8,
+    borderRightWidth: 8,
+    borderBottomColor: '#000',
+    borderRightColor: '#000',
   },
   btn: {
-    height: 60,
-    width: 60,
+    marginBottom: 5,
   },
   descOperation: {
     textAlign: 'center',
-    fontSize:  14,
-    color: '#a9a9a9',
+    fontSize: 14,
     fontWeight: '400',
+    color: '#000',
+    opacity: 0.4,
   },
-  // * Estilos para os cards (total de ganhos e gastos)
   cards: {
     paddingHorizontal: 20,
     marginTop: 20,
@@ -294,26 +232,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   cardContainer: {
-    borderRadius: 15
-  },
-  card: {
-    width: 175,
-    height: 170,
+    width: 170,
+    height: 110,
+    borderRadius: 15,
     padding: 15,
+    backgroundColor: '#ededed',
     alignItems: 'flex-start',
   },
   cardTotal: {
-    color: '#fff',
+    color: '#000',
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 'auto',
   },
   cardCategory: {
-    color: '#fff',
+    color: '#000',
     fontSize: 18,
     fontWeight: '600',
+    fontFamily: 'monospace',
+
   },
-  // * Estilo para as metas do usuário
   goalsTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -321,8 +259,9 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   secondTitle: {
-    color: '#120630',
+    color: '#000',
     fontWeight: '700',
+    marginLeft: 10,
     fontSize: 24,
     lineHeight: 32,
   },
@@ -330,60 +269,62 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 30,
   },
-  goalCard: {
-    backgroundColor: '#EEEEEE',
-    borderRadius: 17,
+  goal: {
+    backgroundColor: '#fff',
     padding: 15,
-    marginBottom: 15,
+    marginBottom: 10,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderBottomWidth: 8,
+    borderRightWidth: 8,
+    borderBottomColor: '#000',
+    borderRightColor: '#000',
   },
   goalTitle: {
+    marginVertical: 4,
     fontSize: 18,
-    marginBottom: 5,
-    opacity: 0.7,
+    fontWeight: 'bold',
+    color: '#000',
+    opacity: 0.8,
   },
   goalUser: {
+    marginVertical: 4,
+    fontSize: 14,
+    color: '#a9a9a9',
+  },
+  goalRemainingValue: {
     fontSize: 16,
-    marginBottom: 5,
-    opacity: 0.4,
+    fontWeight: '600',
+    color: '#000',
   },
   goalBarProgress: {
-    margin: 10,
+    marginTop: 10,
     borderWidth: 0,
-    backgroundColor: '#C7C7C7',
+    borderColor: '#000',
   },
-  goalRemaining: {
-    marginLeft: 'auto',
-    fontSize: 16,
-    color: 'gray',
-  },
-  // * Estilo para a opção de adicionar uma meta
   addGoalCard: {
-    backgroundColor: '#EEEEEE',
-    borderRadius: 17,
-    padding: 10,
-    marginBottom: 15,
+    marginVertical: 15,
+    padding: 14,
+    borderRadius: 10,
+    backgroundColor: '#ededed',
   },
   addGoalContent: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  addGoalText: {
-    fontSize: 18,
-    marginBottom: 5,
-    opacity: 0.7,
-    color: '#642de8',
-  },
   addGoalIcon: {
-    marginRight: 10,
-    opacity: 0.7,
-    marginBottom: 'auto',
+    marginRight: 5,
   },
-  // * Estilo para mensagem excepcional
+  addGoalText: {
+    fontSize: 16,
+    color: '#000',
+    fontWeight: '500',
+  },
   dataText: {
+    color: '#120630',
+    fontSize: 16,
     textAlign: 'center',
-    marginBottom: 20,
   },
 });
 

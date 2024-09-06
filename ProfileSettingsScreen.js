@@ -1,56 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import axios from 'axios';
-import { API_URL } from './apiConfig';
+
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const ProfileSettingsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { username, email } = route.params || {};
-  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedIconIndex, setSelectedIconIndex] = useState(0);
   const icons = ['default', 'man', 'woman'];
 
-  useEffect(() => {
-    axios.post(`${API_URL}`, {
-      action: 'getUserData',
-      email
-    })
-    .then(response => {
-      const { success, message, user } = response.data;
-      if (success) {
-        setUserData(user);
-        const initialIconIndex = icons.indexOf(user.iconUser);
-        setSelectedIconIndex(initialIconIndex >= 0 ? initialIconIndex : 0);
-      } else {
-        setError(message);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching user data:', error);
-      setError('An error occurred while fetching user data.');
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-  }, [username]);
 
-  const images = {
-    default: require('./assets/img/icons/profile/default.png'),
-    man: require('./assets/img/icons/profile/man.png'),
-    woman: require('./assets/img/icons/profile/woman.png'),
-  };
 
-  const handleNextIcon = () => {
-    setSelectedIconIndex((prevIndex) => (prevIndex + 1) % icons.length);
-  };
-
-  const handlePreviousIcon = () => {
-    setSelectedIconIndex((prevIndex) => (prevIndex - 1 + icons.length) % icons.length);
-  };
 
   if (loading) {
     return (
@@ -69,8 +32,7 @@ const ProfileSettingsScreen = ({ route }) => {
     );
   }
 
-  const currentIcon = icons[selectedIconIndex];
-  const imageSource = images[currentIcon] || images['default'];
+
 
   return (
     <View style={styles.container}>

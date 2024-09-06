@@ -1,62 +1,65 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { API_URL } from './apiConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Menu from './Menu'
 
 const SettingsScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { username, email } = route.params || {};
-    const menuItems = [
-      { icon:
-      <Icon
-        name='person'
-        size={24}
-        color="gray"
-        style={styles.eyePassword}
-      />,
-       label:'Perfil',
-       navigateTo: 'ProfileSettings' },
-      { icon:
-        <Icon
-        name='notifications'
-        size={24}
-        color="gray"
-      />,
-        label: 'Notificações' },
-      { icon: 
-        <Icon
-        name='wallet'
-        size={24}
-        color="gray"
-        />,
-          label: 'Sua carteira' },
-          { icon:
-            <Icon
-            name='settings'
-            size={24}
-            color="gray"
-          />,
-          label: 'Gerais',
-          navigateTo: 'GeneralSettings'
-          },
-    ];
+  const { userData } = route.params || {};
+  const [selectedIconIndex, setSelectedIconIndex] = useState(0);
+  const icons = ['default', 'man', 'woman'];
+
+  console.log(userData)
+
+  const images = {
+    default: require('./assets/img/icons/profile/default.png'),
+    man: require('./assets/img/icons/profile/man.png'),
+    woman: require('./assets/img/icons/profile/woman.png'),
+  };
+
+  const handleNextIcon = () => {
+    setSelectedIconIndex((prevIndex) => (prevIndex + 1) % icons.length);
+  };
+
+  const handlePreviousIcon = () => {
+    setSelectedIconIndex((prevIndex) => (prevIndex - 1 + icons.length) % icons.length);
+  };
+
+  const currentIcon = icons[selectedIconIndex];
+  const imageSource = images[currentIcon] || images['default'];
+
   return (
   <View style={styles.container}>
     <ScrollView>
       <Text style={styles.title}>Configurações</Text>
-      <View style={styles.options}>
-      {menuItems.map((item, index) => (
-        <TouchableOpacity key={index} style={styles.option} onPress={() => navigation.navigate(item.navigateTo, {username, email})}>
-          <Text style={styles.icon}>{item.icon}</Text>
-          <Text style={styles.label}>{item.label}</Text>
-          <Text style={styles.arrow}>➔</Text>
+    <View style={styles.container}>
+      <View style={styles.selectIcon}>
+        <TouchableOpacity onPress={handlePreviousIcon} style={styles.arrowButton}>
+          <Icon name="chevron-back-outline" style={styles.arrow} />
         </TouchableOpacity>
-      ))}
-      </View>
-    </ScrollView>
-    <Menu username={username} />
 
+        <View style={styles.userImageContainer}>
+          <Image style={styles.userImage} source={imageSource} />
+        </View>
+
+        <TouchableOpacity onPress={handleNextIcon} style={styles.arrowButton}>
+          <Icon name="chevron-forward-outline" style={styles.arrow} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.details}>
+        <Text style={styles.nameUser}>{userData.nameUser}</Text>
+      </View>
+
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.buttonText}>Sair</Text>
+      </TouchableOpacity>
+    </View>
+    </ScrollView>
+    <Menu userData={userData} />
    </View>
   );
 };
@@ -69,36 +72,39 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    marginTop: 20,
-    color: '#2F1155',
+    color: '#000',
     fontWeight: 'bold',
     fontSize: 26,
     lineHeight: 32,
     textAlign: 'center',
   },
-  options: {
-    marginTop: 75,
-    marginHorizontal: 10,
-    padding: 20,
-  },
-  option: {
+  selectIcon: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 25,
+    justifyContent: 'center',
   },
-  icon: {
-    fontSize: 24,
-    marginRight: 12,
+  userImageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  label: {
-    marginLeft: 20,
-    fontWeight: '500',
-    fontSize: 16,
-    color: '#2F1155',
+  userImage: {
+    width: 200,
+    height: 200,
+    marginHorizontal: 'auto',
+  },
+  nameUser: {
+    textAlign: 'center',
+    fontSize: 28,
+    marginTop: 26,
+    fontWeight: '700',
+    letterSpacing: 1.2,
+    color: '#666666',
+  },
+  arrowButton: {
+    padding: 10,
   },
   arrow: {
-    marginLeft: 'auto',
-    fontSize: 16,
+    fontSize: 40,
     color: '#000',
   },
   button: {
@@ -106,16 +112,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#e52c2c',
     padding: 20,
     marginTop: 'auto',
+    marginBottom: 20,
   },
-  buttonLogOut: {
+  buttonText: {
     textAlign: 'center',
     fontSize: 16,
     color: 'white',
     fontWeight: 'bold',
-  },
-  dataText: {
-    textAlign: 'center',
-    fontSize: 16,
   },
 });
 

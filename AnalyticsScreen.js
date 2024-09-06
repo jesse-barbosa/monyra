@@ -1,8 +1,8 @@
-import React, { useCallback, useState, useEffect, useRef} from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
-import Menu from './Menu'
+import Menu from './Menu';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import { Dropdown } from 'react-native-element-dropdown';
 
@@ -16,6 +16,7 @@ const getCategoryColor = (category) => {
     Lazer: '#FFD700',
     Vestuário: '#FF69B4',
     Economia: '#8A2BE2',
+
     Remunerações: '#7FFF00',
     Rendimentos: '#DC143C',
     Empreendimentos: '#00BFFF',
@@ -26,38 +27,38 @@ const getCategoryColor = (category) => {
 
 const AnalyticsScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { username } = route.params || {};
+  const { userData } = route.params || {};
   const [transactions, setTransactions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('expenses');
   const [chartType, setChartType] = useState('pie');
   const [hoveredCategory, setHoveredCategory] = useState('');
-  const [initialScroll, setInitialScroll] = useState(true);
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const scrollViewRef = useRef(null);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Inicializa com o mês atual
   const monthWidth = 100;
 
+  // Scroll para o mês atual quando o componente é montado
   useEffect(() => {
-    if (scrollViewRef.current && initialScroll) {
-      const initialIndex = new Date().getMonth();
-      const xOffset = initialIndex * monthWidth;
+    if (scrollViewRef.current) {
+      const initialIndex = new Date().getMonth(); // Pega o mês atual
+      const xOffset = initialIndex * monthWidth; // Calcula a posição do scroll
       scrollViewRef.current.scrollTo({ x: xOffset, animated: true });
-      setInitialScroll(false);
     }
-  }, [scrollViewRef, initialScroll]);
-
+  }, []);
 
   const handleMonthChange = useCallback((month) => {
-    setSelectedMonth(month);
-    const xOffset = month * monthWidth;
+    setSelectedMonth(month); // Atualiza o estado local
+    const xOffset = month * monthWidth; // Calcula o deslocamento horizontal
     scrollViewRef.current.scrollTo({ x: xOffset, animated: true });
-  }, [selectedMonth, scrollViewRef, monthWidth]);
+  }, []);
 
+  // Calcula o mês selecionado baseado na rolagem
   const handleScroll = useCallback((event) => {
-    const xOffset = event.nativeEvent.contentOffset.x;
-    const selectedMonth = Math.round(xOffset / monthWidth);
-    handleMonthChange(selectedMonth);
-
-  }, [handleMonthChange, monthWidth]);
+    const xOffset = event.nativeEvent.contentOffset.x; // Pega o deslocamento do scroll
+    const newSelectedMonth = Math.round(xOffset / monthWidth); // Converte o deslocamento para o índice do mês
+    if (newSelectedMonth !== selectedMonth) {
+      setSelectedMonth(newSelectedMonth); // Atualiza o mês selecionado
+    }
+  }, [selectedMonth]);
 
   const filteredTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.created_at);
@@ -68,14 +69,15 @@ const AnalyticsScreen = ({ route }) => {
     return (selectedOption === 'expenses' && isExpense && isSameMonth) || 
            (selectedOption === 'gains' && isGain && isSameMonth);
   });
+
   useEffect(() => {
-    if (username) {
+    if (userData.nameUser) {
       fetch(`${API_URL}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ action: 'getUserTransactions', username }),
+        body: JSON.stringify({ action: 'getUserTransactions', username: userData.nameUser }),
       })
       .then((response) => response.json())
       .then((data) => {
@@ -89,14 +91,14 @@ const AnalyticsScreen = ({ route }) => {
         console.error('Error fetching transactions:', error);
       });
     }
-  }, [username]);
+  }, [userData.nameUser]);
 
   const handlePress = (transaction) => {
     navigation.navigate('ViewTransfer', {
-      username,
+      username: userData.nameUser,
       transaction,
-    })
-  }
+    });
+  };
 
   const truncateCategoryName = (name) => {
     return name.length > 4 ? name.slice(0, 4) : name;
@@ -129,7 +131,7 @@ const AnalyticsScreen = ({ route }) => {
       },
     ],
   };
-  
+
   const pieData = aggregatedData.map(item => ({
     name: item.category,
     value: item.value,
@@ -137,7 +139,6 @@ const AnalyticsScreen = ({ route }) => {
     legendFontColor: item.legendFontColor,
     legendFontSize: item.legendFontSize,
   }));
-  
 
   const chartConfig = {
     backgroundColor: '#f7f7f7',
@@ -178,19 +179,19 @@ const AnalyticsScreen = ({ route }) => {
         <View style={styles.headerContainer}>
           <Text style={styles.title}>Análise de {selectedOption === 'expenses' ? 'Gastos' : 'Ganhos'}</Text>
           <Dropdown
-          style={styles.dropdown}
-          data={[
-            { label: 'Gráfico Pizza', value: 'pie' },
-            { label: 'Gráfico Barra', value: 'bar' },
-          ]}
-          value={chartType}
-          onChange={(item) => setChartType(item.value)}
-          placeholder="Tipo de Gráfico"
-          labelField="label"
-          valueField="value"
-          selectedTextStyle={styles.labelStyle}
-          labelStyle={styles.labelStyle}
-          placeholderStyle={styles.placeholderStyle}
+            style={styles.dropdown}
+            data={[
+              { label: 'Gráfico Pizza', value: 'pie' },
+              { label: 'Gráfico Barra', value: 'bar' },
+            ]}
+            value={chartType}
+            onChange={(item) => setChartType(item.value)}
+            placeholder="Tipo de Gráfico"
+            labelField="label"
+            valueField="value"
+            selectedTextStyle={styles.labelStyle}
+            labelStyle={styles.labelStyle}
+            placeholderStyle={styles.placeholderStyle}
           />
         </View>
         {chartType === 'bar' ? (
@@ -219,88 +220,86 @@ const AnalyticsScreen = ({ route }) => {
           )
         ) : (
           (filteredTransactions).length > 0 ? (
-          <View style={styles.pieChartContainer}>
-            <PieChart
-              data={pieData}
-              width={Dimensions.get('window').width - 40}
-              height={220}
-              chartConfig={chartConfig}
-              accessor="value"
-              backgroundColor="transparent"
-              paddingLeft="15"
-              center={[10, 10]}
-              style={{
-                borderRadius: 16,
-              }}
-            />
-          </View>
-        ) : (
-          <Text style={styles.dataText}>Nenhum dado encontrado para este mês.</Text>
-        )
-      )}
-        <View style={styles.monthSelectorContainer}>
-        <ScrollView
-            ref={scrollViewRef}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.monthScrollView}
-            snapToInterval={monthWidth}
-            decelerationRate="fast"
-            onScroll={handleScroll}
-            scrollEventThrottle={16}
-            >
-            {[
-              { label: 'Jan', value: 0 },
-              { label: 'Feb', value: 1 },
-              { label: 'Mar', value: 2 },
-              { label: 'Apr', value: 3 },
-              { label: 'May', value: 4 },
-              { label: 'Jun', value: 5 },
-              { label: 'Jul', value: 6 },
-              { label: 'Aug', value: 7 },
-              { label: 'Sep', value: 8 },
-              { label: 'Oct', value: 9 },
-              { label: 'Nov', value: 10 },
-              { label: 'Dec', value: 11 },
-            ].map((month, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.monthButton,
-                  selectedMonth === month.value && styles.selectedMonthButton,
-                ]}
-                onPress={() => setSelectedMonth(month.value)}
-              >
-                <Text
-                  style={[
-                    styles.monthText,
-                    selectedMonth === month.value && styles.selectedMonthText,
-                  ]}
-                >
-                  {month.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
+            <View style={styles.pieChartContainer}>
+              <PieChart
+                data={pieData}
+                width={Dimensions.get('window').width - 40}
+                height={220}
+                chartConfig={chartConfig}
+                accessor="value"
+                backgroundColor="transparent"
+                paddingLeft="15"
+                center={[10, 10]}
+                style={{
+                  borderRadius: 16,
+                }}
+              />
+            </View>
+          ) : (
+            <Text style={styles.dataText}>Nenhum dado encontrado para este mês.</Text>
+          )
+        )}
+    <View style={{ marginTop: 50 }}>
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ alignItems: 'center' }}
+        snapToInterval={monthWidth}
+        decelerationRate="fast"
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
+        {[
+          { label: 'Jan', value: 0 },
+          { label: 'Feb', value: 1 },
+          { label: 'Mar', value: 2 },
+          { label: 'Apr', value: 3 },
+          { label: 'May', value: 4 },
+          { label: 'Jun', value: 5 },
+          { label: 'Jul', value: 6 },
+          { label: 'Aug', value: 7 },
+          { label: 'Sep', value: 8 },
+          { label: 'Oct', value: 9 },
+          { label: 'Nov', value: 10 },
+          { label: 'Dec', value: 11 },
+        ].map((month, index) => (
+          <TouchableOpacity
+            key={index}
+            style={{
+              width: monthWidth,
+              paddingVertical: 10,
+              backgroundColor: selectedMonth === month.value ? '#B0B0B0' : '#fff',
+              borderRadius: 10,
+              alignItems: 'center',
+            }}
+            onPress={() => handleMonthChange(month.value)}
+          >
+            <Text style={{ color: selectedMonth === month.value ? '#333' : '#666' }}>
+              {month.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </View>
         <View style={styles.transfers}>
           <Text style={styles.titleTransfers}>Suas Transações</Text>
           {(filteredTransactions).length > 0 ? (
             filteredTransactions.map((transaction, index) => (
               <View key={index} style={styles.transferCard}>
                 <TouchableOpacity onPress={() => handlePress(transaction)}>
-                <View style={styles.transferContent}>
-                  <View style={styles.transferInfo}>
-                    <Text style={styles.transferDate}>{transaction.created_at}</Text>
-                    <Text style={styles.transferTitle}>
-                      {transaction.typeTransaction === 'expense' ? 'Você enviou' : 'Você recebeu'} R$ {transaction.valueTransaction}
-                    </Text>
-                    <Text style={styles.transferText}>"{transaction.descTransaction}"</Text>
+                  <View style={styles.transferContent}>
+                    <View style={styles.transferInfo}>
+                      <Text style={styles.transferDate}>{transaction.created_at}</Text>
+                      <Text style={styles.transferTitle}>
+                        {transaction.typeTransaction === 'expense' ? 'Você enviou' : 'Você recebeu'} R$ {transaction.valueTransaction}
+                      </Text>
+                      <Text style={styles.transferText}>"{transaction.descTransaction}"</Text>
+                    </View>
+                    <View style={styles.transferIcon}>
+                      {transaction.typeTransaction === 'expense' ?  <Image source={require('./assets/img/icons/arrowDown.png')} /> : <Image source={require('./assets/img/icons/arrowUp.png')} /> }
+                    </View>
                   </View>
-                  <View style={styles.transferIcon}>
-                    {transaction.typeTransaction === 'expense' ?  <Image source={require('./assets/img/icons/arrowDown.png')} /> : <Image source={require('./assets/img/icons/arrowUp.png')} /> }
-                  </View>
-                </View>
                 </TouchableOpacity>
               </View>
             ))
@@ -309,7 +308,7 @@ const AnalyticsScreen = ({ route }) => {
           )}
         </View>
       </ScrollView>
-      <Menu username={username} />
+      <Menu userData={userData} />
     </View>
   );
 };
@@ -333,7 +332,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#c9c9c9',
   },
   selectedOption: {
-    backgroundColor: '#5019d4',
+    backgroundColor: '#000',
     zIndex: 999,
   },
   optionText: {
@@ -346,7 +345,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    color: '#2F1155',
+    color: '#000',
     fontWeight: 'bold',
     fontSize: 24,
     lineHeight: 32,
@@ -368,7 +367,7 @@ const styles = StyleSheet.create({
   },
   titleTransfers: {
     marginBottom: 10,
-    color: '#2F1155',
+    color: '#000',
     fontWeight: 'bold',
     fontSize: 24,
     lineHeight: 32,
@@ -434,27 +433,39 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 20,
     alignItems: 'center',
+    backgroundColor: '#F5F5F5',
+    borderRadius: 10,
+    paddingVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   monthScrollView: {
     alignItems: 'center',
   },
   monthButton: {
-    width: 100,
+    width: 80,
     justifyContent: 'center',
     alignItems: 'center',
-
+    paddingVertical: 10,
+    marginHorizontal: 5,
   },
   selectedMonthButton: {
-
+    backgroundColor: '#B0B0B0',
+    borderRadius: 10,
+    paddingVertical: 15,
   },
   monthText: {
-    color: '#8a8a8a',
+    color: '#666666',
     fontWeight: 'normal',
+    fontSize: 16,
   },
   selectedMonthText: {
-    color: 'black',
+    color: '#333333',
     fontWeight: '600',
-    fontSize: 22,
+    fontSize: 18,
   },
 });
 

@@ -7,37 +7,11 @@ import { API_URL } from './apiConfig';
 
 const TransferScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { username, operation } = route.params;
-  const [userData, setUserData] = useState(null);
+  const { userData, operation } = route.params;
   const [userGoals, setUserGoals] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [inputValue, setInputValue] = useState('');
   const [category, setCategoryValue] = useState('');
   const [description, setDescription] = useState('');
-
-  useEffect(() => {
-    axios.post(`${API_URL}`, {
-      action: 'getUserData',
-      username
-    })
-    .then(response => {
-      const { success, message, user } = response.data;
-      if (success) {
-        setUserData(user);
-        fetchUserGoals(user.codUser);
-      } else {
-        setError(message);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching user data:', error);
-      setError('An error occurred while fetching user data.');
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-  }, [username]);
 
   useEffect(() => {
     if (userGoals.length > 0) {
@@ -72,23 +46,6 @@ const TransferScreen = ({ route }) => {
     }
   };
 
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text>Carregando dados...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text>Ocorreu um erro ao buscar os dados:</Text>
-        <Text>{error}</Text>
-      </View>
-    );
-  }
-
   const handlePress = () => {
     if (inputValue && category) {
       axios.post(`${API_URL}`, {
@@ -102,7 +59,7 @@ const TransferScreen = ({ route }) => {
         const { success, message, user } = response.data;
         if (success) {
           if (user && user.nameUser) {
-            navigation.navigate('Home', { username: user.nameUser });
+            navigation.navigate('Home', { userData });
           } else {
             Alert.alert('Transfer Failed', 'User data is not available.');
           }
@@ -219,7 +176,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   Button: {
-    backgroundColor: '#6630F3',
+    backgroundColor: '#000',
     borderRadius: 15,
     paddingVertical: 20,
     paddingHorizontal: 10,
@@ -248,6 +205,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  value: {
+    textAlign: 'center',
+    color: '#000',
+    fontWeight: 'bold',
+    fontSize: 32,
+    lineHeight: 32,
+  },
   keyboard: {
     width: 340,
     flexDirection: 'row',
@@ -264,13 +228,6 @@ const styles = StyleSheet.create({
   keyText: {
     fontSize: 24,
     color: '#333',
-  },
-  value: {
-    textAlign: 'center',
-    color: '#120630',
-    fontWeight: 'bold',
-    fontSize: 32,
-    lineHeight: 32,
   },
 });
 

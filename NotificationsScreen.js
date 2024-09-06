@@ -6,17 +6,17 @@ import Menu from './Menu'
 
 const NotificationsScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { username } = route.params || {};
+  const { userData } = route.params || {};
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    if (username) {
+    if (userData) {
       fetch(`${API_URL}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ action: 'getUserTransactions', username }),
+        body: JSON.stringify({ action: 'getUserTransactions', username:userData.nameUser }),
       })
       .then((response) => response.json())
       .then((data) => {
@@ -30,11 +30,11 @@ const NotificationsScreen = ({ route }) => {
         console.error('Error fetching transactions:', error);
       });
     }
-  }, [username]);
+  }, [userData.userName]);
 
   const handlePress = (transaction) => {
     navigation.navigate('ViewTransfer', {
-      username,
+      username: userData.nameUser,
       transaction,
     })
   }
@@ -66,7 +66,7 @@ const NotificationsScreen = ({ route }) => {
         )}
         </View>
       </ScrollView>
-      <Menu username={username} />
+      <Menu userData={userData} />
     </SafeAreaView>
   );
 };
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 10,
     marginHorizontal: 20,
-    color: '#2F1155',
+    color: '#000',
     fontWeight: 'bold',
     fontSize: 26,
     lineHeight: 32,
