@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 60,
-    color: '#2F1155',
+    color: '#000',
     fontWeight: 'bold',
     fontSize: 32,
     lineHeight: 32,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   Button: {
-    backgroundColor: '#5019d4',
+    backgroundColor: '#000',
     borderRadius: 15,
     paddingVertical: 20,
     paddingHorizontal: 10,
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     color: '#808080',
   },
   link: {
-    color: '#5019d4',
+    color: '#000',
     fontWeight: 'bold',
   },
 });

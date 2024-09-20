@@ -21,7 +21,7 @@ const RegisterStep2Screen = ({ navigation, route }) => {
   const handleRegister = () => {
     if (selectedOption !== null) {
       const selectedIncome = options.find(option => option.id === selectedOption).value;
-      
+  
       axios.post(`${API_URL}`, {
         action: 'register',
         username,
@@ -29,13 +29,26 @@ const RegisterStep2Screen = ({ navigation, route }) => {
         password,
         incomeUser: selectedIncome
       })
-      .then(response => {
+      .then(async response => {
         const { success, message } = response.data;
-
+  
         if (success) {
-          navigation.navigate('Home', {
-            username, email
+          // Após o registro, busque os dados do usuário
+          const userDataResponse = await axios.post(`${API_URL}`, {
+            action: 'getUserData',
+            email
           });
+  
+          const { success: userDataSuccess, user: userData } = userDataResponse.data;
+  
+          if (userDataSuccess) {
+            // Navegue para a Home com os dados do usuário
+            navigation.navigate('Home', {
+              userData: userData
+            });
+          } else {
+            Alert.alert('Erro ao buscar dados do usuário', 'Não foi possível recuperar os dados do usuário.');
+          }
         } else {
           Alert.alert('Falha ao criar :(', message);
         }
@@ -43,11 +56,11 @@ const RegisterStep2Screen = ({ navigation, route }) => {
       .catch(error => {
         Alert.alert('Registration Error', `An error occurred while registering: ${error}`);
       });
-      
     } else {
       Alert.alert('Seleção Inválida', 'Por favor, selecione uma opção de renda.');
     }
   };
+  
 
   return (
     <KeyboardAvoidingView
@@ -62,7 +75,7 @@ const RegisterStep2Screen = ({ navigation, route }) => {
           {options.map((option) => (
             <View style={styles.optionContainer} key={option.id}>
               <TouchableOpacity
-                style={[styles.option, { backgroundColor: selectedOption === option.id ? '#5019D4' : '#F2F2F2' }]}
+                style={[styles.option, { backgroundColor: selectedOption === option.id ? 'gray' : '#F2F2F2' }]}
                 onPress={() => handleOptionPress(option.id)}>
                 <Text style={[styles.optionText, { color: selectedOption === option.id ? '#fff' : '#000' }]}>{option.label}</Text>
               </TouchableOpacity>
@@ -93,7 +106,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 60,
-    color: '#2F1155',
+    color: '#000',
     fontWeight: 'bold',
     fontSize: 32,
     lineHeight: 32,
@@ -135,7 +148,7 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   Button: {
-    backgroundColor: '#5019d4',
+    backgroundColor: '#000',
     borderRadius: 15,
     paddingVertical: 20,
     paddingHorizontal: 10,

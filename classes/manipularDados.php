@@ -8,13 +8,16 @@ class ManipularDados extends Conexao {
 
     public function __construct() {
         parent::__construct();
-        session_start(); // Inicializa a sessão
+        session_start();
     }
 
     private function getUserData($input) {
         if (isset($input['email'])) {
             $email = $input['email'];
             $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE emailUser = ?");
+            if ($stmt === false) {
+                die('Prepare failed: ' . htmlspecialchars($this->conn->error));
+            }
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -22,39 +25,32 @@ class ManipularDados extends Conexao {
             if ($result->num_rows > 0) {
                 $user = $result->fetch_assoc();
                 echo json_encode(["success" => true, "message" => "User data retrieved", "user" => $user]);
-                return $user;
             } else {
                 echo json_encode(["success" => false, "message" => "User not found"]);
             }
-
             $stmt->close();
         } else {
             echo json_encode(["success" => false, "message" => "Please provide email"]);
         }
     }
-
     private function getUserGoals($input) {
         if (isset($input['userCod'])) {
             $userCod = $input['userCod'];
             $stmt = $this->conn->prepare("
-                SELECT g.codGoal, g.nameGoal, g.amountSaved, g.amountRemaining, g.created_at, GROUP_CONCAT(u.nameUser) AS userNames
+                SELECT g.codGoal, g.nameGoal, g.amountSaved, g.amountRemaining, g.created_at, u.nameUser
                 FROM tbgoals g
-                LEFT JOIN user_goals ug ON g.codGoal = ug.goalCod
-                LEFT JOIN tbusers u ON ug.userCod = u.codUser
-                WHERE g.codGoal IN (
-                    SELECT goalCod
-                    FROM user_goals
-                    WHERE userCod = ?
-                )
-                GROUP BY g.codGoal
+                LEFT JOIN tbusers u ON g.userCod = u.codUser
+                WHERE g.userCod = ?
             ");
+            if ($stmt === false) {
+                die('Prepare failed: ' . htmlspecialchars($this->conn->error));
+            }
             $stmt->bind_param("i", $userCod);
             $stmt->execute();
             $result = $stmt->get_result();
 
             $goals = [];
             while ($row = $result->fetch_assoc()) {
-                $row['userNames'] = explode(',', $row['userNames']);
                 $goals[] = $row;
             }
 
@@ -112,21 +108,22 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Please provide username"]);
         }
     }
-
     private function assignGoalToUser($input) {
         if (isset($input['userCod']) && isset($input['goalCod'])) {
             $userCod = $input['userCod'];
             $goalCod = $input['goalCod'];
-
-            $stmt = $this->conn->prepare("SELECT * FROM user_goals WHERE userCod = ? AND goalCod = ?");
-            $stmt->bind_param("ii", $userCod, $goalCod);
+    
+            // Verificar se a meta já está associada ao usuário
+            $stmt = $this->conn->prepare("SELECT * FROM tbgoals WHERE codGoal = ? AND userCod = ?");
+            $stmt->bind_param("ii", $goalCod, $userCod);
             $stmt->execute();
             $result = $stmt->get_result();
-
+    
             if ($result->num_rows > 0) {
-                echo json_encode(["success" => false, "message" => "Goal already assigned to user"]);
+                echo json_encode(["success" => false, "message" => "Goal already assigned to this user"]);
             } else {
-                $stmt = $this->conn->prepare("INSERT INTO user_goals (userCod, goalCod) VALUES (?, ?)");
+                // Atribuir a meta ao usuário atualizando o campo userCod
+                $stmt = $this->conn->prepare("UPDATE tbgoals SET userCod = ? WHERE codGoal = ?");
                 $stmt->bind_param("ii", $userCod, $goalCod);
                 if ($stmt->execute()) {
                     echo json_encode(["success" => true, "message" => "Goal assigned to user successfully"]);
@@ -138,7 +135,7 @@ class ManipularDados extends Conexao {
         } else {
             echo json_encode(["success" => false, "message" => "Please provide userCod and goalCod"]);
         }
-    }
+    }    
 
     private function login($input) {
         if (isset($input['email']) && isset($input['password'])) {
@@ -168,13 +165,13 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Email and password required"]);
         }
     }
-
     private function register($input) {
         if (isset($input['username']) && isset($input['email']) && isset($input['password']) && isset($input['incomeUser'])) {
             $username = $input['username'];
             $email = $input['email'];
             $password = password_hash($input['password'], PASSWORD_BCRYPT);
             $incomeUser = $input['incomeUser'];
+            $balanceUser = 0;
 
             // Verifica se o usuário já existe
             $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE emailUser = ?");
@@ -185,13 +182,13 @@ class ManipularDados extends Conexao {
             if ($result->num_rows > 0) {
                 echo json_encode(["success" => false, "message" => "Usuário já cadastrado no sistema"]);
             } else {
-                $stmt = $this->conn->prepare("INSERT INTO tbusers (nameUser, emailUser, passwordUser, incomeUser) VALUES (?, ?, ?, ?)");
-                $stmt->bind_param("ssss", $username, $email, $password, $incomeUser);
+                $stmt = $this->conn->prepare("INSERT INTO tbusers (nameUser, emailUser, passwordUser, incomeUser, balanceUser) VALUES (?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssssd", $username, $email, $password, $incomeUser, $balanceUser);
                 if ($stmt->execute()) {
                     $userCod = $this->conn->insert_id;
                     $_SESSION['userCod'] = $userCod;
                 
-                    $goalStmt = $this->conn->prepare("INSERT INTO tbgoals (nameGoal, categoryGoal, descGoal, amountSaved, amountRemaining) VALUES (?, ?, ?, ?, ?)");
+                    $goalStmt = $this->conn->prepare("INSERT INTO tbgoals (nameGoal, categoryGoal, descGoal, amountSaved, amountRemaining, userCod) VALUES (?, ?, ?, ?, ?, ?)");
                     if ($goalStmt === false) {
                         die('Goal Insert Prepare failed: ' . htmlspecialchars($this->conn->error));
                     }
@@ -200,72 +197,100 @@ class ManipularDados extends Conexao {
                     $descGoal = '(Essa meta foi gerada automaticamente na criação de sua conta)';
                     $amountSaved = 0.00;
                     $amountRemaining = $incomeUser * 3;
-
-                    $goalStmt->bind_param("sssdd", $goalName, $goalCategory, $descGoal, $amountSaved, $amountRemaining);
                 
+                    $goalStmt->bind_param("sssddi", $goalName, $goalCategory, $descGoal, $amountSaved, $amountRemaining, $userCod);
+                
+                    // Execute a query de inserção da meta
                     if ($goalStmt->execute()) {
-                        $goalCod = $goalStmt->insert_id;
-                
-                        $assignStmt = $this->conn->prepare("INSERT INTO user_goals (userCod, goalCod) VALUES (?, ?)");
-                        if ($assignStmt === false) {
-                            die('Assign Goal Prepare failed: ' . htmlspecialchars($this->conn->error));
-                        }
-                        $assignStmt->bind_param("ii", $userCod, $goalCod);
-                
-                        if ($assignStmt->execute()) {
-                            echo json_encode(["success" => true, "message" => "User registered and goal assigned successfully"]);
-                        } else {
-                            echo json_encode(["success" => false, "message" => "Failed to assign goal to user"]);
-                        }
-                
-                        $assignStmt->close();
+                        echo json_encode(["success" => true, "message" => "Usuário registrado com sucesso e meta criada"]);
                     } else {
-                        echo json_encode(["success" => false, "message" => "Failed to create goal"]);
+                        echo json_encode(["success" => false, "message" => "Failed to insert goal"]);
                     }
                 
+                    // Fechar o statement após a execução
                     $goalStmt->close();
                 } else {
                     echo json_encode(["success" => false, "message" => "Failed to register user"]);
-                }
+                }                
                 $stmt->close();
             }
         } else {
             echo json_encode(["success" => false, "message" => "Missing parameters"]);
         }
     }
-
     private function transfer($input) {
         if (isset($input['value']) && isset($input['category']) && isset($input['operation'])) {
             $value = $input['value'];
             $category = $input['category'];
             $description = isset($input['description']) ? $input['description'] : '';
-
+    
             if (isset($_SESSION['userCod'])) {
                 $userCod = $_SESSION['userCod'];
-
-                $sql = "INSERT INTO tbtransactions (valueTransaction, descTransaction, typeTransaction, categoryTransaction, userCod) VALUES (?, ?, ?, ?, ?)";
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bind_param('dsssi', $value, $description, $input['operation'], $category, $userCod);
-
-                if ($stmt->execute()) {
+    
+                // Inicia uma transação para garantir a integridade dos dados
+                $this->conn->begin_transaction();
+    
+                try {
+                    // Insere a nova transação
+                    $sql = "INSERT INTO tbtransactions (valueTransaction, descTransaction, typeTransaction, categoryTransaction, userCod) VALUES (?, ?, ?, ?, ?)";
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->bind_param('dssss', $value, $description, $input['operation'], $category, $userCod);
+                    $stmt->execute();
+                    $stmt->close();
+    
+                    // Atualiza o saldo do usuário
+                    if ($input['operation'] == 'gain') {
+                        $updateSql = "UPDATE tbusers SET balanceUser = balanceUser + ? WHERE codUser = ?";
+                    } else if ($input['operation'] == 'expense') {
+                        // Verifica se há saldo suficiente
+                        $currentBalanceQuery = "SELECT balanceUser FROM tbusers WHERE codUser = ?";
+                        $balanceStmt = $this->conn->prepare($currentBalanceQuery);
+                        $balanceStmt->bind_param("i", $userCod);
+                        $balanceStmt->execute();
+                        $balanceResult = $balanceStmt->get_result();
+                        $currentBalance = $balanceResult->fetch_assoc()['balanceUser'];
+                        $balanceStmt->close();
+    
+                        if ($currentBalance < $value) {
+                            echo json_encode(['success' => false, 'message' => 'Saldo insuficiente']);
+                            return;
+                        }
+    
+                        $updateSql = "UPDATE tbusers SET balanceUser = balanceUser - ? WHERE codUser = ?";
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Operação inválida']);
+                        return;
+                    }
+    
+                    $stmt = $this->conn->prepare($updateSql);
+                    $stmt->bind_param('di', $value, $userCod);
+                    $stmt->execute();
+                    $stmt->close();
+    
+                    // Confirma a transação
+                    $this->conn->commit();
+    
+                    // Recupera os dados atualizados do usuário
                     $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE codUser = ?");
                     $stmt->bind_param("i", $userCod);
                     $stmt->execute();
                     $result = $stmt->get_result();
                     $user = $result->fetch_assoc();
-                    
+                    $stmt->close();
+    
                     echo json_encode(['success' => true, 'message' => 'Transferência realizada com sucesso!', 'user' => $user]);
-                } else {
+                } catch (Exception $e) {
+                    // Reverte a transação em caso de erro
+                    $this->conn->rollback();
                     echo json_encode(['success' => false, 'message' => 'Erro ao realizar a transferência.']);
                 }
-                $stmt->close();
             } else {
                 echo json_encode(["success" => false, "message" => "User not authenticated"]);
             }
         } else {
             echo json_encode(['success' => false, 'message' => 'Dados inválidos.']);
         }
-    }
+    }    
 
     private function deleteTransaction($input) {
         if (isset($input['transactionId'])) {
@@ -302,26 +327,15 @@ class ManipularDados extends Conexao {
             if (isset($_SESSION['userCod'])) {
                 $userCod = $_SESSION['userCod'];
 
-                $stmt = $this->conn->prepare("INSERT INTO tbgoals (nameGoal, categoryGoal ,descGoal, amountSaved, amountRemaining) VALUES (?, ?, ?, ?, ?)");
-                $stmt->bind_param("sssdd", $name, $category, $description, $amountSaved, $amountRemaining);
-                
-                if ($stmt->execute()) {
-                    $goalCod = $this->conn->insert_id;
-                    $stmt->close();
-
-                    $stmt = $this->conn->prepare("INSERT INTO user_goals (userCod, goalCod) VALUES (?, ?)");
-                    $stmt->bind_param("ii", $userCod, $goalCod);
-
-                    if ($stmt->execute()) {
-                        echo json_encode(["success" => true, "message" => "Goal created and assigned successfully"]);
-                    } else {
-                        echo json_encode(["success" => false, "message" => "Failed to assign goal to user"]);
-                    }
-                } else {
-                    echo json_encode(["success" => false, "message" => "Failed to create goal"]);
+                $stmt = $this->conn->prepare("INSERT INTO tbgoals (nameGoal, categoryGoal ,descGoal, amountSaved, amountRemaining, userCod) VALUES (?, ?, ?, ?, ?, ?)");
+                if ($stmt === false) {
+                    die('Prepare failed: ' . htmlspecialchars($this->conn->error));
                 }
-
+                $stmt->bind_param("sssddi", $name, $category, $description, $amountSaved, $amountRemaining, $userCod);
+                $stmt->execute();
                 $stmt->close();
+
+                echo json_encode(["success" => true, "message" => "Goal created successfully"]);
             } else {
                 echo json_encode(["success" => false, "message" => "User not authenticated"]);
             }
@@ -337,24 +351,14 @@ class ManipularDados extends Conexao {
             if (isset($_SESSION['userCod'])) {
                 $userCod = $_SESSION['userCod'];
 
-                $stmt = $this->conn->prepare("DELETE FROM user_goals WHERE userCod = ? AND goalCod = ?");
-                $stmt->bind_param("ii", $userCod, $goalId);
-
+                $stmt = $this->conn->prepare("DELETE FROM tbgoals WHERE codGoal = ?");
+                $stmt->bind_param("i", $goalId);
                 if ($stmt->execute()) {
-                    if ($stmt->affected_rows > 0) {
-                        $stmt = $this->conn->prepare("DELETE FROM tbgoals WHERE codGoal = ?");
-                        $stmt->bind_param("i", $goalId);
-                        if ($stmt->execute()) {
-                            echo json_encode(["success" => true, "message" => "Goal deleted successfully."]);
-                        } else {
-                            echo json_encode(["success" => false, "message" => "Error deleting goal from the table."]);
-                        }
-                    } else {
-                        echo json_encode(["success" => false, "message" => "Goal not found in the database"]);
-                    }
+                    echo json_encode(["success" => true, "message" => "Goal deleted successfully."]);
                 } else {
-                    echo json_encode(["success" => false, "message" => "Error deleting goal."]);
+                    echo json_encode(["success" => false, "message" => "Error deleting goal from the table."]);
                 }
+
                 $stmt->close();
             } else {
                 echo json_encode(["success" => false, "message" => "User not authenticated."]);
@@ -363,59 +367,6 @@ class ManipularDados extends Conexao {
             echo json_encode(["success" => false, "message" => "Goal ID not provided."]);
         }
     }
-    private function addPeopleToGoal($input) {
-        if (isset($input['emailFriend']) && isset($input['goalCod'])) {
-            $emailFriend = $input['emailFriend'];
-            $goalCod = $input['goalCod'];
-    
-            // Busca o amigo no banco de dados
-            $stmt = $this->conn->prepare("SELECT * FROM tbusers WHERE emailUser = ?");
-            $stmt->bind_param("s", $emailFriend);
-            $stmt->execute();
-            $result = $stmt->get_result();
-    
-            if ($result->num_rows > 0) {
-                $user = $result->fetch_assoc();
-                $codUserFriend = $user['codUser'];
-    
-                // Verifica se o amigo já está associado à meta
-                $checkStmt = $this->conn->prepare("SELECT * FROM user_goals WHERE userCod = ? AND goalCod = ?");
-                $checkStmt->bind_param("ii", $codUserFriend, $goalCod);
-                $checkStmt->execute();
-                $checkResult = $checkStmt->get_result();
-    
-                if ($checkResult->num_rows > 0) {
-                    // O amigo já está associado à meta
-                    echo json_encode(["success" => false, "message" => "Este usuário já está adicionado!"]);
-                    $checkStmt->close();
-                    $stmt->close();
-                    exit();
-                }
-    
-                // Associa o amigo ao objetivo
-                $assignStmt = $this->conn->prepare("INSERT INTO user_goals (userCod, goalCod) VALUES (?, ?)");
-                if ($assignStmt === false) {
-                    echo json_encode(["success" => false, "message" => 'Assign Goal Prepare failed: ' . htmlspecialchars($this->conn->error)]);
-                    exit();
-                } else {
-                    $assignStmt->bind_param("ii", $codUserFriend, $goalCod);
-                    if ($assignStmt->execute()) {
-                        echo json_encode(["success" => true, "message" => "Goal assigned successfully"]);
-                    } else {
-                        echo json_encode(["success" => false, "message" => "Failed to assign goal to user"]);
-                    }
-                    $assignStmt->close();
-                }
-                $checkStmt->close();
-            } else {
-                echo json_encode(["success" => false, "message" => "User not found"]);
-            }
-            $stmt->close();
-        } else {
-            echo json_encode(["success" => false, "message" => "Missing parameters"]);
-        }
-    }    
-    
     public function handleRequest() {
         $input = json_decode(file_get_contents("php://input"), true);
         $action = isset($input['action']) ? $input['action'] : '';
@@ -450,9 +401,6 @@ class ManipularDados extends Conexao {
                 break;
             case 'deleteGoal':
                 $this->deleteGoal($input);
-                break;
-            case 'addPeopleToGoal':
-                $this->addPeopleToGoal($input);
                 break;
             default:
                 echo json_encode(["success" => false, "message" => "Invalid action"]);

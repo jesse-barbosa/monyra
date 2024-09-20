@@ -40,7 +40,7 @@ const TransferScreen = ({ route }) => {
           Alert.alert('Create Error', 'An error occurred while creating goal.');
         });
     } else {
-      Alert.alert('Invalid Input', 'Please enter both username and password.');
+      Alert.alert('Invalid Input', 'Por favor preencha todos os campos.');
     }
   }
   return (
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   Button: {
-    backgroundColor: '#6630F3',
+    backgroundColor: '#000',
     borderRadius: 15,
     paddingVertical: 20,
     paddingHorizontal: 10,
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    color: '#120630',
+    color: '#000',
     fontWeight: 'bold',
     fontSize: 26,
     lineHeight: 32,

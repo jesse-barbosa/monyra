@@ -55,7 +55,7 @@ const ViewTransferScreen = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-          <Ionicons name="arrow-back" size={24} color="#5A67D8" />
+          <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={transaction.typeTransaction === 'expense' ? styles.titleExpense : styles.titleGain}>
           {transaction.typeTransaction === 'expense' ? '- ' : '+ '} 
@@ -68,37 +68,37 @@ const ViewTransferScreen = ({ route }) => {
 
       <View style={styles.card}>
         <View style={styles.infoRow}>
-          <Ionicons name="cash-outline" size={20} color="#5A67D8" />
+          <Ionicons name="cash-outline" size={20} color="#000" />
           <Text style={styles.label}>Valor:</Text>
           <Text style={styles.value}>R$ {transaction.valueTransaction}</Text>
         </View>
         
         <View style={styles.infoRow}>
-          <Ionicons name="trending-up-outline" size={20} color="#5A67D8"/>
+          <Ionicons name="trending-up-outline" size={20} color="#000"/>
           <Text style={styles.label}>Tipo:</Text>
           <Text style={styles.value}>{transaction.typeTransaction === 'expense' ? 'Gasto' : 'Ganho'}</Text>
         </View>
         
         <View style={styles.infoRow}>
-          <Ionicons name="calendar-outline" size={20} color="#5A67D8" />
+          <Ionicons name="calendar-outline" size={20} color="#000" />
           <Text style={styles.label}>Data:</Text>
           <Text style={styles.value}>{formattedDate}</Text>
         </View>
         
         <View style={styles.infoRow}>
-          <Ionicons name="time-outline" size={20} color="#5A67D8" />
+          <Ionicons name="time-outline" size={20} color="#000" />
           <Text style={styles.label}>Horário:</Text>
           <Text style={styles.value}>{formattedTime}</Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Ionicons name="pricetag-outline" size={20} color="#5A67D8" />
+          <Ionicons name="pricetag-outline" size={20} color="#000" />
           <Text style={styles.label}>Categoria:</Text>
           <Text style={styles.value}>{transaction.categoryTransaction}</Text>
         </View>
 
         <View style={styles.infoRowDescription}>
-          <Ionicons name="information-circle-outline" size={20} color="#5A67D8" />
+          <Ionicons name="information-circle-outline" size={20} color="#000" />
           <Text style={styles.label}>Descrição:</Text>
           <Text style={styles.valueDescription}>
             {transaction.descTransaction.length > 0 ? transaction.descTransaction : 'Sem descrição'}
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   saveButton: {
-    backgroundColor: '#6630F3',
+    backgroundColor: '#000',
     borderRadius: 10,
     padding: 15,
     alignItems: 'center',

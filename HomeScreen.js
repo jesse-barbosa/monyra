@@ -78,7 +78,9 @@ const HomeScreen = ({ route }) => {
         <View style={styles.balanceContainer}>
           <View style={styles.balance}>
             <Text style={styles.balanceTitle}>Saldo Total</Text>
-            <Text style={styles.balanceText}>{formatCurrency(userData.balanceUser)}</Text>
+            <Text style={styles.balanceText}>
+            {formatCurrency(userData?.balanceUser || 0)}
+          </Text>
           </View>
         </View>
         <View style={styles.operations}>
@@ -90,18 +92,18 @@ const HomeScreen = ({ route }) => {
             <Icon name="arrow-down-outline" size={30} color="#000" style={styles.btn} />
             <Text style={styles.descOperation}>Gasto</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('Transfer', {userData, operation: 'default' })}>
+          <TouchableOpacity style={styles.operation} onPress={() => navigation.navigate('CreateGoal', { username: userData.nameUser, email: userData.email })}>
             <Icon name="add-circle-outline" size={30} color="#000" style={styles.btn} />
             <Text style={styles.descOperation}>Adicionar</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.cards}>
           <TouchableOpacity style={styles.cardContainer}>
-            <Text style={styles.cardTotal}>{formatCurrency(userData.balanceUser)}</Text>
+            <Text style={styles.cardTotal}>{formatCurrency(userData?.balanceUser || 0)}</Text>
             <Text style={styles.cardCategory}>Ganhos</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cardContainer}>
-            <Text style={styles.cardTotal}>{formatCurrency(userData.balanceUser)}</Text>
+            <Text style={styles.cardTotal}>{formatCurrency(userData?.balanceUser || 0)}</Text>
             <Text style={styles.cardCategory}>Gastos</Text>
           </TouchableOpacity>
         </View>
@@ -160,6 +162,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 32,
     lineHeight: 32,
+    fontStyle: 'italic',
+    fontFamily: 'serif',
   },
   username: {
     color: '000',
@@ -244,6 +248,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 'auto',
+    fontFamily: 'monospace',
   },
   cardCategory: {
     color: '#000',

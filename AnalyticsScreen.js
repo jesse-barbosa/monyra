@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, Dimensions, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
 import Menu from './Menu';
@@ -34,31 +34,29 @@ const AnalyticsScreen = ({ route }) => {
   const [hoveredCategory, setHoveredCategory] = useState('');
   const scrollViewRef = useRef(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Inicializa com o mês atual
+
   const monthWidth = 100;
 
-  // Scroll para o mês atual quando o componente é montado
   useEffect(() => {
-    if (scrollViewRef.current) {
-      const initialIndex = new Date().getMonth(); // Pega o mês atual
-      const xOffset = initialIndex * monthWidth; // Calcula a posição do scroll
-      scrollViewRef.current.scrollTo({ x: xOffset, animated: true });
-    }
+    // Define o mês atual sempre que o componente é montado
+    const currentMonth = new Date().getMonth();
+    setSelectedMonth(currentMonth);
   }, []);
+
+useEffect(() => {
+  // Role a lista para o mês atual ao montar o componente
+  if (scrollViewRef.current) {
+    setTimeout(() => {
+      scrollViewRef.current.scrollToIndex({ index: selectedMonth, animated: true });
+    }, 300); // Adicione um pequeno delay para garantir que o FlatList esteja montado
+  }
+}, [selectedMonth]);
+
 
   const handleMonthChange = useCallback((month) => {
     setSelectedMonth(month); // Atualiza o estado local
-    const xOffset = month * monthWidth; // Calcula o deslocamento horizontal
-    scrollViewRef.current.scrollTo({ x: xOffset, animated: true });
   }, []);
-
-  // Calcula o mês selecionado baseado na rolagem
-  const handleScroll = useCallback((event) => {
-    const xOffset = event.nativeEvent.contentOffset.x; // Pega o deslocamento do scroll
-    const newSelectedMonth = Math.round(xOffset / monthWidth); // Converte o deslocamento para o índice do mês
-    if (newSelectedMonth !== selectedMonth) {
-      setSelectedMonth(newSelectedMonth); // Atualiza o mês selecionado
-    }
-  }, [selectedMonth]);
+  
 
   const filteredTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.created_at);
@@ -239,18 +237,13 @@ const AnalyticsScreen = ({ route }) => {
             <Text style={styles.dataText}>Nenhum dado encontrado para este mês.</Text>
           )
         )}
-    <View style={{ marginTop: 50 }}>
-      <ScrollView
+        <View style={styles.monthSelectorContainer}>
+        <FlatList
         ref={scrollViewRef}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ alignItems: 'center' }}
-        snapToInterval={monthWidth}
-        decelerationRate="fast"
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-      >
-        {[
+        contentContainerStyle={styles.monthScrollView}
+        data={[
           { label: 'Jan', value: 0 },
           { label: 'Feb', value: 1 },
           { label: 'Mar', value: 2 },
@@ -263,25 +256,31 @@ const AnalyticsScreen = ({ route }) => {
           { label: 'Oct', value: 9 },
           { label: 'Nov', value: 10 },
           { label: 'Dec', value: 11 },
-        ].map((month, index) => (
+        ]}
+        keyExtractor={(item) => item.value.toString()}
+        renderItem={({ item }) => (
           <TouchableOpacity
-            key={index}
-            style={{
-              width: monthWidth,
-              paddingVertical: 10,
-              backgroundColor: selectedMonth === month.value ? '#B0B0B0' : '#fff',
-              borderRadius: 10,
-              alignItems: 'center',
-            }}
-            onPress={() => handleMonthChange(month.value)}
+            style={[
+              styles.monthButton,
+              selectedMonth === item.value && styles.selectedMonthButton
+            ]}
+            onPress={() => handleMonthChange(item.value)}
           >
-            <Text style={{ color: selectedMonth === month.value ? '#333' : '#666' }}>
-              {month.label}
+            <Text style={[
+              styles.monthText,
+              selectedMonth === item.value && styles.selectedMonthText
+            ]}>
+              {item.label}
             </Text>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
+        )}
+        getItemLayout={(data, index) => ({
+          length: monthWidth,
+          offset: monthWidth * index,
+          index,
+        })}
+      />
+        </View>
         <View style={styles.transfers}>
           <Text style={styles.titleTransfers}>Suas Transações</Text>
           {(filteredTransactions).length > 0 ? (
@@ -428,6 +427,9 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 5,
     zIndex: 10,
+  },
+  optionText: {
+    color: '#fff',
   },
   monthSelectorContainer: {
     paddingHorizontal: 20,
