@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     fontFamily: 'serif',
   },
   username: {
-    color: '000',
+    color: '#000',
     fontSize: 18,
     fontWeight: '400',
     opacity: 0.5,
@@ -197,7 +197,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 34,
     fontWeight: 'bold',
-    fontFamily: 'monospace',
   },
   operations: {
     flexDirection: 'row',
@@ -248,7 +247,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 'auto',
-    fontFamily: 'monospace',
   },
   cardCategory: {
     color: '#000',
