@@ -116,7 +116,7 @@ const LoginScreen = ({ navigation }) => {
           <Text style={styles.ButtonText}>Entrar</Text>
         </TouchableOpacity>
         <Text style={styles.goRegister}>
-          Ainda não tem uma conta?
+          Não tem uma conta?
           <Text style={styles.link} onPress={() => navigation.navigate('Register')}> Crie uma</Text>
         </Text>
       </ScrollView>
@@ -176,27 +176,33 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   Button: {
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     borderRadius: 15,
     paddingVertical: 20,
     paddingHorizontal: 10,
-    width: '100%',
+    width: '60%',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 'auto',
+    borderWidth: 1,
+    borderBottomWidth: 4,
+    borderRightWidth: 4,
+    borderBottomColor: '#000',
+    borderRightColor: '#000',
   },
   ButtonText: {
-    color: 'white',
+    color: '#000',
     fontSize: 18,
     fontWeight: 'bold',
   },
   goRegister: {
     textAlign: 'center',
     marginTop: 10,
+    marginBottom: 20,
     color: '#808080',
   },
   link: {
-    color: '#000',
+    color: '#81C2FF',
     fontWeight: 'bold',
   },
 });

@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, ScrollView, SafeAreaView, TouchableOpacity, Ima
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
 import Menu from './Menu'
+import styles from './styles';
 
 const NotificationsScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -70,60 +71,5 @@ const NotificationsScreen = ({ route }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 60,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  title: {
-    marginTop: 5,
-    marginBottom: 10,
-    marginHorizontal: 20,
-    color: '#000',
-    fontWeight: 'bold',
-    fontSize: 26,
-    lineHeight: 32,
-  },
-  notifications: {
-    marginTop: 10,
-    padding: 20,
-  },
-  notificationsCard: {
-    backgroundColor: '#EEEEEE',
-    borderRadius: 17,
-    padding: 15,
-    marginBottom: 15,
-  },
-  notificationsContent: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  notificationInfo: {
-    flex: 1,
-  },
-  notificationTitle: {
-    fontSize: 16,
-    marginTop: 7,
-    marginBottom: 7,
-  },
-  notificationText: {
-    opacity: 0.6,
-  },
-  notificationDate: {
-    opacity: 0.5,
-  },
-  notificationIcon: {
-    marginLeft: 10,
-  },
-  dataText: {
-    textAlign: 'center',
-    marginTop: 20,
-    color: '#666',
-  },
-});
 
 export default NotificationsScreen;

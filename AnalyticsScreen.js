@@ -1,10 +1,11 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, Dimensions, FlatList, Modal, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
 import Menu from './Menu';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import { Dropdown } from 'react-native-element-dropdown';
+import styles from './styles';
 
 const getCategoryColor = (category) => {
   const colors = {
@@ -34,6 +35,8 @@ const AnalyticsScreen = ({ route }) => {
   const [hoveredCategory, setHoveredCategory] = useState('');
   const scrollViewRef = useRef(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Inicializa com o mês atual
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false); // Estado para controlar a visibilidade do modal
 
   const monthWidth = 100;
 
@@ -91,11 +94,20 @@ useEffect(() => {
     }
   }, [userData.nameUser]);
 
+
   const handlePress = (transaction) => {
-    navigation.navigate('ViewTransfer', {
-      username: userData.nameUser,
-      transaction,
-    });
+    setSelectedTransaction(transaction);  // Armazena a transação selecionada
+    setIsModalVisible(true); // Abre o modal
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false); // Fecha o modal
+  };
+
+  const handleEdit = () => {
+    // Fecha o modal e navega para a página de edição
+    setIsModalVisible(false);
+    navigation.navigate('EditTransfer', { transaction: selectedTransaction });
   };
 
   const truncateCategoryName = (name) => {
@@ -175,7 +187,7 @@ useEffect(() => {
           </TouchableOpacity>
         </View>
         <View style={styles.headerContainer}>
-          <Text style={styles.title}>Análise de {selectedOption === 'expenses' ? 'Gastos' : 'Ganhos'}</Text>
+          <Text style={styles.title2}>Análise de {selectedOption === 'expenses' ? 'Gastos' : 'Ganhos'}</Text>
           <Dropdown
             style={styles.dropdown}
             data={[
@@ -282,7 +294,7 @@ useEffect(() => {
       />
         </View>
         <View style={styles.transfers}>
-          <Text style={styles.titleTransfers}>Suas Transações</Text>
+          <Text style={styles.title2}>Suas Transações</Text>
           {(filteredTransactions).length > 0 ? (
             filteredTransactions.map((transaction, index) => (
               <View key={index} style={styles.transferCard}>
@@ -296,7 +308,10 @@ useEffect(() => {
                       <Text style={styles.transferText}>"{transaction.descTransaction}"</Text>
                     </View>
                     <View style={styles.transferIcon}>
-                      {transaction.typeTransaction === 'expense' ?  <Image source={require('./assets/img/icons/arrowDown.png')} /> : <Image source={require('./assets/img/icons/arrowUp.png')} /> }
+                      {transaction.typeTransaction === 'expense' ?  
+                        <Image source={require('./assets/img/icons/arrowDown.png')} /> : 
+                        <Image source={require('./assets/img/icons/arrowUp.png')} /> 
+                      }
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -306,169 +321,63 @@ useEffect(() => {
             <Text style={styles.dataText}>Nenhum transação realizada este mês.</Text>
           )}
         </View>
+        <Modal
+          visible={isModalVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={closeModal}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              {selectedTransaction ? (
+                <>
+                  <View style={styles.field}>
+                    <Text style={styles.label}>Valor:</Text>
+                    <Text style={styles.value}>R$ {selectedTransaction.valueTransaction}</Text>
+                  </View>
+
+                  <View style={styles.field}>
+                    <Text style={styles.label}>Data:</Text>
+                    <Text style={styles.value}>{selectedTransaction.created_at}</Text>
+                  </View>
+
+                  <View style={styles.field}>
+                    <Text style={styles.label}>Horário:</Text>
+                    <Text style={styles.value}>{new Date(selectedTransaction.created_at).toLocaleTimeString()}</Text>
+                  </View>
+
+                  <View style={styles.field}>
+                    <Text style={styles.label}>Categoria:</Text>
+                    <View style={styles.category}>
+                      <Text style={styles.categoryText}>{selectedTransaction.categoryTransaction || 'N/A'}</Text>
+                      <Text style={styles.categoryIcon}>❌</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.field}>
+                    <Text style={styles.label}>Descrição:</Text>
+                    <Text style={styles.value}>{selectedTransaction.descTransaction || 'Sem descrição'}</Text>
+                  </View>
+
+                  <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
+                    <Text style={styles.editButtonText}>Editar</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+                    <Text style={styles.closeButtonText}>Fechar</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <Text>Carregando dados da transação...</Text>
+              )}
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
       <Menu userData={userData} />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 60,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  optionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-    marginHorizontal: 90,
-  },
-  optionButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 50,
-    borderRadius: 20,
-    backgroundColor: '#c9c9c9',
-  },
-  selectedOption: {
-    backgroundColor: '#000',
-    zIndex: 999,
-  },
-  optionText: {
-    color: '#fff',
-  },
-  headerContainer: {
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  title: {
-    color: '#000',
-    fontWeight: 'bold',
-    fontSize: 24,
-    lineHeight: 32,
-  },
-  dropdown: {
-    width: 150,
-    height: 40,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  placeholderStyle: {
-    color: '#9B9B9B',
-  },
-  labelStyle: {
-    color: '#9B9B9B',
-    fontSize: 14,
-    textAlign: 'right',
-  },
-  titleTransfers: {
-    marginBottom: 10,
-    color: '#000',
-    fontWeight: 'bold',
-    fontSize: 24,
-    lineHeight: 32,
-  },
-  transfers: {
-    padding: 20,
-    marginTop: 10,
-  },
-  transferCard: {
-    backgroundColor: '#EEEEEE',
-    borderRadius: 17,
-    padding: 15,
-    marginBottom: 15,
-  },
-  transferContent: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  transferInfo: {
-    flex: 1,
-  },
-  transferTitle: {
-    fontSize: 16,
-    marginTop: 7,
-    marginBottom: 7,
-  },
-  transferText: {
-    opacity: 0.6,
-  },
-  transferDate: {
-    opacity: 0.5,
-  },
-  transferIcon: {
-    marginLeft: 10,
-  },
-  dataText: {
-    textAlign: 'center',
-    marginTop: 20,
-    color: '#666',
-  },
-  pieChartContainer: {
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  chartContainer: {
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    position: 'relative',
-  },
-  tooltip: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    backgroundColor: '#2F1155',
-    color: '#fff',
-    padding: 5,
-    borderRadius: 5,
-    zIndex: 10,
-  },
-  optionText: {
-    color: '#fff',
-  },
-  monthSelectorContainer: {
-    paddingHorizontal: 20,
-    marginTop: 20,
-    alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-    borderRadius: 10,
-    paddingVertical: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  monthScrollView: {
-    alignItems: 'center',
-  },
-  monthButton: {
-    width: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 10,
-    marginHorizontal: 5,
-  },
-  selectedMonthButton: {
-    backgroundColor: '#B0B0B0',
-    borderRadius: 10,
-    paddingVertical: 15,
-  },
-  monthText: {
-    color: '#666666',
-    fontWeight: 'normal',
-    fontSize: 16,
-  },
-  selectedMonthText: {
-    color: '#333333',
-    fontWeight: '600',
-    fontSize: 18,
-  },
-});
 
 export default AnalyticsScreen;

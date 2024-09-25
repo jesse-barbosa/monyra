@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { API_URL } from './apiConfig';
+import styles from './styles';
 
 const TransferScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -78,8 +79,8 @@ const TransferScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
+      <View style={styles.main}>
+        <View style={styles.headerTransfer}>
           <View style={styles.title}>
             <Text style={styles.value}>R$ {inputValue}</Text>
           </View>
@@ -126,7 +127,6 @@ const TransferScreen = ({ route }) => {
             />
           </View>
         </View>
-        <View style={styles.main}>
           <View style={styles.keyboard}>
             {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0'].map((item, index) => (
               <TouchableOpacity key={index} style={styles.key} onPress={() => handleKeyPress(item)}>
@@ -137,67 +137,17 @@ const TransferScreen = ({ route }) => {
               <Image source={require('./assets/img/icons/close-circle.png')} style={styles.keyText}/>
             </TouchableOpacity>
           </View>
-        </View>
-      </ScrollView>
-      <TouchableOpacity style={styles.Button} onPress={handlePress}>
-        <Text style={styles.ButtonTransfer}>Confirmar</Text>
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handlePress}>
+        <Text style={styles.buttonText}>Confirmar</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  inputs: {
-    marginTop: '15%',
-    marginBottom: '5%',
-    width: '100%',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: 'gray',
-    borderRadius: 15,
-    paddingHorizontal: 10,
-    backgroundColor: '#F2F2F2',
-    width: '100%',
-    marginBottom: 10,
-  },
-  input: {
-    flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    backgroundColor: '#F2F2F2',
-    borderRadius: 15,
-    fontSize: 16,
-  },
-  picker: {
-    flex: 1,
-    backgroundColor: '#F2F2F2',
-    borderRadius: 15,
-  },
-  Button: {
-    backgroundColor: '#000',
-    borderRadius: 15,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 'auto',
-  },
-  ButtonTransfer: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 20,
-  },
-  header: {
+{
+/*
+  headerTransfer: {
     padding: 10,
     borderRadius: 10,
     flexDirection: 'row',
@@ -205,30 +155,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  value: {
-    textAlign: 'center',
-    color: '#000',
-    fontWeight: 'bold',
-    fontSize: 32,
-    lineHeight: 32,
-  },
-  keyboard: {
-    width: 340,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
-  key: {
-    width: '20%',
-    margin: '5%',
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  keyText: {
-    fontSize: 24,
-    color: '#333',
-  },
-});
+*/}
 
 export default TransferScreen;

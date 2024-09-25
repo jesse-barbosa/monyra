@@ -5,6 +5,7 @@ import axios from 'axios';
 import { API_URL } from './apiConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Menu from './Menu'
+import styles from './styles';
 
 const SettingsScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -37,21 +38,21 @@ const SettingsScreen = ({ route }) => {
       <Text style={styles.title}>Configurações</Text>
     <View style={styles.container}>
       <View style={styles.selectIcon}>
-        <TouchableOpacity onPress={handlePreviousIcon} style={styles.arrowButton}>
-          <Icon name="chevron-back-outline" style={styles.arrow} />
+        <TouchableOpacity onPress={handlePreviousIcon} style={styles.arrowButtonIcon}>
+          <Icon name="chevron-back-outline" style={styles.arrowIcon} />
         </TouchableOpacity>
 
         <View style={styles.userImageContainer}>
-          <Image style={styles.userImage} source={imageSource} />
+          <Image style={styles.userImageSettings} source={imageSource} />
         </View>
 
-        <TouchableOpacity onPress={handleNextIcon} style={styles.arrowButton}>
-          <Icon name="chevron-forward-outline" style={styles.arrow} />
+        <TouchableOpacity onPress={handleNextIcon} style={styles.arrowButtonIcon}>
+          <Icon name="chevron-forward-outline" style={styles.arrowIcon} />
         </TouchableOpacity>
       </View>
 
       <View style={styles.details}>
-        <Text style={styles.nameUser}>{userData.nameUser}</Text>
+        <Text style={styles.nameUserSettings}>{userData.nameUser}</Text>
       </View>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
@@ -63,63 +64,5 @@ const SettingsScreen = ({ route }) => {
    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    paddingTop: 60,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  title: {
-    color: '#000',
-    fontWeight: 'bold',
-    fontSize: 26,
-    lineHeight: 32,
-    textAlign: 'center',
-  },
-  selectIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  userImageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  userImage: {
-    width: 200,
-    height: 200,
-    marginHorizontal: 'auto',
-  },
-  nameUser: {
-    textAlign: 'center',
-    fontSize: 28,
-    marginTop: 26,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-    color: '#666666',
-  },
-  arrowButton: {
-    padding: 10,
-  },
-  arrow: {
-    fontSize: 40,
-    color: '#000',
-  },
-  button: {
-    borderRadius: 15,
-    backgroundColor: '#e52c2c',
-    padding: 20,
-    marginTop: 'auto',
-    marginBottom: 20,
-  },
-  buttonText: {
-    textAlign: 'center',
-    fontSize: 16,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-});
 
 export default SettingsScreen;

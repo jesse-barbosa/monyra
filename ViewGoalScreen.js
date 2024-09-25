@@ -57,7 +57,7 @@ const ViewTransferScreen = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-          <Ionicons name="arrow-back" size={24} color="#5A67D8" />
+          <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.title}>{goal.nameGoal}</Text>
         <TouchableOpacity onPress={deleteGoal} style={styles.iconButton}>
@@ -67,33 +67,33 @@ const ViewTransferScreen = ({ route }) => {
 
       <View style={styles.card}>
         <View style={styles.infoRow}>
-          <Ionicons name="cash-outline" size={20} color="#5A67D8" />
+          <Ionicons name="cash-outline" size={20} color="#000" />
           <Text style={styles.label}>Total acumulado:</Text>
           <Text style={styles.value}>R$ {goal.amountSaved}</Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Ionicons name="cash-outline" size={20} color="#5A67D8" />
+          <Ionicons name="cash-outline" size={20} color="#000" />
           <Text style={styles.label}>Total restante:</Text>
           <Text style={styles.value}>R$ {goal.amountRemaining - goal.amountSaved}</Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Ionicons name="calendar-outline" size={20} color="#5A67D8" />
+          <Ionicons name="calendar-outline" size={20} color="#000" />
           <Text style={styles.label}>Data:</Text>
           <Text style={styles.value}>{formattedDate}</Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Ionicons name="time-outline" size={20} color="#5A67D8" />
+          <Ionicons name="time-outline" size={20} color="#000" />
           <Text style={styles.label}>Horário:</Text>
           <Text style={styles.value}>{formattedTime}</Text>
         </View>
-      <Progress.Bar progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)} width={290} height={30} color="#642de8" style={styles.goalBarProgress}/>
-      <View style={styles.addPeopleCard}>
-              <TouchableOpacity onPress={() => navigation.navigate('AddPeople', { goal, username, email } )} style={styles.addPeopleContent}>
-              <Icon name='add-circle' size={24} color="#642de8" style={styles.addPeopleIcon}/>
-                <Text style={styles.addPeopleText}>Adicionar Pessoa</Text>
+      <Progress.Bar progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)} width={340} height={15} color="#642de8" style={styles.goalBarProgress}/>
+      <View style={styles.addTransferCard}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddTransfer', { goal, username, email } )} style={styles.addTransferContent}>
+              <Icon name='add-circle' size={24} color="#000" style={styles.addTransferIcon}/>
+                <Text style={styles.addTransferText}>Adicionar Valor</Text>
               </TouchableOpacity>
             </View>
       </View>
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#FFFFFF',
+    alignItems: 'center',
   },
   header: {
     flexDirection: 'row',
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
-    color: '#2F1155',
+    color: '#000',
     fontWeight: 'bold',
     fontSize: 22,
     textAlign: 'center',
@@ -129,12 +130,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 30,
-    paddingTop: 120,
-    paddingBottom: 30,
-    marginHorizontal: 10,
-    marginVertical: 40,
-    flex: 1,
+    marginVertical: 'auto',
     justifyContent: 'space-evenly',
   },
   infoRow: {
@@ -177,7 +173,7 @@ const styles = StyleSheet.create({
   },
   goalBarProgress: {
     marginTop: 'auto',
-    height: 30,
+    height: 15,
     borderWidth: 0,
     backgroundColor: '#C7C7C7',
   },
@@ -186,44 +182,46 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'gray',
   },
-  saveButton: {
-    backgroundColor: '#6630F3',
-    borderRadius: 10,
-    padding: 15,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginTop: 30,
-  },
-  saveButtonText: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  addPeopleCard: {
+  addTransferCard: {
     backgroundColor: '#EEEEEE',
     borderRadius: 17,
     padding: 10,
     marginVertical: 15,
   },
-  addPeopleContent: {
+  addTransferContent: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  addPeopleText: {
+  addTransferText: {
     fontSize: 18,
     marginBottom: 5,
     opacity: 0.7,
-    color: '#642de8',
+    color: '#000',
   },
-  addPeopleIcon: {
+  addTransferIcon: {
     marginRight: 10,
     opacity: 0.7,
     marginBottom: 'auto',
+  },
+  saveButton: {
+    // backgroundColor: '#6630F3',
+    backgroundColor: '#ffff',
+    borderRadius: 10,
+    marginTop: 30,
+    padding: 15,
+    width: '80%',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderBottomWidth: 4,
+    borderRightWidth: 4,
+    borderBottomColor: '#000',
+    borderRightColor: '#000',
+  },
+  saveButtonText: {
+    color: '#000',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 
