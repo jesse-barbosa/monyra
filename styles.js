@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-      width: '80%',
+      width: '90%',
+      height: '60%',
       backgroundColor: '#F5F5F5',
       borderRadius: 10,
       padding: 20,
@@ -118,15 +119,20 @@ const styles = StyleSheet.create({
       width: '100%',
       marginVertical: 10,
       alignItems: 'center',
+      borderColor: '#ccc',
+      paddingVertical: 10,
+      borderBottomWidth: 2,
     },
     label: {
       fontSize: 16,
       fontWeight: 'bold',
-      color: '#333',
+      color: '#5D5D5D',
+      opacity: 0.5,
     },
     value: {
       fontSize: 16,
-      color: '#333',
+      color: '#000',
+      opacity: 0.7,
     },
     category: {
       flexDirection: 'row',
@@ -135,14 +141,14 @@ const styles = StyleSheet.create({
     categoryText: {
       marginRight: 5,
       fontSize: 16,
-      color: '#333',
+      color: '#000',
+      opacity: 0.7,
     },
     categoryIcon: {
       fontSize: 16,
-      color: 'red',
     },
     editButton: {
-      marginTop: 20,
+      marginTop: 'auto',
       width: '100%',
       backgroundColor: '#fff',
       borderRadius: 10,
@@ -509,7 +515,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F2',
     borderRadius: 15,
   },
-  value: {
+  valueTransfer: {
     textAlign: 'center',
     color: '#000',
     fontWeight: 'bold',

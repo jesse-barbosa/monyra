@@ -82,7 +82,7 @@ const TransferScreen = ({ route }) => {
       <View style={styles.main}>
         <View style={styles.headerTransfer}>
           <View style={styles.title}>
-            <Text style={styles.value}>R$ {inputValue}</Text>
+            <Text style={styles.valueTransfer}>R$ {inputValue}</Text>
           </View>
         </View>
         <View style={styles.inputs}>
@@ -144,17 +144,5 @@ const TransferScreen = ({ route }) => {
     </View>
   );
 };
-
-{
-/*
-  headerTransfer: {
-    padding: 10,
-    borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-*/}
 
 export default TransferScreen;

@@ -34,32 +34,28 @@ const AnalyticsScreen = ({ route }) => {
   const [chartType, setChartType] = useState('pie');
   const [hoveredCategory, setHoveredCategory] = useState('');
   const scrollViewRef = useRef(null);
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Inicializa com o mês atual
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false); // Estado para controlar a visibilidade do modal
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const monthWidth = 100;
 
   useEffect(() => {
-    // Define o mês atual sempre que o componente é montado
     const currentMonth = new Date().getMonth();
     setSelectedMonth(currentMonth);
   }, []);
 
 useEffect(() => {
-  // Role a lista para o mês atual ao montar o componente
   if (scrollViewRef.current) {
     setTimeout(() => {
       scrollViewRef.current.scrollToIndex({ index: selectedMonth, animated: true });
-    }, 300); // Adicione um pequeno delay para garantir que o FlatList esteja montado
+    }, 300);
   }
 }, [selectedMonth]);
 
-
   const handleMonthChange = useCallback((month) => {
-    setSelectedMonth(month); // Atualiza o estado local
+    setSelectedMonth(month);
   }, []);
-  
 
   const filteredTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.created_at);
@@ -96,16 +92,15 @@ useEffect(() => {
 
 
   const handlePress = (transaction) => {
-    setSelectedTransaction(transaction);  // Armazena a transação selecionada
-    setIsModalVisible(true); // Abre o modal
+    setSelectedTransaction(transaction);
+    setIsModalVisible(true);
   };
 
   const closeModal = () => {
-    setIsModalVisible(false); // Fecha o modal
+    setIsModalVisible(false);
   };
 
   const handleEdit = () => {
-    // Fecha o modal e navega para a página de edição
     setIsModalVisible(false);
     navigation.navigate('EditTransfer', { transaction: selectedTransaction });
   };
@@ -338,7 +333,7 @@ useEffect(() => {
 
                   <View style={styles.field}>
                     <Text style={styles.label}>Data:</Text>
-                    <Text style={styles.value}>{selectedTransaction.created_at}</Text>
+                    <Text style={styles.value}>{new Date(selectedTransaction.created_at).toLocaleDateString()}</Text>
                   </View>
 
                   <View style={styles.field}>
