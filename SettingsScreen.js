@@ -13,8 +13,6 @@ const SettingsScreen = ({ route }) => {
   const [selectedIconIndex, setSelectedIconIndex] = useState(0);
   const icons = ['default', 'man', 'woman'];
 
-  console.log(userData)
-
   const images = {
     default: require('./assets/img/icons/profile/default.png'),
     man: require('./assets/img/icons/profile/man.png'),
