@@ -167,22 +167,22 @@ useEffect(() => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.optionContainer}>
+        <View style={styles.optionContainerAnalytics}>
           <TouchableOpacity
-            style={[styles.optionButton, selectedOption === 'expenses' && styles.selectedOption]}
+            style={[styles.optionButtonAnalytics, selectedOption === 'expenses' && styles.selectedOptionAnalytics]}
             onPress={() => setSelectedOption('expenses')}
           >
-            <Text style={styles.optionText}>Gastos</Text>
+            <Text style={styles.optionTextAnalytics}>Gastos</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.optionButton, selectedOption === 'gains' && styles.selectedOption]}
+            style={[styles.optionButtonAnalytics, selectedOption === 'gains' && styles.selectedOptionAnalytics]}
             onPress={() => setSelectedOption('gains')}
           >
-            <Text style={styles.optionText}>Ganhos</Text>
+            <Text style={styles.optionTextAnalytics}>Ganhos</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.headerContainer}>
-          <Text style={styles.title2}>Análise de {selectedOption === 'expenses' ? 'Gastos' : 'Ganhos'}</Text>
+        <View style={styles.header}>
+          <Text style={styles.secondaryTitle}>Análise de {selectedOption === 'expenses' ? 'Gastos' : 'Ganhos'}</Text>
           <Dropdown
             style={styles.dropdown}
             data={[
@@ -289,7 +289,7 @@ useEffect(() => {
       />
         </View>
         <View style={styles.transfers}>
-          <Text style={styles.title2}>Suas Transações</Text>
+          <Text style={styles.secondaryTitle}>Suas Transações</Text>
           {(filteredTransactions).length > 0 ? (
             filteredTransactions.map((transaction, index) => (
               <View key={index} style={styles.transferCard}>

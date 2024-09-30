@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import axios from 'axios';
 import { API_URL } from './apiConfig';
+import styles from './styles';
 
 const RegisterStep2Screen = ({ navigation, route }) => {
   const { username, email, password } = route.params;
@@ -67,102 +68,25 @@ const RegisterStep2Screen = ({ navigation, route }) => {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
           <Text style={styles.title}>Quase lá...</Text>
           <Text style={styles.subtitle}>Qual sua renda mensal?</Text>
-        </View>
         <View style={styles.options}>
           {options.map((option) => (
             <View style={styles.optionContainer} key={option.id}>
               <TouchableOpacity
-                style={[styles.option, { backgroundColor: selectedOption === option.id ? 'gray' : '#F2F2F2' }]}
+                style={[styles.option, { backgroundColor: selectedOption === option.id ? '#292929' : '#F2F2F2' }]}
                 onPress={() => handleOptionPress(option.id)}>
                 <Text style={[styles.optionText, { color: selectedOption === option.id ? '#fff' : '#000' }]}>{option.label}</Text>
               </TouchableOpacity>
             </View>
           ))}
         </View>
-        <TouchableOpacity style={styles.Button} onPress={handleRegister}>
-          <Text style={styles.ButtonLogin}>Confirmar</Text>
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <Text style={styles.buttonText}>Confirmar</Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  header: {
-    margin: 20,
-  },
-  title: {
-    marginTop: 60,
-    color: '#000',
-    fontWeight: 'bold',
-    fontSize: 32,
-    lineHeight: 32,
-    textAlign: 'center',
-  },
-  subtitle: {
-    marginTop: 60,
-    color: '#000',
-    opacity: 0.4,
-    fontWeight: 'bold',
-    fontSize: 23,
-    lineHeight: 32,
-    textAlign: 'center',
-  },
-  options: {
-    marginTop: 100,
-    width: '100%',
-    marginBottom: 20,
-  },
-  optionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: 'gray',
-    borderRadius: 15,
-    paddingHorizontal: 10,
-    width: '100%',
-    marginBottom: 20,
-  },
-  option: {
-    flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    borderRadius: 15,
-  },
-  optionText: {
-    fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    opacity: 0.4,
-  },
-  Button: {
-    backgroundColor: '#000',
-    borderRadius: 15,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 'auto',
-  },
-  ButtonLogin: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-
-});
 
 export default RegisterStep2Screen;

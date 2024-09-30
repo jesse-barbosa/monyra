@@ -34,7 +34,7 @@ const SettingsScreen = ({ route }) => {
   <View style={styles.container}>
     <ScrollView>
       <Text style={styles.title}>Configurações</Text>
-    <View style={styles.container}>
+    <View>
       <View style={styles.selectIcon}>
         <TouchableOpacity onPress={handlePreviousIcon} style={styles.arrowButtonIcon}>
           <Icon name="chevron-back-outline" style={styles.arrowIcon} />

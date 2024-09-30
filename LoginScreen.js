@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Keyboa
 import axios from 'axios';
 import { API_URL } from './apiConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
+import styles from './styles';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -112,8 +113,8 @@ const LoginScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity style={styles.Button} onPress={handlePress}>
-          <Text style={styles.ButtonText}>Entrar</Text>
+        <TouchableOpacity style={styles.button} onPress={handlePress}>
+          <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
         <Text style={styles.goRegister}>
           Não tem uma conta?
@@ -123,88 +124,5 @@ const LoginScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  header: {
-    margin: 20,
-  },
-  title: {
-    marginTop: 60,
-    color: '#000',
-    fontWeight: 'bold',
-    fontSize: 32,
-    lineHeight: 32,
-    textAlign: 'center',
-  },
-  inputs: {
-    marginTop: 200,
-    width: '100%',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: 'gray',
-    borderRadius: 15,
-    paddingHorizontal: 10,
-    backgroundColor: '#F2F2F2',
-    width: '100%',
-    marginBottom: 20,
-  },
-  input: {
-    flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    backgroundColor: '#F2F2F2',
-    borderRadius: 15,
-    fontSize: 16,
-  },
-  eyePassword: {
-    width: 30,
-    height: 25,
-    resizeMode: 'contain',
-    opacity: 0.6,
-  },
-  Button: {
-    backgroundColor: '#fff',
-    borderRadius: 15,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    width: '60%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 'auto',
-    borderWidth: 1,
-    borderBottomWidth: 4,
-    borderRightWidth: 4,
-    borderBottomColor: '#000',
-    borderRightColor: '#000',
-  },
-  ButtonText: {
-    color: '#000',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  goRegister: {
-    textAlign: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-    color: '#808080',
-  },
-  link: {
-    color: '#81C2FF',
-    fontWeight: 'bold',
-  },
-});
 
 export default LoginScreen;

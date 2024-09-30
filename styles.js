@@ -1,38 +1,49 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-    container: {
-      paddingTop: 60,
-      flex: 1,
-      backgroundColor: '#fff',
-      justifyContent: 'center',
-    },
-    title: {
-      marginTop: 5,
-      marginBottom: 10,
-      marginHorizontal: 20,
-      color: '#000',
-      fontWeight: 'bold',
-      fontSize: 26,
-      lineHeight: 32,
-    },
-    optionContainer: {
+  /* Estilos Gerais */
+  container: {
+    paddingTop: 40,
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+  title: {
+    marginTop: 5,
+    marginBottom: 10,
+    marginHorizontal: 20,
+    color: '#000',
+    fontWeight: 'bold',
+    fontSize: 26,
+    lineHeight: 32,
+  },
+  subtitle: {
+    marginTop: 30,
+    color: '#000',
+    opacity: 0.4,
+    fontWeight: 'bold',
+    fontSize: 23,
+    lineHeight: 32,
+    textAlign: 'center',
+  },
+  /* Tela Analytics */
+    optionContainerAnalytics: {
       flexDirection: 'row',
       justifyContent: 'space-around',
       marginBottom: 20,
       marginHorizontal: 90,
     },
-    optionButton: {
+    optionButtonAnalytics: {
       paddingVertical: 10,
       paddingHorizontal: 50,
       borderRadius: 20,
       backgroundColor: '#c9c9c9',
     },
-    selectedOption: {
+    selectedOptionAnalytics: {
       backgroundColor: '#000',
       zIndex: 999,
     },
-    optionText: {
+    optionTextAnalytics: {
       color: '#fff',
     },
     headerContainer: {
@@ -41,7 +52,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'space-between',
     },
-    title2: {
+    secondaryTitle: {
       color: '#000',
       fontWeight: 'bold',
       fontSize: 24,
@@ -197,9 +208,6 @@ const styles = StyleSheet.create({
       padding: 5,
       borderRadius: 5,
       zIndex: 10,
-    },
-    optionText: {
-      color: '#fff',
     },
     monthSelectorContainer: {
       paddingHorizontal: 20,
@@ -378,8 +386,8 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       borderRadius: 16,
       borderWidth: 1,
-      borderBottomWidth: 8,
-      borderRightWidth: 8,
+      borderBottomWidth: 4  ,
+      borderRightWidth: 4,
       borderBottomColor: '#000',
       borderRightColor: '#000',
     },
@@ -462,21 +470,21 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     width: '100%',
   },
-  addGoalCard: {
+  addCard: {
     marginVertical: 15,
     padding: 14,
     borderRadius: 10,
     backgroundColor: '#ededed',
   },
-  addGoalContent: {
+  addContent: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  addGoalIcon: {
+  addIcon: {
     marginRight: 5,
   },
-  addGoalText: {
+  addText: {
     fontSize: 16,
     color: '#000',
     fontWeight: '500',
@@ -488,7 +496,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputs: {
-    marginTop: '15%',
+    marginTop: 'auto',
     marginBottom: '5%',
     width: '100%',
   },
@@ -498,7 +506,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 15,
     paddingHorizontal: 10,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: '#F7F7F7',
     width: '100%',
     marginBottom: 10,
   },
@@ -506,13 +514,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 20,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: '#F7F7F7',
     borderRadius: 15,
     fontSize: 16,
+    marginHorizontal: 10,
   },
   picker: {
     flex: 1,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: '#F7F7F7',
     borderRadius: 15,
   },
   valueTransfer: {
@@ -521,6 +530,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 32,
     lineHeight: 32,
+    marginBottom: 60,
   },
   main: {
     paddingHorizontal: 20,
@@ -546,6 +556,117 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     color: '#666',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  goRegister: {
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#808080',
+  },
+  link: {
+    color: '#81C2FF',
+    fontWeight: 'bold',
+  },
+  options: {
+    marginTop: 100,
+    width: '100%',
+    marginBottom: 20,
+  },
+  optionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: 'gray',
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    width: '100%',
+    marginBottom: 20,
+  },
+  option: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+  },
+  optionText: {
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    opacity: 0.4,
+  },
+  headerCreateGoal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageFormGoal: {
+    height: 260,
+    width: 260,
+    marginBottom: 15,
+  },
+  headerViewGoal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 30,
+  },
+  cardViewGoal: {
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    marginVertical: 'auto',
+    justifyContent: 'space-evenly',
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f2f2f2',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  infoRowDescription: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: '#f2f2f2',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  labelInfo: {
+    fontSize: 18,
+    color: '#666666',
+    marginLeft: 10,
+    flex: 1,
+  },
+  valueInfo: {
+    fontSize: 18,
+    color: '#545454',
+    fontWeight: 'bold',
+    marginLeft: 10,
+    flexShrink: 1,
+  },
+  valueDescription: {
+    fontSize: 18,
+    color: '#545454',
+    fontWeight: 'bold',
+    marginLeft: 10,
+    textAlign: 'right',
+    flex: 1,
+    marginTop: 5,
+  },
+  goalBarProgress: {
+    marginTop: 'auto',
+    height: 15,
+    borderWidth: 0,
+    backgroundColor: '#C7C7C7',
+  },
+  goalRemaining: {
+    marginLeft: 'auto',
+    fontSize: 16,
+    color: 'gray',
   },
 });
 

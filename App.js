@@ -13,6 +13,7 @@ import GeneralSettingsScreen from './GeneralSettingsScreen';
 import TransferScreen from './TransferScreen';
 import ViewTransferScreen from './ViewTransferScreen';
 import CreateGoalScreen from './CreateGoalScreen';
+import CreateGoalStep2Screen from './CreateGoalStep2Screen';
 import ViewGoalScreen from './ViewGoalScreen';
 
 const Stack = createStackNavigator();
@@ -33,7 +34,8 @@ export default function App() {
         <Stack.Screen name="Transfer" component={TransferScreen} options={{ headerTitle: "Transferir", animationEnabled: false, }} />
         <Stack.Screen name="ViewTransfer" component={ViewTransferScreen} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="CreateGoal" component={CreateGoalScreen} options={{ headerTitle: "Criar meta", animationEnabled: false, }} />
-        <Stack.Screen name="ViewGoal" component={ViewGoalScreen} options={{ headerShown: false, animationEnabled: false, }} />
+        <Stack.Screen name="CreateGoalStep2" component={CreateGoalStep2Screen} options={{ headerTitle: "Criar meta", animationEnabled: false, }} />
+        <Stack.Screen name="ViewGoal" component={ViewGoalScreen} options={{ headerTitle: "Visualizar", headerShown: true, animationEnabled: false, }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -176,7 +176,7 @@ const HomeScreen = ({ route }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.goalsTitle}>
-          <Text style={styles.title2}>Metas</Text>
+          <Text style={styles.secondaryTitle}>Metas</Text>
         </View>
         <View style={styles.goals}>
           {userGoals.length > 0 ? (
@@ -206,13 +206,13 @@ const HomeScreen = ({ route }) => {
           ) : (
             <Text style={styles.dataText}>Você não possui metas.</Text>
           )}
-          <View style={styles.addGoalCard}>
+          <View style={styles.addCard}>
             <TouchableOpacity
               onPress={() => navigation.navigate('CreateGoal', { username: userData.nameUser, email: userData.email })}
-              style={styles.addGoalContent}
+              style={styles.addContent}
             >
-              <Icon name="add-circle" size={24} color="#000" style={styles.addGoalIcon} />
-              <Text style={styles.addGoalText}>Adicionar Meta</Text>
+              <Icon name="add-circle" size={24} color="#000" style={styles.addIcon} />
+              <Text style={styles.addText}>Adicionar Meta</Text>
             </TouchableOpacity>
           </View>
         </View>
