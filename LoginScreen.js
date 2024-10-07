@@ -6,8 +6,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('barbosajesse419@gmail.com');
+  const [password, setPassword] = useState('1234');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const togglePasswordVisibility = () => {

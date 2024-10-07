@@ -3,6 +3,12 @@
 # Files
 apiConfig.js
 
+# Android
+android/
+
+# iOS
+ios/
+
 # dependencies
 node_modules/
 

@@ -5,6 +5,8 @@ import { API_URL } from './apiConfig';
 import Menu from './Menu';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import { Dropdown } from 'react-native-element-dropdown';
+import { PermissionsAndroid } from 'react-native';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import styles from './styles';
 
 const getCategoryColor = (category) => {
@@ -114,6 +116,67 @@ const AnalyticsScreen = ({ route }) => {
       }
     }, [userData.nameUser])
   );
+
+  const requestStoragePermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Permissão para salvar arquivos',
+          message: 'Este aplicativo precisa de acesso ao armazenamento para salvar PDFs.',
+          buttonNeutral: 'Perguntar depois',
+          buttonNegative: 'Cancelar',
+          buttonPositive: 'OK',
+        }
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  };
+  
+  const exportData = async () => {
+    try {
+      // Solicitar permissão de armazenamento
+      const hasPermission = await requestStoragePermission();
+      if (!hasPermission) {
+        console.log('Permissão de armazenamento negada');
+        return;
+      }
+  
+      const pdfData = filteredTransactions.map(transaction => ({
+        date: transaction.created_at,
+        value: transaction.valueTransaction,
+        description: transaction.descTransaction,
+        category: transaction.categoryTransaction,
+      }));
+  
+      const options = {
+        fileName: 'transacoes',
+        directory: 'Documents',
+      };
+  
+      const file = await RNHTMLtoPDF.convert({
+        html: generateHtml(pdfData),
+        fileName: options.fileName,
+        directory: options.directory,
+      });
+  
+      console.log('PDF gerado em:', file.filePath);
+    } catch (error) {
+      console.error('Erro ao exportar dados:', error);
+    }
+  };
+  
+  const generateHtml = (data) => {
+    let html = '<h1>Transações</h1><ul>';
+    data.forEach(item => {
+      html += `<li>${item.date}: R$ ${item.value} - ${item.description} (${item.category})</li>`;
+    });
+    html += '</ul>';
+    return html;
+  };
 
   const handlePress = (transaction) => {
     setSelectedTransaction(transaction);
@@ -338,7 +401,7 @@ const AnalyticsScreen = ({ route }) => {
                 </View>
               ))}
               <View style={{ marginTop: 20 }}>
-              <TouchableOpacity style={styles.button} onPress={handlePress}>
+              <TouchableOpacity style={styles.button} onPress={exportData}>
                 <Text style={styles.buttonText}>Exportar Dados</Text>
               </TouchableOpacity>
               </View>
