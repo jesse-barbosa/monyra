@@ -78,7 +78,7 @@ const TransferScreen = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, paddingTop: 40,}}>
       <View style={styles.main}>
         <View style={styles.headerTransfer}>
           <View style={styles.title}>

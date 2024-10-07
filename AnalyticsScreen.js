@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, Dimensions, FlatList, Modal, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
 import Menu from './Menu';
 import { BarChart, PieChart } from 'react-native-chart-kit';
@@ -45,13 +45,13 @@ const AnalyticsScreen = ({ route }) => {
     setSelectedMonth(currentMonth);
   }, []);
 
-useEffect(() => {
-  if (scrollViewRef.current) {
-    setTimeout(() => {
-      scrollViewRef.current.scrollToIndex({ index: selectedMonth, animated: true });
-    }, 300);
-  }
-}, [selectedMonth]);
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      setTimeout(() => {
+        scrollViewRef.current.scrollToIndex({ index: selectedMonth, animated: true });
+      }, 300);
+    }
+  }, [selectedMonth]);
 
   const handleMonthChange = useCallback((month) => {
     setSelectedMonth(month);
@@ -88,8 +88,32 @@ useEffect(() => {
         console.error('Error fetching transactions:', error);
       });
     }
-  }, [userData.nameUser]);
+  }, [userData.nameUser, selectedMonth, selectedOption]);  
 
+  useFocusEffect(
+    useCallback(() => {
+      if (userData.nameUser) {
+        fetch(`${API_URL}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ action: 'getUserTransactions', username: userData.nameUser }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            setTransactions(data.transactions);
+          } else {
+            console.log(data.message);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching transactions:', error);
+        });
+      }
+    }, [userData.nameUser])
+  );
 
   const handlePress = (transaction) => {
     setSelectedTransaction(transaction);
@@ -102,7 +126,7 @@ useEffect(() => {
 
   const handleEdit = () => {
     setIsModalVisible(false);
-    navigation.navigate('EditTransfer', { transaction: selectedTransaction });
+    navigation.navigate('ViewTransfer', { transaction: selectedTransaction });
   };
 
   const truncateCategoryName = (name) => {
@@ -165,7 +189,7 @@ useEffect(() => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, paddingTop: 40}}>
       <ScrollView>
         <View style={styles.optionContainerAnalytics}>
           <TouchableOpacity
@@ -291,27 +315,34 @@ useEffect(() => {
         <View style={styles.transfers}>
           <Text style={styles.secondaryTitle}>Suas Transações</Text>
           {(filteredTransactions).length > 0 ? (
-            filteredTransactions.map((transaction, index) => (
-              <View key={index} style={styles.transferCard}>
-                <TouchableOpacity onPress={() => handlePress(transaction)}>
-                  <View style={styles.transferContent}>
-                    <View style={styles.transferInfo}>
-                      <Text style={styles.transferDate}>{transaction.created_at}</Text>
-                      <Text style={styles.transferTitle}>
-                        {transaction.typeTransaction === 'expense' ? 'Você enviou' : 'Você recebeu'} R$ {transaction.valueTransaction}
-                      </Text>
-                      <Text style={styles.transferText}>"{transaction.descTransaction}"</Text>
+            <View>
+              {filteredTransactions.map((transaction, index) => (
+                <View key={index} style={styles.transferCard}>
+                  <TouchableOpacity onPress={() => handlePress(transaction)}>
+                    <View style={styles.transferContent}>
+                      <View style={styles.transferInfo}>
+                        <Text style={styles.transferDate}>{transaction.created_at}</Text>
+                        <Text style={styles.transferTitle}>
+                          {transaction.typeTransaction === 'expense' ? 'Você enviou' : 'Você recebeu'} R$ {transaction.valueTransaction}
+                        </Text>
+                        <Text style={styles.transferText}>"{transaction.descTransaction}"</Text>
+                      </View>
+                      <View style={styles.transferIcon}>
+                        {transaction.typeTransaction === 'expense' ?  
+                          <Image source={require('./assets/img/icons/arrowDown.png')} /> : 
+                          <Image source={require('./assets/img/icons/arrowUp.png')} /> 
+                        }
+                      </View>
                     </View>
-                    <View style={styles.transferIcon}>
-                      {transaction.typeTransaction === 'expense' ?  
-                        <Image source={require('./assets/img/icons/arrowDown.png')} /> : 
-                        <Image source={require('./assets/img/icons/arrowUp.png')} /> 
-                      }
-                    </View>
-                  </View>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                </View>
+              ))}
+              <View style={{ marginTop: 20 }}>
+              <TouchableOpacity style={styles.button} onPress={handlePress}>
+                <Text style={styles.buttonText}>Exportar Dados</Text>
+              </TouchableOpacity>
               </View>
-            ))
+            </View>
           ) : (
             <Text style={styles.dataText}>Nenhum transação realizada este mês.</Text>
           )}

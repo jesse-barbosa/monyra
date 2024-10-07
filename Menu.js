@@ -1,5 +1,6 @@
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import styles from './styles';
 
 const Menu = ({ userData }) => {
     const navigation = useNavigation();
@@ -41,28 +42,5 @@ const Menu = ({ userData }) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    menu: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#000',
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        marginHorizontal: 20,
-        marginBottom: 10,
-        borderRadius: 25,
-    },
-    menuItem: {
-        width: 50,
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    iconsMenu: {
-        height: 30,
-        width: 30,
-    },
-});
 
 export default Menu;

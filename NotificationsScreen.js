@@ -40,21 +40,21 @@ const NotificationsScreen = ({ route }) => {
     })
   }
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{...styles.container, paddingTop: 40}}>
       <ScrollView>
         <Text style={styles.title}>Recentes</Text>
-        <View style={styles.notifications}>
+        <View style={styles.transfers}>
           {transactions.length > 0 ? (
           transactions.map((transaction, index) => (
-            <View key={index} style={styles.notificationsCard}>
+            <View key={index} style={styles.transferCard}>
               <TouchableOpacity onPress={() => handlePress(transaction)}>
-              <View style={styles.notificationsContent}>
-                <View style={styles.notificationInfo}>
-                  <Text style={styles.notificationDate}>{transaction.created_at}</Text>
-                  <Text style={styles.notificationTitle}>{transaction.typeTransaction === 'expense' ? 'Você enviou' : 'Você recebeu'} R$ {transaction.valueTransaction}</Text>
-                  <Text style={styles.notificationText}>"{transaction.descTransaction}"</Text>
+              <View style={styles.transferContent}>
+                <View style={styles.transferInfo}>
+                  <Text style={styles.transferDate}>{transaction.created_at}</Text>
+                  <Text style={styles.transferTitle}>{transaction.typeTransaction === 'expense' ? 'Você enviou' : 'Você recebeu'} R$ {transaction.valueTransaction}</Text>
+                  <Text style={styles.transferText}>"{transaction.descTransaction}"</Text>
                 </View>
-                <View style={styles.notificationIcon}>
+                <View style={styles.transferIcon}>
                   <Image source={transaction.typeTransaction === 'expense' ? require('./assets/img/icons/arrowDown.png') : require('./assets/img/icons/arrowUp.png')} />
                 </View>
               </View>

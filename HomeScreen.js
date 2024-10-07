@@ -6,6 +6,7 @@ import { API_URL } from './apiConfig';
 import Menu from './Menu';
 import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Modal } from 'react-native';
 import styles from './styles';
 
 const HomeScreen = ({ route }) => {
@@ -14,6 +15,8 @@ const HomeScreen = ({ route }) => {
   const [userGoals, setUserGoals] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [balance, setBalance] = useState(userData?.balanceUser || 0); // Estado para o saldo do usuário
+  const [selectedGoal, setSelectedGoal] = useState(null);
+  const [isGoalModalVisible, setGoalModalVisible] = useState(false);
   const [error, setError] = useState(null);
 
   // Função para buscar as metas do usuário
@@ -79,7 +82,7 @@ const HomeScreen = ({ route }) => {
       if (userData && userData.codUser) {
         fetchUserGoals(userData.codUser);
         fetchUserTransactions(userData.nameUser);
-        fetchUserBalance(userData.codUser); // Atualiza o saldo total do usuário
+        fetchUserBalance(userData.codUser);
       }
     }, [userData, fetchUserGoals, fetchUserTransactions, fetchUserBalance])
   );
@@ -123,82 +126,87 @@ const HomeScreen = ({ route }) => {
   };
 
   const imageSource = userData ? images[userData.iconUser] || images['default'] : images['default'];
+ 
+  const openGoalModal = (goal) => {
+    setSelectedGoal(goal);
+    setGoalModalVisible(true);
+  };
 
+  const closeGoalModal = () => {
+    setGoalModalVisible(false);
+    setSelectedGoal(null);
+  };
+  const editGoal = () => {
+    setGoalModalVisible(false);
+    navigation.navigate('ViewGoal', { goal: selectedGoal });
+  };
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, paddingTop: 40,}}>
       <ScrollView style={styles.scrollview}>
         <View style={styles.header}>
           <View style={styles.titles}>
-            <Text style={styles.titleApp}>Monyra</Text>
-            {userData && <Text style={styles.username}>{userData.nameUser}</Text>}
+            <Text style={styles.titleAppHome}>Monyra</Text>
+            {userData && <Text style={styles.usernameHome}>{userData.nameUser}</Text>}
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('Settings', { userData })}>
-            <Image style={styles.userImage} source={imageSource} />
+            <Image style={styles.userIconHome} source={imageSource} />
           </TouchableOpacity>
         </View>
-        <View style={styles.balanceContainer}>
-          <View style={styles.balance}>
-            <Text style={styles.balanceTitle}>Saldo Total</Text>
-            <Text style={styles.balanceText}>{formatCurrency(balance)}</Text>
+        <View style={styles.balanceContainerHome}>
+          <View style={styles.balanceHome}>
+            <Text style={styles.balanceTitleHome}>Saldo Total</Text>
+            <Text style={styles.balanceValueHome}>{formatCurrency(balance)}</Text>
           </View>
         </View>
-        <View style={styles.operations}>
+        <View style={styles.operationsHome}>
           <TouchableOpacity
-            style={styles.operation}
+            style={styles.operationHome}
             onPress={() => navigation.navigate('Transfer', { userData, operation: 'gain' })}
           >
-            <Icon name="arrow-up-outline" size={30} color="#000" style={styles.btn} />
-            <Text style={styles.descOperation}>Ganho</Text>
+            <Icon name="arrow-up-outline" size={30} color="#000" style={styles.operationIconHome} />
+            <Text style={styles.descOperationHome}>Ganho</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.operation}
-            onPress={() => navigation.navigate('Transfer', { userData, operation: 'expense' })}
+            style={styles.operationHome}
+            onPress={() => navigation.navigate('Transfer', { userData, operationHome: 'expense' })}
           >
-            <Icon name="arrow-down-outline" size={30} color="#000" style={styles.btn} />
-            <Text style={styles.descOperation}>Gasto</Text>
+            <Icon name="arrow-down-outline" size={30} color="#000" style={styles.operationIconHome} />
+            <Text style={styles.descOperationHome}>Gasto</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.operation}
+            style={styles.operationHome}
             onPress={() => navigation.navigate('CreateGoal', { username: userData.nameUser, email: userData.email })}
           >
-            <Icon name="add-circle-outline" size={30} color="#000" style={styles.btn} />
-            <Text style={styles.descOperation}>Adicionar</Text>
+            <Icon name="add-circle-outline" size={30} color="#000" style={styles.operationIconHome} />
+            <Text style={styles.descOperationHome}>Adicionar</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.cardsHome}>
-          <TouchableOpacity style={styles.cardHomeContainer}>
-            <Text style={styles.cardTotal}>{formatCurrency(totalGains)}</Text>
-            <Text style={styles.cardCategory}>Ganhos</Text>
+          <TouchableOpacity style={styles.cardContainerHome}>
+            <Text style={styles.cardTotalHome}>{formatCurrency(totalGains)}</Text>
+            <Text style={styles.cardTypeHome}>Ganhos</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cardHomeContainer}>
-            <Text style={styles.cardTotal}>{formatCurrency(totalExpenses)}</Text>
-            <Text style={styles.cardCategory}>Gastos</Text>
+          <TouchableOpacity style={styles.cardContainerHome}>
+            <Text style={styles.cardTotalHome}>{formatCurrency(totalExpenses)}</Text>
+            <Text style={styles.cardTypeHome}>Gastos</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.goalsTitle}>
+        <View style={styles.goalsSectionTitleHome}>
           <Text style={styles.secondaryTitle}>Metas</Text>
         </View>
-        <View style={styles.goals}>
+        <View style={styles.goalsHome}>
           {userGoals.length > 0 ? (
             userGoals.map((goal) => (
-              <View key={goal.codGoal} style={styles.goal}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('ViewGoal', {
-                      goal,
-                      username: userData.nameUser,
-                      email: userData.email,
-                    })
-                  }
-                >
-                  <Text style={styles.goalTitle}>{goal.nameGoal}</Text>
-                  <Text style={styles.goalRemainingValue}>R${goal.amountRemaining.toFixed(2)}</Text>
+              <View key={goal.codGoal} style={styles.goalHome}>
+                <TouchableOpacity onPress={() => openGoalModal(goal)}>
+                  <Text style={styles.goalTitleHome}>{goal.nameGoal}</Text>
+                  <Text style={styles.goalRemainingValueHome}>R${goal.amountRemaining.toFixed(2)}</Text>
                   <Progress.Bar
                     progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)}
                     width={290}
                     color="#000"
                     unfilledColor="#e0e0e0"
-                    style={styles.goalBarProgress}
+                    style={styles.goalBarProgressHome}
                   />
                 </TouchableOpacity>
               </View>
@@ -206,6 +214,41 @@ const HomeScreen = ({ route }) => {
           ) : (
             <Text style={styles.dataText}>Você não possui metas.</Text>
           )}
+          {/* Modal de metas */}
+          <Modal
+            visible={isGoalModalVisible}
+            animationType="slide"
+            transparent={true}
+            onRequestClose={closeGoalModal}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                {selectedGoal && (
+                  <>
+                    <Text style={styles.title}>{selectedGoal.nameGoal}</Text>
+                    <View style={styles.modalMain}>
+                      <Text style={styles.value}>Valor salvo: R${selectedGoal.amountSaved.toFixed(2)}</Text>
+                      <Text style={styles.value}>Valor restante: R${selectedGoal.amountRemaining.toFixed(2)}</Text>
+                    </View>
+
+                    <Progress.Bar
+                      progress={selectedGoal.amountSaved / (selectedGoal.amountSaved + selectedGoal.amountRemaining)}
+                      width={290}
+                      color="#000"
+                      unfilledColor="#e0e0e0"
+                      style={styles.modalProgressBar}
+                    />
+                    <TouchableOpacity onPress={editGoal} style={styles.editButton}>
+                      <Text style={styles.editButtonText}>Editar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={closeGoalModal} style={styles.closeButton}>
+                      <Text style={styles.closeButtonText}>Fechar</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+              </View>
+            </View>
+          </Modal>
           <View style={styles.addCard}>
             <TouchableOpacity
               onPress={() => navigation.navigate('CreateGoal', { username: userData.nameUser, email: userData.email })}

@@ -55,36 +55,32 @@ const ViewTransferScreen = ({ route }) => {
   };
   
   return (
-    <View style={styles.container}>
-      <View style={styles.headerViewGoal}>
+    <View style={{...styles.container, paddingTop: 40,}}>
+      <View style={styles.header}>
       <Text style={styles.title}>{goal.nameGoal}</Text>
         <TouchableOpacity onPress={deleteGoal} style={styles.iconButton}>
           <Ionicons name="trash" size={24} color="#FF3838" />
         </TouchableOpacity>
       </View>
-      <View style={{...styles.cardViewGoal, paddingHorizontal: 20}}>
-        <View style={styles.infoRow}>
-          <Ionicons name="cash-outline" size={20} color="#000" />
-          <Text style={styles.labelInfo}>Total acumulado:</Text>
-          <Text style={styles.valueInfo}>R$ {goal.amountSaved}</Text>
+      <View style={{...styles.cardViewGoal, paddingHorizontal: 30}}>
+        <View style={styles.field}>
+          <Text style={styles.label}>Total acumulado:</Text>
+          <Text style={styles.value}>R$ {goal.amountSaved}</Text>
         </View>
 
-        <View style={styles.infoRow}>
-          <Ionicons name="cash-outline" size={20} color="#000" />
-          <Text style={styles.labelInfo}>Total restante:</Text>
-          <Text style={styles.valueInfo}>R$ {goal.amountRemaining - goal.amountSaved}</Text>
+        <View style={styles.field}>
+          <Text style={styles.label}>Total restante:</Text>
+          <Text style={styles.value}>R$ {goal.amountRemaining - goal.amountSaved}</Text>
         </View>
 
-        <View style={styles.infoRow}>
-          <Ionicons name="calendar-outline" size={20} color="#000" />
-          <Text style={styles.labelInfo}>Data:</Text>
-          <Text style={styles.valueInfo}>{formattedDate}</Text>
+        <View style={styles.field}>
+          <Text style={styles.label}>Data:</Text>
+          <Text style={styles.value}>{formattedDate}</Text>
         </View>
 
-        <View style={styles.infoRow}>
-          <Ionicons name="time-outline" size={20} color="#000" />
-          <Text style={styles.labelInfo}>Horário:</Text>
-          <Text style={styles.valueInfo}>{formattedTime}</Text>
+        <View style={styles.field}>
+          <Text style={styles.label}>Horário:</Text>
+          <Text style={styles.value}>{formattedTime}</Text>
         </View>
       <Progress.Bar progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)} width={340} height={15} color="#642de8" style={styles.goalBarProgress}/>
       <View style={styles.addCard}>

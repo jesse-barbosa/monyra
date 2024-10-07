@@ -65,7 +65,7 @@ const RegisterStep2Screen = ({ navigation, route }) => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={{...styles.container, paddingTop: 40,}}
       behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Text style={styles.title}>Quase lá...</Text>

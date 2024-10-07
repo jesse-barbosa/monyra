@@ -23,8 +23,8 @@ const CreateGoalScreen = ({ route }) => {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.headerCreateGoal}>
-          <Text style={styles.secondaryTitle}>Seus sonhos esperam por você!</Text>
           <Image style={styles.imageFormGoal} source={require('./assets/img/formGoalImage.png')} />
+          <Text style={styles.secondaryTitle}>Seus sonhos esperam por você!</Text>
         </View>
         <View style={{...styles.inputs, paddingHorizontal: 15,}}>
         <View style={styles.inputContainer}>

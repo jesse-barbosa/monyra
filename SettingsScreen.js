@@ -31,9 +31,9 @@ const SettingsScreen = ({ route }) => {
   const imageSource = images[currentIcon] || images['default'];
 
   return (
-  <View style={styles.container}>
-    <ScrollView>
+  <View style={{...styles.container, paddingTop: 40,}}>
       <Text style={styles.title}>Configurações</Text>
+      <ScrollView>
     <View>
       <View style={styles.selectIcon}>
         <TouchableOpacity onPress={handlePreviousIcon} style={styles.arrowButtonIcon}>
@@ -52,7 +52,8 @@ const SettingsScreen = ({ route }) => {
       <View style={styles.details}>
         <Text style={styles.nameUserSettings}>{userData.nameUser}</Text>
       </View>
-
+    </View>
+    <View style={styles.footerSettings}>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
         <Text style={styles.buttonText}>Sair</Text>
       </TouchableOpacity>
