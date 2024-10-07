@@ -138,7 +138,7 @@ const HomeScreen = ({ route }) => {
   };
   const editGoal = () => {
     setGoalModalVisible(false);
-    navigation.navigate('ViewGoal', { goal: selectedGoal });
+    navigation.navigate('ViewGoal', { userData: userData, goal: selectedGoal });
   };
   return (
     <View style={{...styles.container, paddingTop: 40,}}>
@@ -203,7 +203,8 @@ const HomeScreen = ({ route }) => {
                   <Text style={styles.goalRemainingValueHome}>R${goal.amountRemaining.toFixed(2)}</Text>
                   <Progress.Bar
                     progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)}
-                    width={290}
+                    width={305}
+                    height={10}
                     color="#000"
                     unfilledColor="#e0e0e0"
                     style={styles.goalBarProgressHome}
@@ -227,13 +228,19 @@ const HomeScreen = ({ route }) => {
                   <>
                     <Text style={styles.title}>{selectedGoal.nameGoal}</Text>
                     <View style={styles.modalMain}>
-                      <Text style={styles.value}>Valor salvo: R${selectedGoal.amountSaved.toFixed(2)}</Text>
-                      <Text style={styles.value}>Valor restante: R${selectedGoal.amountRemaining.toFixed(2)}</Text>
+                      <View style={styles.field}>
+                          <Text style={styles.labelModal}>Valor salvo:</Text>
+                        <Text style={styles.value}> R${selectedGoal.amountSaved.toFixed(2)}</Text>
+                      </View>
+                      <View style={styles.field}>
+                          <Text style={styles.labelModal}>Valor restante:</Text>
+                      <Text style={styles.value}>R${selectedGoal.amountRemaining.toFixed(2)}</Text>
+                      </View>
                     </View>
-
                     <Progress.Bar
                       progress={selectedGoal.amountSaved / (selectedGoal.amountSaved + selectedGoal.amountRemaining)}
-                      width={290}
+                      width={340}
+                      height={25}
                       color="#000"
                       unfilledColor="#e0e0e0"
                       style={styles.modalProgressBar}

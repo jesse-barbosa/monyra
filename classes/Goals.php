@@ -5,7 +5,7 @@ class Goal extends Conexao {
         if (isset($input['userCod'])) {
             $userCod = $input['userCod'];
             $stmt = $this->conn->prepare("
-                SELECT g.codGoal, g.nameGoal, g.amountSaved, g.amountRemaining, g.created_at, u.nameUser
+                SELECT g.codGoal, g.nameGoal, g.categoryGoal, g.descGoal, g.amountSaved, g.amountRemaining, g.created_at, u.nameUser
                 FROM tbgoals g
                 LEFT JOIN tbusers u ON g.userCod = u.codUser
                 WHERE g.userCod = ?
@@ -90,6 +90,39 @@ class Goal extends Conexao {
             echo json_encode(["success" => false, "message" => "Missing parameters"]);
         }
     }
+    // Atualizar meta
+    public function updateGoal($input) {
+        // Verifica se os parâmetros necessários estão definidos
+        if (isset($input['goalId']) && isset($input['amountSaved']) && isset($input['categoryGoal']) && isset($input['descGoal'])) {
+            $goalId = $input['goalId'];
+            $amountSaved = $input['amountSaved'];
+            $categoryGoal = $input['categoryGoal'];
+            $descGoal = $input['descGoal'];
+    
+            // Prepara a consulta SQL para atualizar a meta
+            $stmt = $this->conn->prepare("UPDATE tbgoals SET amountSaved = ?, categoryGoal = ?, descGoal = ? WHERE codGoal = ?");
+            
+            if ($stmt === false) {
+                die('Prepare failed: ' . htmlspecialchars($this->conn->error));
+            }
+    
+            // Faz o binding dos parâmetros
+            $stmt->bind_param("dssi", $amountSaved, $categoryGoal, $descGoal, $goalId);
+    
+            // Executa a consulta
+            if ($stmt->execute()) {
+                echo json_encode(["success" => true, "message" => "Goal updated successfully"]);
+            } else {
+                echo json_encode(["success" => false, "message" => "Error updating goal"]);
+            }
+    
+            $stmt->close();
+        } else {
+            echo json_encode(["success" => false, "message" => "Missing parameters"]);
+        }
+    }
+    
+
     // Deletar uma Goal
     public function deleteGoal($input) {
         if (isset($input['goalId'])) {

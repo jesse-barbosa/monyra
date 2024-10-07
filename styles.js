@@ -53,6 +53,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 20,
   },
+  pickerGoal: {
+    flex: 1,
+    borderRadius: 15,
+    padding: 20,
+  },
   addCard: {
     marginVertical: 15,
     padding: 14,
@@ -117,10 +122,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  labelModal: {
+    fontSize: 20,
+    color: '#000',
+    opacity: 0.7,
+  },
   modalProgressBar: {
+    backgroundColor: '#fff',
     marginTop: 'auto',
-    height: 20,
-    width: '100%',
   },
   categoryText: {
     marginRight: 5,
@@ -625,8 +634,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   goalBarProgress: {
-    marginVertical: 5,
-    height: 10,
+    marginVertical: 10,
     width: '100%',
     borderWidth: 0,
     backgroundColor: '#C7C7C7',

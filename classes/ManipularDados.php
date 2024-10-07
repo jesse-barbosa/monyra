@@ -51,6 +51,9 @@ class ManipularDados extends Conexao {
             case 'createGoal':
                 $goal->createGoal($input);
                 break;
+            case 'updateGoal':
+                $goal->updateGoal($input);
+                break;                
             case 'deleteGoal':
                 $goal->deleteGoal($input);
                 break;
