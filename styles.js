@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
 
+
 const styles = StyleSheet.create({
+  
   /* Estilos Gerais */
   container: {
     flex: 1,
@@ -239,21 +241,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   balanceHome: {
-    backgroundColor: '#EBEBEB',
+    backgroundColor: '#5019D4',
     borderRadius: 30,
     paddingHorizontal: 40,
     paddingVertical: 35,
     borderRadius: 15,
   },
   balanceTitleHome: {
-    color: '#000',
+    color: '#fff',
     fontSize: 20,
     fontWeight: '600',
     opacity: 0.7,
     fontFamily: 'monospace',
   },
   balanceValueHome: {
-    color: '#000',
+    color: '#fff',
     fontSize: 34,
     fontWeight: 'bold',
   },
@@ -266,16 +268,11 @@ const styles = StyleSheet.create({
   operationHome: {
     width: 100,
     height: 95,
-    backgroundColor: '#fff',
+    backgroundColor: '#EBEBEB',
     marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 16,
-    borderWidth: 1,
-    borderBottomWidth: 4  ,
-    borderRightWidth: 4,
-    borderBottomColor: '#000',
-    borderRightColor: '#000',
   },
   operationIconHome: {
     marginBottom: 5,
@@ -299,17 +296,16 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 15,
     padding: 15,
-    backgroundColor: '#ededed',
     alignItems: 'flex-start',
   },
   cardTotalHome: {
-    color: '#000',
+    color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 'auto',
   },
   cardTypeHome: {
-    color: '#000',
+    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
     fontFamily: 'monospace',
@@ -369,7 +365,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#c9c9c9',
   },
   selectedOptionAnalytics: {
-    backgroundColor: '#000',
+    backgroundColor: '#6979F8',
     zIndex: 999,
   },
   optionTextAnalytics: {
@@ -477,7 +473,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   selectedMonthButton: {
-    backgroundColor: '#B0B0B0',
+    backgroundColor: '#6979F8',
     borderRadius: 10,
     paddingVertical: 15,
   },
@@ -487,7 +483,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   selectedMonthText: {
-    color: '#333333',
+    color: '#f7f7f7',
     fontWeight: '600',
     fontSize: 18,
   },
@@ -699,7 +695,26 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     width: '100%',
   },
-
+  buttonLogOut: {
+    borderRadius: 15,
+    backgroundColor: '#fff',
+    padding: 20,
+    marginTop: 'auto',
+    marginHorizontal: 'auto',
+    width: '80%',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderBottomWidth: 4,
+    borderRightWidth: 4,
+    borderBottomColor: '#000',
+    borderRightColor: '#000',
+  },
+  buttonLogOutText: {
+    color: '#000',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   dataText: {
     textAlign: 'center',
     marginTop: 20,

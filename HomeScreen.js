@@ -182,11 +182,11 @@ const HomeScreen = ({ route }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.cardsHome}>
-          <TouchableOpacity style={styles.cardContainerHome}>
+          <TouchableOpacity style={{...styles.cardContainerHome, backgroundColor: '#75FF72',}}>
             <Text style={styles.cardTotalHome}>{formatCurrency(totalGains)}</Text>
             <Text style={styles.cardTypeHome}>Ganhos</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cardContainerHome}>
+          <TouchableOpacity style={{...styles.cardContainerHome, backgroundColor: '#FF7171',}}>
             <Text style={styles.cardTotalHome}>{formatCurrency(totalExpenses)}</Text>
             <Text style={styles.cardTypeHome}>Gastos</Text>
           </TouchableOpacity>
