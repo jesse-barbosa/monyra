@@ -715,6 +715,36 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  descriptionContainer: {
+    marginVertical: 25,
+    paddingHorizontal: 20,
+  },
+  descriptionInput: {
+    height: 130,
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    textAlignVertical: 'top',
+    backgroundColor: '#EBEBEB',
+  },
+  characterCount: {
+    textAlign: 'right',
+    marginTop: 5,
+    color: '#999',
+    paddingRight: 10,
+  },
+  updateButton: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  updateButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },    
+  
   dataText: {
     textAlign: 'center',
     marginTop: 20,

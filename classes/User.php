@@ -106,5 +106,26 @@ class User extends Conexao {
             echo json_encode(["success" => false, "message" => "Missing parameters"]);
         }
     }
+    // Atualiza a descrição do usuário
+    public function updateUserDescription($input) {
+        if (isset($input['userId']) && isset($input['description'])) {
+            $userId = $input['userId'];
+            $description = $input['description'];
+
+            $stmt = $this->conn->prepare("UPDATE tbusers SET descUser = ? WHERE codUser = ?");
+            $stmt->bind_param("si", $description, $userId);
+
+            if ($stmt->execute()) {
+                echo json_encode(["success" => true, "message" => "Descrição atualizada com sucesso"]);
+            } else {
+                echo json_encode(["success" => false, "message" => "Falha ao atualizar a descrição"]);
+            }
+
+            $stmt->close();
+        } else {
+            echo json_encode(["success" => false, "message" => "Parâmetros faltando"]);
+        }
+    }
+
 }
 ?>

@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Tempo de geração: 08/10/2024 às 01:49
+-- Host: localhost
+-- Tempo de geração: 08/10/2024 às 14:10
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -84,21 +84,22 @@ CREATE TABLE `tbusers` (
   `nameUser` varchar(100) DEFAULT NULL,
   `emailUser` varchar(100) DEFAULT NULL,
   `passwordUser` char(60) NOT NULL,
-  `descUser` char(75) NOT NULL DEFAULT 'Sem descrição.',
+  `descUser` char(200) NOT NULL DEFAULT 'No description',
   `incomeUser` varchar(10) DEFAULT NULL,
   `balanceUser` float NOT NULL DEFAULT 0,
   `iconUser` varchar(50) DEFAULT 'default',
-  `type_user` int(1) NOT NULL DEFAULT 0
+  `typeUser` int(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `tbusers`
 --
 
-INSERT INTO `tbusers` (`codUser`, `nameUser`, `emailUser`, `passwordUser`, `descUser`, `incomeUser`, `balanceUser`, `iconUser`, `type_user`) VALUES
-(131, 'JessÃ© Barbosa', 'barbosajesse419@gmail.com', '$2y$10$Q0/WprZF3S/groZavwZgH.7XkVPZHpi7eDeaYFWdZ.c9B7T0Km2xi', 'Sem descrição.', '4000', 630, 'default', 1),
-(132, 'JosÃ© Campos', 'jose@gmail.com', '$2y$10$EP1YIfzpJ8fQQSDfVCmI1O7g6cdhsABvXj0mBDuzeOLv41rhe/D3e', 'Sem descrição.', '6000', 0, 'default', 0),
-(134, 'Marcos', 'marcos@gmail.com', '$2y$10$EAV7qrqDrE6OCEOwYVskh.pBunB.9fOUhRlF58mfC8mtEzG3eMjrC', 'Sem descrição.', '6000', 0, 'default', 0);
+INSERT INTO `tbusers` (`codUser`, `nameUser`, `emailUser`, `passwordUser`, `descUser`, `incomeUser`, `balanceUser`, `iconUser`, `typeUser`, `created_at`) VALUES
+(131, 'JessÃ© Barbosa', 'barbosajesse419@gmail.com', '$2y$10$Q0/WprZF3S/groZavwZgH.7XkVPZHpi7eDeaYFWdZ.c9B7T0Km2xi', 'No description.', '4000', 630, 'default', 0, '2024-09-20 13:02:09'),
+(132, 'JosÃ© Campos', 'jose@gmail.com', '$2y$10$EP1YIfzpJ8fQQSDfVCmI1O7g6cdhsABvXj0mBDuzeOLv41rhe/D3e', 'No description.', '6000', 0, 'default', 0, '2024-09-23 13:28:48'),
+(134, 'Marcos', 'marcos@gmail.com', '$2y$10$EAV7qrqDrE6OCEOwYVskh.pBunB.9fOUhRlF58mfC8mtEzG3eMjrC', 'No description.', '6000', 0, 'default', 0, '2024-09-30 12:27:20');
 
 --
 -- Índices para tabelas despejadas

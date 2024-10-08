@@ -42,6 +42,9 @@ class ManipularDados extends Conexao {
             case 'register':
                 $user->register($input);
                 break;
+            case 'updateUserDescription':
+                $user->updateUserDescription($input);
+                break;                
             case 'transfer':
                 $transfer->transfer($input);
                 break;
