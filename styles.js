@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   modalProgressBar: {
+    borderWidth: 0,
     backgroundColor: '#fff',
     marginTop: 'auto',
   },

@@ -93,21 +93,22 @@ class Goal extends Conexao {
     // Atualizar meta
     public function updateGoal($input) {
         // Verifica se os parâmetros necessários estão definidos
-        if (isset($input['goalId']) && isset($input['amountSaved']) && isset($input['categoryGoal']) && isset($input['descGoal'])) {
+        if (isset($input['goalId']) && isset($input['nameGoal']) && isset($input['amountSaved']) && isset($input['categoryGoal']) && isset($input['descGoal'])) {
             $goalId = $input['goalId'];
+            $nameGoal = $input['nameGoal'];
             $amountSaved = $input['amountSaved'];
             $categoryGoal = $input['categoryGoal'];
             $descGoal = $input['descGoal'];
     
             // Prepara a consulta SQL para atualizar a meta
-            $stmt = $this->conn->prepare("UPDATE tbgoals SET amountSaved = ?, categoryGoal = ?, descGoal = ? WHERE codGoal = ?");
+            $stmt = $this->conn->prepare("UPDATE tbgoals SET nameGoal = ?, amountSaved = ?, categoryGoal = ?, descGoal = ? WHERE codGoal = ?");
             
             if ($stmt === false) {
                 die('Prepare failed: ' . htmlspecialchars($this->conn->error));
             }
     
             // Faz o binding dos parâmetros
-            $stmt->bind_param("dssi", $amountSaved, $categoryGoal, $descGoal, $goalId);
+            $stmt->bind_param("sdssi", $nameGoal, $amountSaved, $categoryGoal, $descGoal, $goalId);
     
             // Executa a consulta
             if ($stmt->execute()) {

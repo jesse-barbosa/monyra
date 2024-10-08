@@ -205,7 +205,7 @@ const HomeScreen = ({ route }) => {
                     progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)}
                     width={305}
                     height={10}
-                    color="#000"
+                    color="#5019D4"
                     unfilledColor="#e0e0e0"
                     style={styles.goalBarProgressHome}
                   />
@@ -241,7 +241,7 @@ const HomeScreen = ({ route }) => {
                       progress={selectedGoal.amountSaved / (selectedGoal.amountSaved + selectedGoal.amountRemaining)}
                       width={340}
                       height={25}
-                      color="#000"
+                      color="#5019D4"
                       unfilledColor="#e0e0e0"
                       style={styles.modalProgressBar}
                     />

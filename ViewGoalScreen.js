@@ -15,8 +15,9 @@ const ViewGoalScreen = ({ route }) => {
 
   // Estados para armazenar mudanças
   const [amountSaved, setAmountSaved] = useState(goal.amountSaved);
-  const [categoryGoal, setCategoryGoal] = useState(goal.categoryGoal || ""); // Inicializa com a categoria do banco
+  const [categoryGoal, setCategoryGoal] = useState(goal.categoryGoal || "");
   const [descGoal, setDescGoal] = useState(goal.descGoal);
+  const [nameGoal, setNameGoal] = useState(goal.nameGoal); // Adicionado para o nome da meta
   const [isModified, setIsModified] = useState(false);
 
   // Função para deletar a meta
@@ -69,7 +70,11 @@ const ViewGoalScreen = ({ route }) => {
     setIsModified(true);
   };
 
-  // Função para salvar as alterações
+  const handleChangeNameGoal = (newName) => {
+    setNameGoal(newName);
+    setIsModified(true);
+  };
+
   const saveGoal = () => {
     fetch(`${API_URL}`, {
       method: 'POST',
@@ -77,6 +82,7 @@ const ViewGoalScreen = ({ route }) => {
       body: JSON.stringify({
         action: 'updateGoal',
         goalId: goal.codGoal,
+        nameGoal: nameGoal,
         amountSaved: amountSaved,
         categoryGoal: categoryGoal,
         descGoal: descGoal
@@ -100,14 +106,18 @@ const ViewGoalScreen = ({ route }) => {
   return (
     <View style={{ ...styles.container, paddingTop: 40 }}>
       <View style={styles.header}>
-        <Text style={styles.title}>{goal.nameGoal}</Text>
+        <TextInput
+          style={styles.title} // Estilo pode ser alterado conforme necessário
+          value={nameGoal}
+          onChangeText={handleChangeNameGoal}
+          placeholder="Nome da Meta" // Placeholder para o campo de nome
+        />
         <TouchableOpacity onPress={deleteGoal} style={styles.iconButton}>
           <Ionicons name="trash" size={24} color="#FF3838" />
         </TouchableOpacity>
       </View>
 
       <View style={{ ...styles.cardViewGoal, paddingHorizontal: 30 }}>
-
         <View style={styles.field}>
           <Text style={styles.label}>Total acumulado:</Text>
           <TextInput
@@ -126,9 +136,9 @@ const ViewGoalScreen = ({ route }) => {
         <View style={styles.field}>
           <Text style={styles.label}>Categoria:</Text>
           <Picker
-            selectedValue={categoryGoal} // Usando o estado para o valor selecionado
+            selectedValue={categoryGoal}
             style={styles.pickerGoal}
-            onValueChange={handleChangeCategoryGoal} // Atualiza o estado ao mudar a seleção
+            onValueChange={handleChangeCategoryGoal}
           >
             <Picker.Item label="Selecione uma categoria" value="" />
             <Picker.Item label="Moradia" value="Moradia" />
