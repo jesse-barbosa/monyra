@@ -1,16 +1,46 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Alert, ScrollView, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 import { API_URL } from './apiConfig';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from './styles';
 
 const ViewTransferScreen = ({ route }) => {
   const navigation = useNavigation();
   const { transaction } = route.params;
 
-  const formattedDate = transaction.created_at.split(' ')[0];
-  const formattedTime = transaction.created_at.split(' ')[1];
+  // Estado para armazenar os dados da transferência
+  const [valueTransaction, setValueTransaction] = useState(transaction.valueTransaction);
+  const [categoryTransaction, setCategoryTransaction] = useState(transaction.categoryTransaction || "");
+  const [descTransaction, setDescTransaction] = useState(transaction.descTransaction);
+  const [date, setDate] = useState(new Date(transaction.created_at));
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [operation, setOperation] = useState(transaction.typeTransaction || 'expense');
+  const [isEdited, setIsEdited] = useState(false); // Estado para rastrear alterações
+
+  const formattedDate = date.toISOString().split('T')[0];
+  const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  useEffect(() => {
+    // Reseta a categoria ao mudar o tipo de operação
+    setCategoryTransaction(""); // ou você pode definir um valor padrão aqui
+  }, [operation]);
+
+  useEffect(() => {
+    // Verifica se os dados foram alterados
+    if (valueTransaction !== transaction.valueTransaction || 
+        categoryTransaction !== transaction.categoryTransaction || 
+        descTransaction !== transaction.descTransaction || 
+        date.toISOString() !== transaction.created_at ||
+        operation !== transaction.typeTransaction) {
+      setIsEdited(true);
+    } else {
+      setIsEdited(false);
+    }
+  }, [valueTransaction, categoryTransaction, descTransaction, date, operation]);
 
   const deleteTransaction = () => {
     Alert.alert(
@@ -52,58 +82,208 @@ const ViewTransferScreen = ({ route }) => {
       ]
     );
   };
+
+  const handleSave = () => {
+    fetch(`${API_URL}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            action: 'updateTransaction',
+            transactionId: transaction.codTransaction,
+            valueTransaction,
+            categoryTransaction,
+            descTransaction,
+            created_at: date.toISOString(),
+            typeTransaction: operation,
+        }),
+    })
+    .then(response => {
+        console.log('Response status:', response.status); 
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            Alert.alert("Sucesso", "Transferência atualizada com sucesso!");
+            navigation.goBack();
+        } else {
+            Alert.alert("Erro", "Não foi possível atualizar a transferência.");
+        }
+    })
+    .catch(error => {
+        Alert.alert("Erro", "Ocorreu um erro ao atualizar a transferência.");
+        console.error(error);
+    });
+    console.log('Request body:', {
+        action: 'updateTransaction',
+        transactionId: transaction.codTransaction,
+        valueTransaction,
+        categoryTransaction,
+        descTransaction,
+        created_at: date.toISOString(),
+        typeTransaction: operation,
+    });
+  };
+
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+  };
+
+  const showTimepicker = () => {
+    setShowTimePicker(true);
+  };
+
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
+  };
+
+  const onChangeTime = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowTimePicker(false);
+    setDate(currentDate);
+  };
+
   return (
-    <View style={{...styles.container, paddingTop: 40,}}>
+    <View style={{ ...styles.container, paddingTop: 40 }}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={transaction.typeTransaction === 'expense' ? styles.titleExpenseTransfer : styles.titleGainTransfer}>
-          {transaction.typeTransaction === 'expense' ? '- ' : '+ '} 
-          R$ {transaction.valueTransaction}
+        <Text style={operation === 'expense' ? styles.titleExpenseTransfer : styles.titleGainTransfer}>
+          {operation === 'expense' ? '- ' : '+ '} 
+          R$ {valueTransaction}
         </Text>
         <TouchableOpacity onPress={deleteTransaction} style={styles.iconButton}>
           <Ionicons name="trash" size={24} color="#FF3838" />
         </TouchableOpacity>
       </View>
 
-      <View style={{...styles.card, paddingHorizontal: 30, marginVertical: 'auto',}}>
+      <View style={{ ...styles.card, paddingHorizontal: 30, marginVertical: 'auto' }}>
         <View style={styles.field}>
           <Text style={styles.label}>Valor:</Text>
-          <Text style={styles.value}>R$ {transaction.valueTransaction}</Text>
+          <TextInput
+            style={styles.value}
+            keyboardType="numeric"
+            value={valueTransaction.toString()}
+            onChangeText={text => {
+              setValueTransaction(text);
+              setIsEdited(true); // Marca como editado
+            }}
+          />
         </View>
-        
+
         <View style={styles.field}>
           <Text style={styles.label}>Tipo:</Text>
-          <Text style={styles.value}>{transaction.typeTransaction === 'expense' ? 'Gasto' : 'Ganho'}</Text>
+          <Picker
+            selectedValue={operation}
+            style={styles.picker2}
+            onValueChange={(itemValue) => {
+              setOperation(itemValue);
+              setIsEdited(true); // Marca como editado
+            }}
+          >
+            <Picker.Item label="Gasto" value="expense" />
+            <Picker.Item label="Ganho" value="gain" />
+          </Picker>
         </View>
-        
+
         <View style={styles.field}>
           <Text style={styles.label}>Data:</Text>
-          <Text style={styles.value}>{formattedDate}</Text>
+          <TouchableOpacity onPress={showDatepicker}>
+            <Text style={styles.value}>{formattedDate}</Text>
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={onChangeDate}
+            />
+          )}
         </View>
-        
+
         <View style={styles.field}>
           <Text style={styles.label}>Horário:</Text>
-          <Text style={styles.value}>{formattedTime}</Text>
+          <TouchableOpacity onPress={showTimepicker}>
+            <Text style={styles.value}>{formattedTime}</Text>
+          </TouchableOpacity>
+          {showTimePicker && (
+            <DateTimePicker
+              value={date}
+              mode="time"
+              display="default"
+              onChange={onChangeTime}
+            />
+          )}
         </View>
 
         <View style={styles.field}>
           <Text style={styles.label}>Categoria:</Text>
-          <Text style={styles.value}>{transaction.categoryTransaction}</Text>
-        </View>
 
+          {operation === 'expense' ? (
+            <Picker
+              selectedValue={categoryTransaction}
+              style={styles.picker2}
+              onValueChange={(itemValue) => {
+                setCategoryTransaction(itemValue);
+                setIsEdited(true); // Marca como editado
+              }}
+            >
+              <Picker.Item label="Selecione uma categoria" value="" />
+              <Picker.Item label="Moradia" value="Moradia" />
+              <Picker.Item label="Alimentação" value="Alimentação" />
+              <Picker.Item label="Transporte" value="Transporte" />
+              <Picker.Item label="Saúde" value="Saúde" />
+              <Picker.Item label="Educação" value="Educação" />
+              <Picker.Item label="Lazer" value="Lazer" />
+              <Picker.Item label="Vestuário" value="Vestuário" />
+              <Picker.Item label="Economia ou Investimentos" value="Economia" />
+            </Picker>
+          ) : (
+            <Picker
+              selectedValue={categoryTransaction}
+              style={styles.picker2}
+              onValueChange={(itemValue) => {
+                setCategoryTransaction(itemValue);
+                setIsEdited(true); // Marca como editado
+              }}
+            >
+              <Picker.Item label="Selecione uma categoria" value="" />
+              <Picker.Item label="Salário ou Remunerações" value="Remunerações" />
+              <Picker.Item label="Investimentos (rendimentos)" value="Rendimentos" />
+              <Picker.Item label="Empreendimentos" value="Empreendimentos" />
+              <Picker.Item label="Benefícios" value="Benefícios" />
+            </Picker>
+          )}
+        </View>
         <View style={styles.fieldDescription}>
-        <Text style={styles.label}>Descrição:</Text>
-          <ScrollView style={styles.scrollView}>
-            <Text style={styles.valueDescription}>
-              {transaction.descTransaction.length > 0 ? transaction.descTransaction : 'Sem descrição'}
-            </Text>
+          <Text style={styles.label}>Descrição:</Text>
+          <ScrollView horizontal style={styles.scrollView}>
+            <TextInput
+              style={styles.valueDescription}
+              value={descTransaction}
+              onChangeText={text => {
+                setDescTransaction(text);
+                setIsEdited(true); // Marca como editado
+              }}
+              multiline={true}
+              placeholder="Digite a descrição"
+            />
           </ScrollView>
         </View>
       </View>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity 
+        style={[styles.button, { opacity: isEdited ? 1 : 0.5 }]} 
+        onPress={handleSave} 
+        disabled={!isEdited} // Desabilita o botão se não houver edições
+      >
         <Text style={styles.buttonText}>Salvar</Text>
       </TouchableOpacity>
     </View>

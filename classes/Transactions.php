@@ -117,6 +117,51 @@ class Transfer extends Conexao {
             echo json_encode(['success' => false, 'message' => 'Dados inválidos.']);
         }
     }
+    // Atualizar uma Transferência
+    public function updateTransaction($input) {
+        if (isset($input['transactionId']) && isset($input['valueTransaction']) && 
+            isset($input['categoryTransaction']) && isset($input['descTransaction']) && 
+            isset($input['created_at']) && isset($input['typeTransaction'])) {
+            
+            $transactionId = $input['transactionId'];
+            $valueTransaction = (float)$input['valueTransaction']; // Convertendo para float
+            $categoryTransaction = $input['categoryTransaction'];
+            $descTransaction = $input['descTransaction'];
+            $createdAt = $input['created_at'];
+            $typeTransaction = $input['typeTransaction'];
+    
+            if (isset($_SESSION['userCod'])) {
+                $userCod = $_SESSION['userCod'];
+    
+                $stmt = $this->conn->prepare("
+                    UPDATE tbtransactions 
+                    SET valueTransaction = ?, 
+                        categoryTransaction = NULLIF(?, ''), 
+                        descTransaction = ?, 
+                        created_at = ?, 
+                        typeTransaction = ? 
+                    WHERE codTransaction = ? AND userCod = ?
+                ");
+                if ($stmt === false) {
+                    die('Prepare failed: ' . htmlspecialchars($this->conn->error));
+                }
+    
+                $stmt->bind_param("dssssi", $valueTransaction, $categoryTransaction, $descTransaction, $createdAt, $typeTransaction, $transactionId, $userCod);
+    
+                if ($stmt->execute()) {
+                    echo json_encode(["success" => true, "message" => "Transferência atualizada com sucesso!"]);
+                } else {
+                    echo json_encode(["success" => false, "message" => "Erro ao atualizar a transferência: " . htmlspecialchars($stmt->error)]);
+                }
+                $stmt->close();
+            } else {
+                echo json_encode(["success" => false, "message" => "Usuário não autenticado."]);
+            }
+        } else {
+            echo json_encode(["success" => false, "message" => "Dados inválidos."]);
+        }
+    }
+    
     // Deletar uma Transferência
     public function deleteTransaction($input) {
         if (isset($input['transactionId'])) {

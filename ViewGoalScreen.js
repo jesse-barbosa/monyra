@@ -137,7 +137,7 @@ const ViewGoalScreen = ({ route }) => {
           <Text style={styles.label}>Categoria:</Text>
           <Picker
             selectedValue={categoryGoal}
-            style={styles.pickerGoal}
+            style={styles.picker2}
             onValueChange={handleChangeCategoryGoal}
           >
             <Picker.Item label="Selecione uma categoria" value="" />

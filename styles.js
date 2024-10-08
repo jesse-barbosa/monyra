@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 20,
   },
-  pickerGoal: {
+  picker2: {
+    textAlign: 'right',
     flex: 1,
     borderRadius: 15,
     padding: 20,
@@ -621,15 +622,6 @@ const styles = StyleSheet.create({
     marginVertical: 'auto',
     justifyContent: 'space-evenly',
   },
-  valueDescription: {
-    fontSize: 18,
-    color: '#545454',
-    fontWeight: 'bold',
-    marginLeft: 10,
-    textAlign: 'right',
-    flex: 1,
-    marginTop: 5,
-  },
   goalBarProgress: {
     marginVertical: 10,
     width: '100%',
@@ -682,6 +674,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     height: '100%',
+    minWidth: '95%',
     overflow: 'hidden',
   },
   scrollView: {

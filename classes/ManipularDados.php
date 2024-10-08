@@ -44,9 +44,12 @@ class ManipularDados extends Conexao {
                 break;
             case 'updateUserDescription':
                 $user->updateUserDescription($input);
-                break;                
+                break;
             case 'transfer':
                 $transfer->transfer($input);
+                break;
+            case 'updateTransaction':
+                $transfer->updateTransaction($input);
                 break;
             case 'deleteTransaction':
                 $transfer->deleteTransaction($input);
@@ -56,7 +59,7 @@ class ManipularDados extends Conexao {
                 break;
             case 'updateGoal':
                 $goal->updateGoal($input);
-                break;                
+                break;
             case 'deleteGoal':
                 $goal->deleteGoal($input);
                 break;
