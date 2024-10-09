@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 08/10/2024 às 14:10
+-- Tempo de geração: 09/10/2024 às 15:57
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -43,9 +43,7 @@ CREATE TABLE `tbgoals` (
 --
 
 INSERT INTO `tbgoals` (`codGoal`, `nameGoal`, `categoryGoal`, `descGoal`, `amountSaved`, `amountRemaining`, `created_at`, `userCod`) VALUES
-(80, 'Reserva de emergÃªncia', 'Moradia', '(Essa meta foi gerada automaticamente na criaÃ§Ã£o de sua conta)', 1000, 12000, '2024-09-20 13:02:09', 131),
-(81, 'Reserva de emergÃªncia', 'Economia', '(Essa meta foi gerada automaticamente na criaÃ§Ã£o de sua conta)', 0, 18000, '2024-09-23 13:28:48', 132),
-(83, 'Reserva de emergÃªncia', 'Economia', '(Essa meta foi gerada automaticamente na criaÃ§Ã£o de sua conta)', 0, 18000, '2024-09-30 12:27:20', 134);
+(80, 'Reserva de emergÃªncia', 'Economia', '(Essa meta foi gerada automaticamente na criaÃ§Ã£o de sua conta)', 1000, 12000, '2024-09-20 13:02:09', 131);
 
 -- --------------------------------------------------------
 
@@ -68,10 +66,24 @@ CREATE TABLE `tbtransactions` (
 --
 
 INSERT INTO `tbtransactions` (`codTransaction`, `valueTransaction`, `descTransaction`, `typeTransaction`, `categoryTransaction`, `created_at`, `userCod`) VALUES
-(48, 1200, 'Meu salÃ¡rio', 'gain', 'RemuneraÃ§Ãµes', '2024-09-20 10:21:22', 131),
-(49, 50, 'Coxinha', 'expense', 'AlimentaÃ§Ã£o', '2024-09-27 08:01:51', 131),
-(50, 120, 'Passagem para o Rio de Janeiro', 'expense', 'Transporte', '2024-09-27 08:06:46', 131),
-(53, 100, 'teste', 'expense', 'AlimentaÃ§Ã£o', '2024-10-07 14:40:47', 131);
+(69, 150, 'Compra de supermercado', 'expense', 'AlimentaÃ§Ã£o', '2024-10-09 10:00:00', 131),
+(70, 200, 'Conta de luz', 'expense', 'Moradia', '2024-10-09 11:30:00', 131),
+(72, 90, 'Transporte pÃºblico', 'expense', 'Transporte', '2024-10-01 08:00:00', 131),
+(73, 500, 'Curso online', 'expense', 'EducaÃ§Ã£o', '2024-10-05 15:00:00', 131),
+(75, 60, 'Jantar fora', 'expense', 'Lazer', '2024-09-15 20:00:00', 131),
+(76, 180, 'Medicamentos', 'expense', 'SaÃºde', '2024-09-20 14:00:00', 131),
+(78, 250, 'Compra de roupas', 'expense', 'VestuÃ¡rio', '2024-08-05 11:00:00', 131),
+(81, 75, 'Cinema com amigos', 'expense', 'Lazer', '2024-07-10 19:00:00', 131),
+(82, 150, 'Reforma da casa', 'expense', 'Moradia', '2024-07-15 09:00:00', 131),
+(93, 1200, 'SalÃ¡rio do mÃªs', 'gain', 'RemuneraÃ§Ãµes', '2024-10-09 12:00:00', 131),
+(94, 300, 'Venda de artesanato', 'gain', 'Empreendimentos', '2024-10-07 17:00:00', 131),
+(95, 1000, 'BÃ´nus de desempenho', 'gain', 'RemuneraÃ§Ãµes', '2024-09-25 12:00:00', 131),
+(96, 300, 'Venda de produtos', 'gain', 'Empreendimentos', '2024-08-15 16:00:00', 131),
+(97, 400, 'Pagamento em aÃ§Ãµes', 'gain', 'Rendimentos', '2024-08-20 10:00:00', 131),
+(98, 200, 'Pagamento de freelance', 'gain', 'Empreendimentos', '2024-07-20 13:00:00', 131),
+(99, 500, 'Venda de mÃ³veis usados', 'gain', 'Empreendimentos', '2024-07-30 14:00:00', 131),
+(100, 200, 'Reembolso de despesas', 'gain', 'BenefÃ­cios', '2024-09-10 16:00:00', 131),
+(101, 150, 'Dividendo de aÃ§Ãµes', 'gain', 'Rendimentos', '2024-10-02 09:00:00', 131);
 
 -- --------------------------------------------------------
 
@@ -97,9 +109,7 @@ CREATE TABLE `tbusers` (
 --
 
 INSERT INTO `tbusers` (`codUser`, `nameUser`, `emailUser`, `passwordUser`, `descUser`, `incomeUser`, `balanceUser`, `iconUser`, `typeUser`, `created_at`) VALUES
-(131, 'JessÃ© Barbosa', 'barbosajesse419@gmail.com', '$2y$10$Q0/WprZF3S/groZavwZgH.7XkVPZHpi7eDeaYFWdZ.c9B7T0Km2xi', 'No description.', '4000', 630, 'default', 0, '2024-09-20 13:02:09'),
-(132, 'JosÃ© Campos', 'jose@gmail.com', '$2y$10$EP1YIfzpJ8fQQSDfVCmI1O7g6cdhsABvXj0mBDuzeOLv41rhe/D3e', 'No description.', '6000', 0, 'default', 0, '2024-09-23 13:28:48'),
-(134, 'Marcos', 'marcos@gmail.com', '$2y$10$EAV7qrqDrE6OCEOwYVskh.pBunB.9fOUhRlF58mfC8mtEzG3eMjrC', 'No description.', '6000', 0, 'default', 0, '2024-09-30 12:27:20');
+(131, 'JessÃ© Barbosa', 'barbosajesse419@gmail.com', '$2y$10$Q0/WprZF3S/groZavwZgH.7XkVPZHpi7eDeaYFWdZ.c9B7T0Km2xi', 'No description.', '4000', 2595, 'default', 0, '2024-09-20 13:02:09');
 
 --
 -- Índices para tabelas despejadas
@@ -140,7 +150,7 @@ ALTER TABLE `tbgoals`
 -- AUTO_INCREMENT de tabela `tbtransactions`
 --
 ALTER TABLE `tbtransactions`
-  MODIFY `codTransaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `codTransaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT de tabela `tbusers`
