@@ -288,7 +288,7 @@ const ViewTransferScreen = ({ route }) => {
       <TouchableOpacity 
         style={[styles.button, { opacity: isEdited ? 1 : 0.5 }]} 
         onPress={handleSave} 
-        disabled={!isEdited} // Desabilita o botão quando não há edições
+        disabled={!isEdited}
       >
         <Text style={styles.buttonText}>Salvar</Text>
       </TouchableOpacity>
