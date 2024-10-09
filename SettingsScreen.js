@@ -127,7 +127,7 @@ const SettingsScreen = ({ route }) => {
               maxLength={200}
               value={tempDescription}
               onChangeText={(text) => setTempDescription(text)}
-              onBlur={updateDescription} // Chama updateDescription ao sair do campo
+              onBlur={updateDescription}
             />
             <Text style={styles.characterCount}>{tempDescription.length}/200</Text>
           </View>

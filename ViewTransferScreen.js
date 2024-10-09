@@ -97,7 +97,7 @@ const ViewTransferScreen = ({ route }) => {
         body: JSON.stringify({
             action: 'updateTransaction',
             transactionId: transaction.codTransaction,
-            valueTransaction: parseFloat(valueTransaction), // Certifica-se que o valor é um número
+            valueTransaction: parseFloat(valueTransaction),
             categoryTransaction,
             descTransaction,
             created_at: formattedDateForBackend,
@@ -105,7 +105,6 @@ const ViewTransferScreen = ({ route }) => {
         }),
     })
     .then(response => {
-        console.log('Response status:', response.status); 
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -122,16 +121,6 @@ const ViewTransferScreen = ({ route }) => {
     .catch(error => {
         Alert.alert("Erro", "Ocorreu um erro ao atualizar a transferência.");
         console.error(error);
-    });
-    
-    console.log('Request body:', {
-        action: 'updateTransaction',
-        transactionId: transaction.codTransaction,
-        valueTransaction: parseFloat(valueTransaction),
-        categoryTransaction,
-        descTransaction,
-        created_at: formattedDateForBackend,
-        typeTransaction: operation,
     });
   };
 
