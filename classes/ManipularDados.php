@@ -36,6 +36,9 @@ class ManipularDados extends Conexao {
             case 'getUserIcon':
                 $user->getUserIcon($input);
                 break;
+            case 'getUserDescription':
+                $user->getUserDescription($input);
+                break;
             case 'assignGoalToUser':
                 $goal->assignGoalToUser($input);
                 break;

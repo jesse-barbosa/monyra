@@ -115,15 +115,37 @@ const SettingsScreen = ({ route }) => {
         console.error('Error fetching user icon:', error);
       });
   }, []);
-  
+
+  // Função para buscar a descrição do usuário
+  const fetchUserDescription = useCallback((userCod) => {
+    axios
+      .post(`${API_URL}`, {
+        action: 'getUserDescription', // Esta ação deve ser tratada no backend
+        userCod: userCod,
+      })
+      .then((response) => {
+        const { success, description } = response.data;
+        if (success) {
+          setDescription(description); // Atualiza a descrição com o valor retornado
+          setTempDescription(description); // Também atualiza a descrição temporária
+        } else {
+          console.error('Erro ao buscar a descrição do usuário:', response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar a descrição do usuário:', error);
+      });
+  }, []);
+
   // Atualiza o ícone do usuário sempre que a página é recarregada
   useFocusEffect(
     useCallback(() => {
       if (userData && userData.codUser) {
         fetchUserIcon(userData.codUser);
+        fetchUserDescription(userData.codUser);
       }
-    }, [userData, fetchUserIcon])
-  );
+    }, [userData, fetchUserIcon, fetchUserDescription])
+  );  
 
   return (
     <View style={{ ...styles.container, paddingTop: 40 }}>
@@ -163,8 +185,8 @@ const SettingsScreen = ({ route }) => {
         </View>
 
         <View style={styles.footerSettings}>
-          <TouchableOpacity style={styles.buttonLogOut} onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.buttonLogOutText}>Sair</Text>
+          <TouchableOpacity style={styles.logOutbutton} onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.logOutbuttonText}>Sair</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

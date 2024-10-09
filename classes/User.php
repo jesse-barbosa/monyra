@@ -131,6 +131,31 @@ class User extends Conexao {
             echo json_encode(["success" => false, "message" => "Please provide user code"]);
         }
     }
+    // Busca a descrição do usuário
+    public function getUserDescription($input) {
+        if (isset($input['userCod'])) {
+            $userCod = $input['userCod'];
+            $stmt = $this->conn->prepare("SELECT descUser FROM tbusers WHERE codUser = ?");
+            
+            if ($stmt === false) {
+                die('Prepare failed: ' . htmlspecialchars($this->conn->error));
+            }
+            
+            $stmt->bind_param("i", $userCod);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $user = $result->fetch_assoc();
+                echo json_encode(["success" => true, "message" => "User description retrieved", "description" => $user['descUser']]);
+            } else {
+                echo json_encode(["success" => false, "message" => "User not found"]);
+            }
+            $stmt->close();
+        } else {
+            echo json_encode(["success" => false, "message" => "Please provide user code"]);
+        }
+    }
 
     // Atualiza o ícone de usuário
     public function updateUserIcon($input) {
