@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Menu from './Menu';
 import styles from './styles';
-import axios from 'axios'; // Certifique-se de ter axios instalado
-import { API_URL } from './apiConfig'; // Certifique-se de ter a URL da API importada
+import axios from 'axios';
+import { API_URL } from './apiConfig';
 
 const SettingsScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -95,6 +95,35 @@ const SettingsScreen = ({ route }) => {
   useEffect(() => {
     setTempDescription(description);
   }, [description]);
+
+  const fetchUserIcon = useCallback((userCod) => {
+    axios
+      .post(`${API_URL}`, {
+        action: 'getUserIcon',
+        userCod: userCod,
+      })
+      .then((response) => {
+        const { success, icon } = response.data;
+        if (success) {
+          const iconIndex = icons.indexOf(icon);
+          setSelectedIconIndex(iconIndex !== -1 ? iconIndex : 0); // Atualiza o ícone
+        } else {
+          console.error('Error fetching user icon:', response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching user icon:', error);
+      });
+  }, []);
+  
+  // Atualiza o ícone do usuário sempre que a página é recarregada
+  useFocusEffect(
+    useCallback(() => {
+      if (userData && userData.codUser) {
+        fetchUserIcon(userData.codUser);
+      }
+    }, [userData, fetchUserIcon])
+  );
 
   return (
     <View style={{ ...styles.container, paddingTop: 40 }}>
