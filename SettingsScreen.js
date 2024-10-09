@@ -10,28 +10,46 @@ import { API_URL } from './apiConfig'; // Certifique-se de ter a URL da API impo
 const SettingsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { userData } = route.params || {};
-  const [selectedIconIndex, setSelectedIconIndex] = useState(0);
+  const icons = ['default', 'icon2', 'icon3', 'icon4', 'icon5', 'icon6', 'icon7', 'icon8', 'icon9', 'icon10', 'icon11', 'icon12', 'icon13'];
+  const [selectedIconIndex, setSelectedIconIndex] = useState(icons.indexOf(userData.iconUser) || 0); // Carrega o índice do ícone salvo
   const [description, setDescription] = useState(userData.descUser || ''); // Carrega a descrição inicial
   const [tempDescription, setTempDescription] = useState(description);
 
-  const icons = ['default', 'man', 'woman'];
   const images = {
     default: require('./assets/img/icons/profile/default.png'),
-    man: require('./assets/img/icons/profile/man.png'),
-    woman: require('./assets/img/icons/profile/woman.png'),
+    icon2: require('./assets/img/icons/profile/icon2.png'),
+    icon3: require('./assets/img/icons/profile/icon3.png'),
+    icon4: require('./assets/img/icons/profile/icon4.png'),
+    icon5: require('./assets/img/icons/profile/icon5.png'),
+    icon6: require('./assets/img/icons/profile/icon6.png'),
+    icon7: require('./assets/img/icons/profile/icon7.png'),
+    icon8: require('./assets/img/icons/profile/icon8.png'),
+    icon9: require('./assets/img/icons/profile/icon9.png'),
+    icon10: require('./assets/img/icons/profile/icon10.png'),
+    icon11: require('./assets/img/icons/profile/icon11.png'),
+    icon12: require('./assets/img/icons/profile/icon12.png'),
+    icon13: require('./assets/img/icons/profile/icon13.png'),
   };
 
   const handleNextIcon = () => {
-    setSelectedIconIndex((prevIndex) => (prevIndex + 1) % icons.length);
+    setSelectedIconIndex((prevIndex) => {
+      const newIndex = (prevIndex + 1) % icons.length;
+      updateUserIcon(newIndex); // Atualiza o ícone ao selecionar um novo
+      return newIndex;
+    });
   };
 
   const handlePreviousIcon = () => {
-    setSelectedIconIndex((prevIndex) => (prevIndex - 1 + icons.length) % icons.length);
+    setSelectedIconIndex((prevIndex) => {
+      const newIndex = (prevIndex - 1 + icons.length) % icons.length;
+      updateUserIcon(newIndex); // Atualiza o ícone ao selecionar um novo
+      return newIndex;
+    });
   };
 
+  // Função para atualizar a descrição
   const updateDescription = async () => {
     try {
-      // Aqui você pode chamar a API para atualizar a descrição
       const response = await axios.post(`${API_URL}`, {
         action: 'updateUserDescription',
         userId: userData.codUser,
@@ -47,6 +65,26 @@ const SettingsScreen = ({ route }) => {
     } catch (error) {
       console.error(error);
       Alert.alert('Erro ao atualizar a descrição. Tente novamente.'); // Mensagem de erro
+    }
+  };
+
+  // Função para atualizar o ícone
+  const updateUserIcon = async (index) => {
+    try {
+      const response = await axios.post(`${API_URL}`, {
+        action: 'updateUserIcon',
+        userId: userData.codUser,
+        icon: icons[index],
+      });
+
+      if (response.data.success) {
+        // Ícone atualizado com sucesso, você pode adicionar uma mensagem se necessário
+      } else {
+        Alert.alert('Erro', response.data.message || 'Ocorreu um erro ao atualizar o ícone.');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Erro ao atualizar o ícone. Tente novamente.'); // Mensagem de erro
     }
   };
 

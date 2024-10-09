@@ -106,6 +106,53 @@ class User extends Conexao {
             echo json_encode(["success" => false, "message" => "Missing parameters"]);
         }
     }
+    // Busca o ícone do usuário
+    public function getUserIcon($input) {
+        if (isset($input['userCod'])) {
+            $userCod = $input['userCod'];
+            $stmt = $this->conn->prepare("SELECT iconUser FROM tbusers WHERE codUser = ?");
+            
+            if ($stmt === false) {
+                die('Prepare failed: ' . htmlspecialchars($this->conn->error));
+            }
+            
+            $stmt->bind_param("i", $userCod);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $user = $result->fetch_assoc();
+                echo json_encode(["success" => true, "message" => "User icon retrieved", "icon" => $user['iconUser']]);
+            } else {
+                echo json_encode(["success" => false, "message" => "User not found"]);
+            }
+            $stmt->close();
+        } else {
+            echo json_encode(["success" => false, "message" => "Please provide user code"]);
+        }
+    }
+
+    // Atualiza o ícone de usuário
+    public function updateUserIcon($input) {
+        if (isset($input['userId']) && isset($input['icon'])) {
+            $userId = $input['userId'];
+            $icon = $input['icon'];
+
+            $stmt = $this->conn->prepare("UPDATE tbusers SET iconUser = ? WHERE codUser = ?");
+            $stmt->bind_param("si", $icon, $userId);
+
+            if ($stmt->execute()) {
+                echo json_encode(["success" => true, "message" => "Ícone atualizado com sucesso"]);
+            } else {
+                echo json_encode(["success" => false, "message" => "Falha ao atualizar o ícone"]);
+            }
+
+            $stmt->close();
+        } else {
+            echo json_encode(["success" => false, "message" => "Parâmetros faltando"]);
+        }
+    }
+
     // Atualiza a descrição do usuário
     public function updateUserDescription($input) {
         if (isset($input['userId']) && isset($input['description'])) {

@@ -119,49 +119,63 @@ class Transfer extends Conexao {
     }
     // Atualizar uma Transferência
     public function updateTransaction($input) {
+        // Verifica se os dados obrigatórios foram fornecidos
         if (isset($input['transactionId']) && isset($input['valueTransaction']) && 
             isset($input['categoryTransaction']) && isset($input['descTransaction']) && 
             isset($input['created_at']) && isset($input['typeTransaction'])) {
             
+            // Conversão e atribuição dos dados
             $transactionId = $input['transactionId'];
-            $valueTransaction = (float)$input['valueTransaction']; // Convertendo para float
+            $valueTransaction = (float)$input['valueTransaction']; // Converte o valor para float
             $categoryTransaction = $input['categoryTransaction'];
             $descTransaction = $input['descTransaction'];
             $createdAt = $input['created_at'];
             $typeTransaction = $input['typeTransaction'];
-    
-            if (isset($_SESSION['userCod'])) {
-                $userCod = $_SESSION['userCod'];
-    
-                $stmt = $this->conn->prepare("
-                    UPDATE tbtransactions 
-                    SET valueTransaction = ?, 
-                        categoryTransaction = NULLIF(?, ''), 
-                        descTransaction = ?, 
-                        created_at = ?, 
-                        typeTransaction = ? 
-                    WHERE codTransaction = ? AND userCod = ?
-                ");
-                if ($stmt === false) {
-                    die('Prepare failed: ' . htmlspecialchars($this->conn->error));
-                }
-    
-                $stmt->bind_param("dssssi", $valueTransaction, $categoryTransaction, $descTransaction, $createdAt, $typeTransaction, $transactionId, $userCod);
-    
-                if ($stmt->execute()) {
+
+            // Prepara a consulta SQL para atualização
+            $stmt = $this->conn->prepare("
+                UPDATE tbtransactions 
+                SET valueTransaction = ?, 
+                    categoryTransaction = NULLIF(?, ''), 
+                    descTransaction = ?, 
+                    created_at = ?, 
+                    typeTransaction = ? 
+                WHERE codTransaction = ?
+            ");
+
+            // Verifica se a preparação da consulta foi bem-sucedida
+            if ($stmt === false) {
+                $error_message = 'Prepare failed: ' . htmlspecialchars($this->conn->error);
+                error_log($error_message); // Log do erro no servidor
+                echo json_encode(["success" => false, "message" => $error_message]);
+                return;
+            }
+
+            // Associa os parâmetros à consulta preparada
+            $stmt->bind_param("dssssi", $valueTransaction, $categoryTransaction, $descTransaction, $createdAt, $typeTransaction, $transactionId);
+
+            // Executa a consulta e verifica o resultado
+            if ($stmt->execute()) {
+                if ($stmt->affected_rows > 0) {
                     echo json_encode(["success" => true, "message" => "Transferência atualizada com sucesso!"]);
                 } else {
-                    echo json_encode(["success" => false, "message" => "Erro ao atualizar a transferência: " . htmlspecialchars($stmt->error)]);
+                    echo json_encode(["success" => false, "message" => "Nenhuma transferência encontrada ou dados não alterados."]);
                 }
-                $stmt->close();
             } else {
-                echo json_encode(["success" => false, "message" => "Usuário não autenticado."]);
+                // Mensagem de erro detalhada em caso de falha na execução
+                $error_message = "Erro ao atualizar a transferência: " . htmlspecialchars($stmt->error);
+                error_log($error_message); // Log do erro no servidor
+                echo json_encode(["success" => false, "message" => $error_message]);
             }
+
+            $stmt->close();
         } else {
-            echo json_encode(["success" => false, "message" => "Dados inválidos."]);
+            // Mensagem de erro caso algum dado obrigatório esteja ausente
+            echo json_encode(["success" => false, "message" => "Dados inválidos ou incompletos."]);
         }
     }
     
+
     // Deletar uma Transferência
     public function deleteTransaction($input) {
         if (isset($input['transactionId'])) {

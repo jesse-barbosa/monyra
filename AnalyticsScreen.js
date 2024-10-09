@@ -237,7 +237,7 @@ const AnalyticsScreen = ({ route }) => {
     backgroundGradientFrom: '#f7f7f7',
     backgroundGradientTo: '#f7f7f7',
     decimalPlaces: 2,
-    color: (opacity = 1) => `#5019d4`,
+    color: (opacity = 1) => `#000`,
     labelColor: (opacity = 1) => `black`,
     barPercentage: 1,
     propsForBackgroundLines: {

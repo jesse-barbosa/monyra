@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   picker2: {
-    textAlign: 'right',
     flex: 1,
     borderRadius: 15,
     padding: 20,
@@ -175,7 +174,7 @@ const styles = StyleSheet.create({
   menu: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#242424',
+    backgroundColor: '#333',
     paddingHorizontal: 20,
     paddingVertical: 15,
     marginHorizontal: 20,
@@ -243,21 +242,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   balanceHome: {
-    backgroundColor: '#5019D4',
+    backgroundColor: '#E4E4E4',
     borderRadius: 30,
     paddingHorizontal: 40,
     paddingVertical: 35,
     borderRadius: 15,
   },
   balanceTitleHome: {
-    color: '#fff',
+    color: '#000',
     fontSize: 20,
     fontWeight: '600',
     opacity: 0.7,
     fontFamily: 'monospace',
   },
   balanceValueHome: {
-    color: '#fff',
+    color: '#000',
     fontSize: 34,
     fontWeight: 'bold',
   },
@@ -301,13 +300,13 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   cardTotalHome: {
-    color: '#fff',
+    color: '#333',
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 'auto',
   },
   cardTypeHome: {
-    color: '#fff',
+    color: '#000',
     fontSize: 16,
     fontWeight: '600',
     fontFamily: 'monospace',

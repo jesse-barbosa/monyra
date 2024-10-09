@@ -17,6 +17,7 @@ const HomeScreen = ({ route }) => {
   const [balance, setBalance] = useState(userData?.balanceUser || 0); // Estado para o saldo do usuário
   const [selectedGoal, setSelectedGoal] = useState(null);
   const [isGoalModalVisible, setGoalModalVisible] = useState(false);
+  const [userIcon, setUserIcon] = useState(userData?.iconUser || 'default'); // Estado para o ícone do usuário
   const [error, setError] = useState(null);
 
   // Função para buscar as metas do usuário
@@ -76,15 +77,34 @@ const HomeScreen = ({ route }) => {
       });
   }, []);
 
-  // Utilize o useFocusEffect para atualizar os dados sempre que a tela for focada
+  const fetchUserIcon = useCallback((userCod) => {
+    axios
+      .post(`${API_URL}`, {
+        action: 'getUserIcon',
+        userCod: userCod,
+      })
+      .then((response) => {
+        const { success, icon } = response.data;
+        if (success) {
+          setUserIcon(icon); // Atualiza o ícone do usuário
+        } else {
+          console.error('Error fetching user icon:', response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching user icon:', error);
+      });
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
       if (userData && userData.codUser) {
         fetchUserGoals(userData.codUser);
         fetchUserTransactions(userData.nameUser);
         fetchUserBalance(userData.codUser);
+        fetchUserIcon(userData.codUser);
       }
-    }, [userData, fetchUserGoals, fetchUserTransactions, fetchUserBalance])
+    }, [userData, fetchUserGoals, fetchUserTransactions, fetchUserBalance, fetchUserIcon])
   );
 
   const formatCurrency = (value) => {
@@ -121,12 +141,22 @@ const HomeScreen = ({ route }) => {
 
   const images = {
     default: require('./assets/img/icons/profile/default.png'),
-    man: require('./assets/img/icons/profile/man.png'),
-    woman: require('./assets/img/icons/profile/woman.png'),
+    icon2: require('./assets/img/icons/profile/icon2.png'),
+    icon3: require('./assets/img/icons/profile/icon3.png'),
+    icon4: require('./assets/img/icons/profile/icon4.png'),
+    icon5: require('./assets/img/icons/profile/icon5.png'),
+    icon6: require('./assets/img/icons/profile/icon6.png'),
+    icon7: require('./assets/img/icons/profile/icon7.png'),
+    icon8: require('./assets/img/icons/profile/icon8.png'),
+    icon9: require('./assets/img/icons/profile/icon9.png'),
+    icon10: require('./assets/img/icons/profile/icon10.png'),
+    icon11: require('./assets/img/icons/profile/icon11.png'),
+    icon12: require('./assets/img/icons/profile/icon12.png'),
+    icon13: require('./assets/img/icons/profile/icon13.png'),
   };
 
-  const imageSource = userData ? images[userData.iconUser] || images['default'] : images['default'];
- 
+  const imageSource = images[userIcon] || images['default']; // Usa o ícone atualizado do estado
+
   const openGoalModal = (goal) => {
     setSelectedGoal(goal);
     setGoalModalVisible(true);
@@ -182,11 +212,11 @@ const HomeScreen = ({ route }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.cardsHome}>
-          <TouchableOpacity style={{...styles.cardContainerHome, backgroundColor: '#75FF72',}}>
+          <TouchableOpacity style={{...styles.cardContainerHome, backgroundColor: '#E4E4E4',}}>
             <Text style={styles.cardTotalHome}>{formatCurrency(totalGains)}</Text>
             <Text style={styles.cardTypeHome}>Ganhos</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{...styles.cardContainerHome, backgroundColor: '#FF7171',}}>
+          <TouchableOpacity style={{...styles.cardContainerHome, backgroundColor: '#E4E4E4',}}>
             <Text style={styles.cardTotalHome}>{formatCurrency(totalExpenses)}</Text>
             <Text style={styles.cardTypeHome}>Gastos</Text>
           </TouchableOpacity>
@@ -205,7 +235,7 @@ const HomeScreen = ({ route }) => {
                     progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)}
                     width={305}
                     height={10}
-                    color="#5019D4"
+                    color="#000"
                     unfilledColor="#e0e0e0"
                     style={styles.goalBarProgressHome}
                   />
@@ -241,7 +271,7 @@ const HomeScreen = ({ route }) => {
                       progress={selectedGoal.amountSaved / (selectedGoal.amountSaved + selectedGoal.amountRemaining)}
                       width={340}
                       height={25}
-                      color="#5019D4"
+                      color="#000"
                       unfilledColor="#e0e0e0"
                       style={styles.modalProgressBar}
                     />

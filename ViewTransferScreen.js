@@ -12,8 +12,8 @@ const ViewTransferScreen = ({ route }) => {
   const { transaction } = route.params;
 
   // Estado para armazenar os dados da transferência
-  const [valueTransaction, setValueTransaction] = useState(transaction.valueTransaction);
-  const [categoryTransaction, setCategoryTransaction] = useState(transaction.categoryTransaction || "");
+  const [valueTransaction, setValueTransaction] = useState(transaction.valueTransaction.toString());
+  const [categoryTransaction, setCategoryTransaction] = useState(transaction.categoryTransaction || ""); // Use valor da transação
   const [descTransaction, setDescTransaction] = useState(transaction.descTransaction);
   const [date, setDate] = useState(new Date(transaction.created_at));
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -23,18 +23,23 @@ const ViewTransferScreen = ({ route }) => {
 
   const formattedDate = date.toISOString().split('T')[0];
   const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formattedDateForBackend = date.toISOString().replace('T', ' ').split('.')[0];
 
   useEffect(() => {
     // Reseta a categoria ao mudar o tipo de operação
-    setCategoryTransaction(""); // ou você pode definir um valor padrão aqui
+    if (operation === 'expense') {
+      setCategoryTransaction(transaction.categoryTransaction || ""); // Define a categoria inicial
+    } else {
+      setCategoryTransaction(transaction.categoryTransaction || ""); // Define a categoria inicial
+    }
   }, [operation]);
 
   useEffect(() => {
     // Verifica se os dados foram alterados
-    if (valueTransaction !== transaction.valueTransaction || 
+    if (valueTransaction !== transaction.valueTransaction.toString() || 
         categoryTransaction !== transaction.categoryTransaction || 
         descTransaction !== transaction.descTransaction || 
-        date.toISOString() !== transaction.created_at ||
+        date.toISOString().split('T')[0] !== transaction.created_at.split(' ')[0] ||
         operation !== transaction.typeTransaction) {
       setIsEdited(true);
     } else {
@@ -92,10 +97,10 @@ const ViewTransferScreen = ({ route }) => {
         body: JSON.stringify({
             action: 'updateTransaction',
             transactionId: transaction.codTransaction,
-            valueTransaction,
+            valueTransaction: parseFloat(valueTransaction), // Certifica-se que o valor é um número
             categoryTransaction,
             descTransaction,
-            created_at: date.toISOString(),
+            created_at: formattedDateForBackend,
             typeTransaction: operation,
         }),
     })
@@ -118,13 +123,14 @@ const ViewTransferScreen = ({ route }) => {
         Alert.alert("Erro", "Ocorreu um erro ao atualizar a transferência.");
         console.error(error);
     });
+    
     console.log('Request body:', {
         action: 'updateTransaction',
         transactionId: transaction.codTransaction,
-        valueTransaction,
+        valueTransaction: parseFloat(valueTransaction),
         categoryTransaction,
         descTransaction,
-        created_at: date.toISOString(),
+        created_at: formattedDateForBackend,
         typeTransaction: operation,
     });
   };
@@ -170,7 +176,7 @@ const ViewTransferScreen = ({ route }) => {
           <TextInput
             style={styles.value}
             keyboardType="numeric"
-            value={valueTransaction.toString()}
+            value={valueTransaction}
             onChangeText={text => {
               setValueTransaction(text);
               setIsEdited(true); // Marca como editado
@@ -232,7 +238,7 @@ const ViewTransferScreen = ({ route }) => {
               style={styles.picker2}
               onValueChange={(itemValue) => {
                 setCategoryTransaction(itemValue);
-                setIsEdited(true); // Marca como editado
+                setIsEdited(true);
               }}
             >
               <Picker.Item label="Selecione uma categoria" value="" />
@@ -251,7 +257,7 @@ const ViewTransferScreen = ({ route }) => {
               style={styles.picker2}
               onValueChange={(itemValue) => {
                 setCategoryTransaction(itemValue);
-                setIsEdited(true); // Marca como editado
+                setIsEdited(true);
               }}
             >
               <Picker.Item label="Selecione uma categoria" value="" />
@@ -270,7 +276,7 @@ const ViewTransferScreen = ({ route }) => {
               value={descTransaction}
               onChangeText={text => {
                 setDescTransaction(text);
-                setIsEdited(true); // Marca como editado
+                setIsEdited(true);
               }}
               multiline={true}
               placeholder="Digite a descrição"
@@ -282,7 +288,7 @@ const ViewTransferScreen = ({ route }) => {
       <TouchableOpacity 
         style={[styles.button, { opacity: isEdited ? 1 : 0.5 }]} 
         onPress={handleSave} 
-        disabled={!isEdited} // Desabilita o botão se não houver edições
+        disabled={!isEdited} // Desabilita o botão quando não há edições
       >
         <Text style={styles.buttonText}>Salvar</Text>
       </TouchableOpacity>
