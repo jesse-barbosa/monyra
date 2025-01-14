@@ -9,10 +9,8 @@
 ## 2. Clone o repositório
 Primeiro, clone o repositório do projeto para o seu computador (ou baixe o repositório pelo GitHub):  
 
-```bash
-git clone https://github.com/jesse-barbosa/monyra.git
-cd monyra
-```
+    git clone https://github.com/jesse-barbosa/monyra.git
+    cd monyra
 
 ## 3. Importe o banco
 
@@ -25,17 +23,14 @@ cd monyra
 ## 4. Instale as dependências  
 Instale todas as dependências necessárias usando npm ou yarn.  
 
-Usando npm:  
-```bash
-npm install
-```  
+Usando npm:
+
+    npm install
 
 ## 5. Inicie o Expo  
 Você pode iniciar o projeto diretamente com o comando:  
 
-```bash
-npx expo start
-```  
+    npx expo start
 
 ## 6. Baixe o aplicativo Expo Go no seu celular  
 Para visualizar o aplicativo no dispositivo, você precisará do aplicativo Expo Go.  
