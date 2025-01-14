@@ -1,50 +1,51 @@
-# Monyra
-Atividade de Conclusão - Módulo 2 Senactec
+# Monyra  
+Atividade de Conclusão - Módulo 2 Senactec  
 
+Siga as instruções abaixo para configurar e executar o aplicativo no seu dispositivo.  
 
-Siga as instruções abaixo para configurar e executar o aplicativo no seu dispositivo.
-# Pré-requisitos
+## Pré-requisitos  
 
-Node.js (versão LTS recomendada) |
-npm ou yarn |
-Git
+- Node.js (versão LTS recomendada)  
+- npm ou yarn  
+- Git  
 
-# Passos para configurar e executar o aplicativo
-# 1. Clone o repositório
+## Passos para configurar e executar o aplicativo  
 
-# - Primeiro, clone o repositório do projeto para o seu computador (ou baixe o repositório pelo GitHub)
+### 1. Clone o repositório  
+Primeiro, clone o repositório do projeto para o seu computador (ou baixe o repositório pelo GitHub):  
 
-    git clone https://github.com/jesse-barbosa/monyra.git
-    cd monyra
+```bash
+git clone https://github.com/jesse-barbosa/monyra.git
+cd monyra
+```
 
-# 2. Instale as dependências
+### 2. Instale as dependências  
+Instale todas as dependências necessárias usando npm ou yarn.  
 
-# - Instale todas as dependências necessárias usando npm ou yarn.
-Usando npm
+Usando npm:  
+```bash
+npm install
+```  
 
-    npm install
-    
-# 3. Instale o Expo CLI
+### 3. Inicie o Expo  
+Você pode iniciar o projeto diretamente com o comando:  
 
-# - Expo CLI é uma ferramenta de linha de comando necessária para executar projetos Expo. Você pode instalá-la globalmente usando npm ou yarn.
-Usando npm
+```bash
+npx expo start
+```  
 
-    npm install -g expo-cli
+### 4. Baixe o aplicativo Expo Go no seu celular  
+Para visualizar seu aplicativo no dispositivo, você precisará do aplicativo Expo Go.  
 
-# 4. Inicie o Expo
+- [Baixe o Expo Go para Android](https://play.google.com/store/apps/details?id=host.exp.exponent)  
+- [Baixe o Expo Go para iOS](https://apps.apple.com/app/expo-go/id982107779)  
 
-# - Para iniciar o projeto com Expo, execute o seguinte comando dentro do diretório:
+### 5. Execute o aplicativo no seu dispositivo  
+Após iniciar o Expo, um QR Code será gerado no terminal ou na janela do navegador que abrirá automaticamente.  
 
-    npx expo start
+1. Abra o aplicativo Expo Go no seu dispositivo.  
+2. Escaneie o QR Code exibido para carregar o aplicativo.  
 
-# 5. Baixe o aplicativo Expo Go no seu celular
+Agora o aplicativo React Native deve rodar no seu dispositivo
 
-- Para visualizar seu aplicativo no seu dispositivo, você precisará do aplicativo Expo Go.
-
-Baixe o Expo Go para Android ou para iOS.
-
-# 6. Execute o aplicativo no seu dispositivo
-
-Após iniciar o Expo, um QR Code será gerado no seu terminal ou na janela do navegador que abrirá automaticamente. Abra o aplicativo Expo Go no seu dispositivo e escaneie o QR Code para carregar o aplicativo.
-
-Agora o aplicativo React Native deve rodar no seu dispositivo. Se você encontrar algum problema ou tiver alguma dúvida, por favor, verifique a documentação do Expo ou entre em contato comigo por E-mail.
+Se encontrar algum problema ou tiver dúvidas, consulte a [documentação oficial do Expo](https://docs.expo.dev/) ou entre em contato comigo por e-mail.
