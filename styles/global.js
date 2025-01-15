@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 20,
-    marginHorizontal: 90,
+    marginHorizontal: 'auto',
   },
   optionButtonAnalytics: {
     paddingVertical: 10,
