@@ -2,8 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Menu from './Menu';
-import styles from './styles';
+import Menu from './components/Menu';
+import styles from '../styles/global';
 import axios from 'axios';
 import { API_URL } from './apiConfig';
 
@@ -16,19 +16,19 @@ const SettingsScreen = ({ route }) => {
   const [tempDescription, setTempDescription] = useState(description);
 
   const images = {
-    default: require('./assets/img/icons/profile/default.png'),
-    icon2: require('./assets/img/icons/profile/icon2.png'),
-    icon3: require('./assets/img/icons/profile/icon3.png'),
-    icon4: require('./assets/img/icons/profile/icon4.png'),
-    icon5: require('./assets/img/icons/profile/icon5.png'),
-    icon6: require('./assets/img/icons/profile/icon6.png'),
-    icon7: require('./assets/img/icons/profile/icon7.png'),
-    icon8: require('./assets/img/icons/profile/icon8.png'),
-    icon9: require('./assets/img/icons/profile/icon9.png'),
-    icon10: require('./assets/img/icons/profile/icon10.png'),
-    icon11: require('./assets/img/icons/profile/icon11.png'),
-    icon12: require('./assets/img/icons/profile/icon12.png'),
-    icon13: require('./assets/img/icons/profile/icon13.png'),
+    default: require('../assets/img/icons/profile/default.png'),
+    icon2: require('../assets/img/icons/profile/icon2.png'),
+    icon3: require('../assets/img/icons/profile/icon3.png'),
+    icon4: require('../assets/img/icons/profile/icon4.png'),
+    icon5: require('../assets/img/icons/profile/icon5.png'),
+    icon6: require('../assets/img/icons/profile/icon6.png'),
+    icon7: require('../assets/img/icons/profile/icon7.png'),
+    icon8: require('../assets/img/icons/profile/icon8.png'),
+    icon9: require('../assets/img/icons/profile/icon9.png'),
+    icon10: require('../assets/img/icons/profile/icon10.png'),
+    icon11: require('../assets/img/icons/profile/icon11.png'),
+    icon12: require('../assets/img/icons/profile/icon12.png'),
+    icon13: require('../assets/img/icons/profile/icon13.png'),
   };
 
   const handleNextIcon = () => {

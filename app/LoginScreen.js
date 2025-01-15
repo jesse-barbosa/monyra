@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Keyboa
 import axios from 'axios';
 import { API_URL } from './apiConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
-import styles from './styles';
+import styles from '../styles/global';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('barbosajesse419@gmail.com');

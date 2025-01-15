@@ -1,18 +1,18 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import RegisterScreen from './RegisterScreen';
-import RegisterScreenStep2 from './RegisterStep2Screen';
-import LoginScreen from './LoginScreen';
-import HomeScreen from './HomeScreen';
-import AnalyticsScreen from './AnalyticsScreen';
-import NotificationsScreen from './NotificationsScreen';
-import SettingsScreen from './SettingsScreen';
-import TransferScreen from './TransferScreen';
-import ViewTransferScreen from './ViewTransferScreen';
-import CreateGoalScreen from './CreateGoalScreen';
-import CreateGoalStep2Screen from './CreateGoalStep2Screen';
-import ViewGoalScreen from './ViewGoalScreen';
+import RegisterScreen from './app/RegisterScreen';
+import RegisterScreenStep2 from './app/RegisterStep2Screen';
+import LoginScreen from './app/LoginScreen';
+import HomeScreen from './app/HomeScreen';
+import AnalyticsScreen from './app/AnalyticsScreen';
+import NotificationsScreen from './app/NotificationsScreen';
+import SettingsScreen from './app/SettingsScreen';
+import TransferScreen from './app/TransferScreen';
+import ViewTransferScreen from './app/ViewTransferScreen';
+import CreateGoalScreen from './app/CreateGoalScreen';
+import CreateGoalStep2Screen from './app/CreateGoalStep2Screen';
+import ViewGoalScreen from './app/ViewGoalScreen';
 
 const Stack = createStackNavigator();
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { API_URL } from './apiConfig';
-import styles from './styles';
+import styles from '../styles/global';
 
 const TransferScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -134,7 +134,7 @@ const TransferScreen = ({ route }) => {
               </TouchableOpacity>
             ))}
             <TouchableOpacity style={styles.key} onPress={() => handleKeyPress('⌫')}>
-              <Image source={require('./assets/img/icons/close-circle.png')} style={styles.keyText}/>
+              <Image source={require('../assets/img/icons/close-circle.png')} style={styles.keyText}/>
             </TouchableOpacity>
           </View>
       </View>

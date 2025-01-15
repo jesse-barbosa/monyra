@@ -1,23 +1,23 @@
 import React, { useState, useCallback } from 'react';
 import { View, Image, Text, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import { useNavigation, useFocusEffect } from '@react-navigation/native'; // Importar o useFocusEffect
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
-import Menu from './Menu';
+import Menu from './components/Menu';
 import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Modal } from 'react-native';
-import styles from './styles';
+import styles from '../styles/global';
 
 const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
   const { userData } = route.params;
   const [userGoals, setUserGoals] = useState([]);
   const [transactions, setTransactions] = useState([]);
-  const [balance, setBalance] = useState(userData?.balanceUser || 0); // Estado para o saldo do usuário
+  const [balance, setBalance] = useState(userData?.balanceUser || 0);
   const [selectedGoal, setSelectedGoal] = useState(null);
   const [isGoalModalVisible, setGoalModalVisible] = useState(false);
-  const [userIcon, setUserIcon] = useState(userData?.iconUser || 'default'); // Estado para o ícone do usuário
+  const [userIcon, setUserIcon] = useState(userData?.iconUser || 'default');
   const [error, setError] = useState(null);
 
   // Função para buscar as metas do usuário
@@ -140,22 +140,22 @@ const HomeScreen = ({ route }) => {
   const { totalGains, totalExpenses } = calculateMonthlyTotals();
 
   const images = {
-    default: require('./assets/img/icons/profile/default.png'),
-    icon2: require('./assets/img/icons/profile/icon2.png'),
-    icon3: require('./assets/img/icons/profile/icon3.png'),
-    icon4: require('./assets/img/icons/profile/icon4.png'),
-    icon5: require('./assets/img/icons/profile/icon5.png'),
-    icon6: require('./assets/img/icons/profile/icon6.png'),
-    icon7: require('./assets/img/icons/profile/icon7.png'),
-    icon8: require('./assets/img/icons/profile/icon8.png'),
-    icon9: require('./assets/img/icons/profile/icon9.png'),
-    icon10: require('./assets/img/icons/profile/icon10.png'),
-    icon11: require('./assets/img/icons/profile/icon11.png'),
-    icon12: require('./assets/img/icons/profile/icon12.png'),
-    icon13: require('./assets/img/icons/profile/icon13.png'),
+    default: require('../assets/img/icons/profile/default.png'),
+    icon2: require('../assets/img/icons/profile/icon2.png'),
+    icon3: require('../assets/img/icons/profile/icon3.png'),
+    icon4: require('../assets/img/icons/profile/icon4.png'),
+    icon5: require('../assets/img/icons/profile/icon5.png'),
+    icon6: require('../assets/img/icons/profile/icon6.png'),
+    icon7: require('../assets/img/icons/profile/icon7.png'),
+    icon8: require('../assets/img/icons/profile/icon8.png'),
+    icon9: require('../assets/img/icons/profile/icon9.png'),
+    icon10: require('../assets/img/icons/profile/icon10.png'),
+    icon11: require('../assets/img/icons/profile/icon11.png'),
+    icon12: require('../assets/img/icons/profile/icon12.png'),
+    icon13: require('../assets/img/icons/profile/icon13.png'),
   };
 
-  const imageSource = images[userIcon] || images['default']; // Usa o ícone atualizado do estado
+  const imageSource = images[userIcon] || images['default'];
 
   const openGoalModal = (goal) => {
     setSelectedGoal(goal);

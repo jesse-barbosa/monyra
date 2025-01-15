@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { API_URL } from './apiConfig';
-import styles from './styles';
+import styles from '../styles/global';
 
 const CreateGoalScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -43,7 +43,7 @@ const CreateGoalScreen = ({ route }) => {
       <ScrollView>
         <View style={styles.headerCreateGoal}>
           <Text style={styles.secondaryTitle}>Quase lá...</Text>
-          <Image style={styles.imageFormGoal} source={require('./assets/img/formGoalImage.png')} />
+          <Image style={styles.imageFormGoal} source={require('../assets/img/formGoalImage.png')} />
         </View>
         <View style={{...styles.inputs, paddingHorizontal: 15,}}>
         <View style={styles.inputContainer}>

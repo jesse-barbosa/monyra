@@ -1,11 +1,12 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Dimensions, FlatList, Modal, Button } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Dimensions, FlatList, Modal, Button } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
-import Menu from './Menu';
+import Menu from './components/Menu';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import { Dropdown } from 'react-native-element-dropdown';
-import styles from './styles';
+import styles from '../styles/global';
 
 const getCategoryColor = (category) => {
   const colors = {
@@ -328,10 +329,7 @@ const AnalyticsScreen = ({ route }) => {
                         <Text style={styles.transferText}>"{transaction.descTransaction}"</Text>
                       </View>
                       <View style={styles.transferIcon}>
-                        {transaction.typeTransaction === 'expense' ?  
-                          <Image source={require('./assets/img/icons/arrowDown.png')} /> : 
-                          <Image source={require('./assets/img/icons/arrowUp.png')} /> 
-                        }
+
                       </View>
                     </View>
                   </TouchableOpacity>

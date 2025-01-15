@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { API_URL } from './apiConfig';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import styles from './styles';
+import styles from '../styles/global';
 
 const ViewTransferScreen = ({ route }) => {
   const navigation = useNavigation();

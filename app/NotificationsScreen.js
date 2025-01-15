@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, SafeAreaView, TouchableOpacity, Image, Modal } from 'react-native';
+import Icon from '@expo/vector-icons/FontAwesome';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
-import Menu from './Menu';
-import styles from './styles';
+import Menu from './components/Menu';
+import styles from '../styles/global';
 
 const NotificationsScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -69,13 +70,11 @@ const NotificationsScreen = ({ route }) => {
                       <Text style={styles.transferText}>"{transaction.descTransaction}"</Text>
                     </View>
                     <View style={styles.transferIcon}>
-                      <Image
-                        source={
-                          transaction.typeTransaction === 'expense'
-                            ? require('./assets/img/icons/arrowDown.png')
-                            : require('./assets/img/icons/arrowUp.png')
-                        }
-                      />
+                      {transaction.typeTransaction === 'expense' ? (
+                        <Icon name="arrow-circle-o-down" size={24} color="black" />
+                      ) : (
+                        <Icon name="arrow-circle-o-up" size={24} color="black" />
+                      )}
                     </View>
                   </View>
                 </TouchableOpacity>

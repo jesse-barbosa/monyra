@@ -1,0 +1,1 @@
+export const API_URL = 'http://(SEU_IP)/monyra/classes/ManipularDados.php';

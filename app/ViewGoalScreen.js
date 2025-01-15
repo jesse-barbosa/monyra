@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from './apiConfig';
 import * as Progress from 'react-native-progress';
-import styles from './styles';
+import styles from '../styles/global';
 
 const ViewGoalScreen = ({ route }) => {
   const navigation = useNavigation();

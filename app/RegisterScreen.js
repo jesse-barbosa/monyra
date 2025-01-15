@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import styles from './styles';
+import styles from '../styles/global';
 
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
