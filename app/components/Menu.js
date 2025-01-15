@@ -13,7 +13,7 @@ const Menu = ({ userData }) => {
                 <Icon name={route.name === 'Home' ? 'home' : 'home-outline'} color="white" size={32} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Analytics', { userData })}>
-                <Icon name={route.name === 'Analytics' ? 'bar-chat' : 'bar-chart-outline'} color="white" size={32} />
+                <Icon name={route.name === 'Analytics' ? 'bar-chart' : 'bar-chart-outline'} color="white" size={32} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Notifications', { userData })}>
                 <Icon name={route.name === 'Notifications' ? 'notifications' : 'notifications-outline'} color="white" size={32} />
