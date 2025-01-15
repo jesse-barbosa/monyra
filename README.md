@@ -16,7 +16,7 @@ Primeiro, clone o repositório do projeto para o seu computador (ou baixe o repo
 
 - 3.1 Primeiro, ligue os servidor Apache e MySQL no XAMPP
 - 3.3 Acesse o painel PhpMyAdmin: Digite "localhost/" no endereço de pesquisa do seu navegador
-- 3.4 - Crie um novo banco de dados com o nome "monyra"
+- 3.4 - Crie um novo banco de dados com o nome "dbmonyra"
 - 3.5 - Clique na opção de importar
 - 3.6 - Importe o arquivo SQL localizado na pasta "banco" do projeto
 
