@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, SafeAreaView, TouchableOpacity, Image, Modal } from 'react-native';
 import Icon from '@expo/vector-icons/FontAwesome';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { API_URL } from './apiConfig';
+import { API_URL } from '../apiConfig';
 import Menu from './components/Menu';
 import styles from '../styles/global';
 

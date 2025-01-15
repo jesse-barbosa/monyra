@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Alert, ScrollView, TextInput } from 'reac
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
-import { API_URL } from './apiConfig';
+import { API_URL } from '../apiConfig';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from '../styles/global';
 

@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, TextInput,
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
-import { API_URL } from './apiConfig';
+import { API_URL } from '../apiConfig';
 import styles from '../styles/global';
 
 const CreateGoalScreen = ({ route }) => {

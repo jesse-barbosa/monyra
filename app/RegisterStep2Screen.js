@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import axios from 'axios';
-import { API_URL } from './apiConfig';
+import { API_URL } from '../apiConfig';
 import styles from '../styles/global';
 
 const RegisterStep2Screen = ({ navigation, route }) => {

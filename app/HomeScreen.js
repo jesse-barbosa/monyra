@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, Image, Text, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { API_URL } from './apiConfig';
+import { API_URL } from '../apiConfig';
 import Menu from './components/Menu';
 import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/Ionicons';

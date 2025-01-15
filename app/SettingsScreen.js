@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Menu from './components/Menu';
 import styles from '../styles/global';
 import axios from 'axios';
-import { API_URL } from './apiConfig';
+import { API_URL } from '../apiConfig';
 
 const SettingsScreen = ({ route }) => {
   const navigation = useNavigation();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import axios from 'axios';
-import { API_URL } from './apiConfig';
+import { API_URL } from '../apiConfig';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/global';
 

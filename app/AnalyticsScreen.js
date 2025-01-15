@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Dimensions, FlatList, Modal, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { API_URL } from './apiConfig';
+import { API_URL } from '../apiConfig';
 import Menu from './components/Menu';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import { Dropdown } from 'react-native-element-dropdown';
