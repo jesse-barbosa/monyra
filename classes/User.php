@@ -80,9 +80,9 @@ class User extends Conexao {
                     if ($goalStmt === false) {
                         die('Goal Insert Prepare failed: ' . htmlspecialchars($this->conn->error));
                     }
-                    $goalName = 'Reserva de emergência';
-                    $goalCategory = 'Economia ou Investimentos';
-                    $descGoal = '(Essa meta foi gerada automaticamente na criação de sua conta)';
+                    $goalName = 'Emergency Fund';
+                    $goalCategory = 'Savings';
+                    $descGoal = '(This goal was generated automatically upon account creation)';
                     $amountSaved = 0.00;
                     $amountRemaining = $incomeUser * 3;
                 
