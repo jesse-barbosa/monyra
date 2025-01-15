@@ -329,7 +329,11 @@ const AnalyticsScreen = ({ route }) => {
                         <Text style={styles.transferText}>"{transaction.descTransaction}"</Text>
                       </View>
                       <View style={styles.transferIcon}>
-
+                      {transaction.typeTransaction === 'expense' ? (
+                        <Icon name="arrow-circle-o-down" size={24} color="black" />
+                      ) : (
+                        <Icon name="arrow-circle-o-up" size={24} color="black" />
+                      )}
                       </View>
                     </View>
                   </TouchableOpacity>
