@@ -184,7 +184,7 @@ const SettingsScreen = ({ route }) => {
           </View>
         </View>
 
-        <View style={styles.footerSettings}>
+        <View>
           <TouchableOpacity style={styles.logOutbutton} onPress={() => navigation.navigate('Login')}>
             <Text style={styles.logOutbuttonText}>Sair</Text>
           </TouchableOpacity>

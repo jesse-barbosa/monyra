@@ -1,27 +1,25 @@
 import { StyleSheet } from 'react-native';
 
-
 const styles = StyleSheet.create({
-  
   /* Estilos Gerais */
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#D9EDFF',
     justifyContent: 'center',
   },
   title: {
     marginTop: 5,
     marginBottom: 10,
     marginHorizontal: 20,
-    color: '#000',
+    color: '#2E4053',
     fontWeight: 'bold',
     fontSize: 26,
     lineHeight: 32,
   },
   subtitle: {
     marginTop: 30,
-    color: '#000',
-    opacity: 0.4,
+    color: '#2E4053',
+    opacity: 0.6,
     fontWeight: 'bold',
     fontSize: 23,
     lineHeight: 32,
@@ -34,37 +32,30 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: 'gray',
+    borderColor: '#B0C4DE',
     borderRadius: 15,
     paddingHorizontal: 10,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: '#E6E6FA',
     width: '100%',
     marginBottom: 10,
   },
   input: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: '#E6E6FA',
     borderRadius: 15,
     fontSize: 16,
     marginHorizontal: 10,
   },
   picker: {
     flex: 1,
-    backgroundColor: '#F7F7F7',
     borderRadius: 15,
-    padding: 20,
-  },
-  picker2: {
-    flex: 1,
-    borderRadius: 15,
-    padding: 20,
   },
   addCard: {
     marginVertical: 15,
     padding: 14,
     borderRadius: 10,
-    backgroundColor: '#ededed',
+    backgroundColor: '#B0C4DE',
   },
   addContent: {
     flexDirection: 'row',
@@ -76,7 +67,7 @@ const styles = StyleSheet.create({
   },
   addText: {
     fontSize: 16,
-    color: '#000',
+    color: '#2E4053',
     fontWeight: '500',
   },
   // Modal
@@ -88,7 +79,7 @@ const styles = StyleSheet.create({
   modalContent: {
     width: '100%',
     height: '60%',
-    backgroundColor: '#E2E2E2',
+    backgroundColor: '#B0C4DE',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
@@ -105,7 +96,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 10,
     alignItems: 'center',
-    borderColor: '#ccc',
+    borderColor: '#2E4053',
     paddingVertical: 10,
     borderBottomWidth: 2,
   },
@@ -116,8 +107,8 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   value: {
-    fontSize: 16,
-    color: '#000',
+    fontSize: 18,
+    color: '#2E4053',
     opacity: 0.7,
   },
   category: {
@@ -126,7 +117,7 @@ const styles = StyleSheet.create({
   },
   labelModal: {
     fontSize: 20,
-    color: '#000',
+    color: '#2E4053',
     opacity: 0.7,
   },
   modalProgressBar: {
@@ -137,7 +128,7 @@ const styles = StyleSheet.create({
   categoryText: {
     marginRight: 5,
     fontSize: 16,
-    color: '#000',
+    color: '#2E4053',
     opacity: 0.7,
   },
   categoryIcon: {
@@ -146,29 +137,29 @@ const styles = StyleSheet.create({
   editButton: {
     marginTop: 20,
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: '#E6E6FA',
     borderRadius: 10,
     paddingVertical: 15,
     borderWidth: 2,
-    borderColor: '#000',
+    borderColor: '#2E4053',
     alignItems: 'center',
   },
   editButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#000',
+    color: '#2E4053',
   },
   closeButton: {
     marginTop: 10,
     width: '100%',
-    backgroundColor: '#333',
+    backgroundColor: '#2E4053',
     borderRadius: 10,
     paddingVertical: 15,
     alignItems: 'center',
   },
   closeButtonText: {
     fontSize: 16,
-    color: '#fff',
+    color: '#FFFFFF',
   },
   logOutbutton: {
     borderRadius: 15,
@@ -189,7 +180,7 @@ const styles = StyleSheet.create({
   menu: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#5019D4',
+    backgroundColor: '#2E4053',
     paddingHorizontal: 20,
     paddingVertical: 15,
     marginHorizontal: 20,
@@ -208,7 +199,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 15,
-    backgroundColor: '#fff',
+    backgroundColor: '#8BB2D4',
     padding: 20,
     marginTop: 'auto',
     marginHorizontal: 'auto',
@@ -217,11 +208,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderBottomWidth: 4,
     borderRightWidth: 4,
-    borderBottomColor: '#000',
-    borderRightColor: '#000',
+    borderBottomColor: '#2E4053',
+    borderRightColor: '#2E4053',
   },
   buttonText: {
-    color: '#000',
+    color: '#2E4053',
     textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
@@ -235,7 +226,7 @@ const styles = StyleSheet.create({
 
   /* Tela inicial */
   titleAppHome: {
-    color: '#000',
+    color: '#2E4053',
     fontWeight: 'bold',
     fontSize: 32,
     lineHeight: 32,
@@ -243,7 +234,7 @@ const styles = StyleSheet.create({
     fontFamily: 'serif',
   },
   usernameHome: {
-    color: '#000',
+    color: '#2E4053',
     fontSize: 18,
     fontWeight: '400',
     opacity: 0.5,
@@ -257,21 +248,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   balanceHome: {
-    backgroundColor: '#5019D4',
-    borderRadius: 30,
+    backgroundColor: '#2E4053',
+    borderRadius: 20,
     paddingHorizontal: 40,
     paddingVertical: 45,
-    borderRadius: 20,
   },
   balanceTitleHome: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 20,
     fontWeight: '600',
     opacity: 0.7,
     fontFamily: 'monospace',
   },
   balanceValueHome: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 34,
     fontWeight: 'bold',
   },
@@ -284,28 +274,25 @@ const styles = StyleSheet.create({
   operationHome: {
     width: 100,
     height: 95,
-    backgroundColor: '#fff',
+    backgroundColor: '#2E4053',
     marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 16,
-    borderWidth: 1,
-    borderBottomWidth: 4,
-    borderRightWidth: 4,
-    borderBottomColor: '#000',
-    borderRightColor: '#000',
+    borderTopLeftRadius: 16,
+    borderBottomRightRadius: 16,
   },
   operationIconHome: {
     marginBottom: 5,
+    color: '#FFFFFF',
   },
   descOperationHome: {
     textAlign: 'center',
     fontSize: 14,
     fontWeight: '400',
-    color: '#000',
+    color: '#FFFFFF',
     opacity: 0.4,
   },
-  
+
   cardsHome: {
     paddingHorizontal: 20,
     marginTop: 20,
@@ -320,19 +307,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   cardTotalHome: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 'auto',
   },
   cardTypeHome: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
     fontFamily: 'monospace',
     opacity: 0.6,
   },
-  
+
   goalsSectionTitleHome: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -344,7 +331,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   goalHome: {
-    backgroundColor: '#EBEBEB',
+    backgroundColor: '#B0C4DE',
     padding: 20,
     marginBottom: 10,
     borderRadius: 15,
@@ -354,20 +341,20 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
+    color: '#2E4053',
     opacity: 0.8,
   },
   goalRemainingValueHome: {
     fontSize: 16,
     marginLeft: 'auto',
     fontWeight: '500',
-    color: '#000',
+    color: '#2E4053',
     opacity: 0.7,
   },
   goalBarProgressHome: {
     marginTop: 10,
     borderWidth: 0,
-    borderColor: '#000',
+    borderColor: '#2E4053',
     width: '100%',
   },
 
@@ -382,14 +369,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 50,
     borderRadius: 20,
-    backgroundColor: '#c9c9c9',
+    backgroundColor: '#E6E6FA',
   },
   selectedOptionAnalytics: {
-    backgroundColor: '#6979F8',
+    backgroundColor: '#2E4053',
     zIndex: 999,
   },
   optionTextAnalytics: {
-    color: '#fff',
+    color: '#FFFFFF',
   },
   headerContainer: {
     paddingHorizontal: 20,
@@ -398,10 +385,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   secondaryTitle: {
-    color: '#000',
+    color: '#2E4053',
     fontWeight: 'bold',
     fontSize: 24,
     lineHeight: 32,
+    paddingVertical: 10,
   },
   dropdown: {
     width: 150,
@@ -420,7 +408,7 @@ const styles = StyleSheet.create({
   },
   titleTransfers: {
     marginBottom: 10,
-    color: '#000',
+    color: '#2E4053',
     fontWeight: 'bold',
     fontSize: 24,
     lineHeight: 32,
@@ -429,7 +417,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   transferCard: {
-    backgroundColor: '#EEEEEE',
+    backgroundColor: '#B0C4DE',
     borderRadius: 17,
     padding: 15,
     marginVertical: 10,
@@ -468,8 +456,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     left: 10,
-    backgroundColor: '#2F1155',
-    color: '#fff',
+    backgroundColor: '#2E4053',
+    color: '#FFFFFF',
     padding: 5,
     borderRadius: 5,
     zIndex: 10,
@@ -493,7 +481,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   selectedMonthButton: {
-    backgroundColor: '#6979F8',
+    backgroundColor: '#2E4053',
     borderRadius: 10,
     paddingVertical: 15,
   },
@@ -503,7 +491,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   selectedMonthText: {
-    color: '#f7f7f7',
+    color: '#FFFFFF',
     fontWeight: '600',
     fontSize: 18,
   },
@@ -534,7 +522,7 @@ const styles = StyleSheet.create({
   },
   arrowIcon: {
     fontSize: 40,
-    color: '#000',
+    color: '#2E4053',
   },
 
   headerTransfer: {
@@ -546,7 +534,7 @@ const styles = StyleSheet.create({
 
   valueTransfer: {
     textAlign: 'center',
-    color: '#000',
+    color: '#2E4053',
     fontWeight: 'bold',
     fontSize: 32,
     lineHeight: 32,
@@ -589,7 +577,7 @@ const styles = StyleSheet.create({
     color: '#808080',
   },
   link: {
-    color: '#5019D4',
+    color: '#2E4053',
     fontWeight: 'bold',
   },
   options: {
@@ -600,7 +588,7 @@ const styles = StyleSheet.create({
   optionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: 'gray',
+    borderColor: '#B0C4DE',
     borderRadius: 15,
     paddingHorizontal: 10,
     width: '100%',
@@ -638,6 +626,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
     marginVertical: 'auto',
+    paddingVertical: 10,
     justifyContent: 'space-evenly',
   },
   goalBarProgress: {
@@ -651,7 +640,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'gray',
   },
-  
+
   /* Página visualizar transferência */
   titleExpenseTransfer: {
     color: '#FF3838',
@@ -682,7 +671,7 @@ const styles = StyleSheet.create({
   },
   valueDescription: {
     fontSize: 16,
-    color: '#000',
+    color: '#2E4053',
     opacity: 0.7,
     textAlign: 'left',
     flex: 1,
@@ -700,13 +689,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   /* Página de Configurações */
-  footerSettings: {
-    marginTop: 'auto',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    paddingVertical: 20,
-    width: '100%',
-  },
   descriptionContainer: {
     marginVertical: 25,
     paddingHorizontal: 20,
@@ -717,7 +699,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     textAlignVertical: 'top',
-    backgroundColor: '#EBEBEB',
+    backgroundColor: '#B0C4DE',
   },
   characterCount: {
     textAlign: 'right',
@@ -725,18 +707,8 @@ const styles = StyleSheet.create({
     color: '#999',
     paddingRight: 10,
   },
-  updateButton: {
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-    alignItems: 'center',
-  },
-  updateButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },    
-  
+
+  /* DataText */
   dataText: {
     textAlign: 'center',
     marginTop: 20,

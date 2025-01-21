@@ -212,11 +212,11 @@ const HomeScreen = ({ route }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.cardsHome}>
-          <TouchableOpacity style={{...styles.cardContainerHome, backgroundColor: '#6BFF53',}}>
+          <TouchableOpacity style={{...styles.cardContainerHome, backgroundColor: '#BAE1B3',}}>
             <Text style={styles.cardTotalHome}>{formatCurrency(totalGains)}</Text>
             <Text style={styles.cardTypeHome}>Ganhos</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{...styles.cardContainerHome, backgroundColor: '#FF4E4E',}}>
+          <TouchableOpacity style={{...styles.cardContainerHome, backgroundColor: '#E7AFAF',}}>
             <Text style={styles.cardTotalHome}>{formatCurrency(totalExpenses)}</Text>
             <Text style={styles.cardTypeHome}>Gastos</Text>
           </TouchableOpacity>
@@ -235,7 +235,7 @@ const HomeScreen = ({ route }) => {
                     progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)}
                     width={305}
                     height={8}
-                    color="#5019D4"
+                    color="#2E4053"
                     unfilledColor="#C7C7C7"
                     style={styles.goalBarProgressHome}
                   />
@@ -271,7 +271,7 @@ const HomeScreen = ({ route }) => {
                       progress={selectedGoal.amountSaved / (selectedGoal.amountSaved + selectedGoal.amountRemaining)}
                       width={340}
                       height={25}
-                      color="#5019D4"
+                      color="#2E4053"
                       unfilledColor="#e0e0e0"
                       style={styles.modalProgressBar}
                     />
