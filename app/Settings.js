@@ -149,28 +149,24 @@ const SettingsScreen = ({ route }) => {
 
   return (
     <View style={{ ...styles.container, paddingTop: 40 }}>
-      <Text style={styles.title}>Configurações</Text>
-      <ScrollView>
+      <ScrollView style={styles.scrollview}>
+        <Text style={styles.title}>Configurações</Text>
         <View>
+
           <View style={styles.selectIcon}>
             <TouchableOpacity onPress={handlePreviousIcon} style={styles.arrowButtonIcon}>
               <Icon name="chevron-back-outline" style={styles.arrowIcon} />
             </TouchableOpacity>
 
-            <View style={styles.userImageContainer}>
               <Image style={styles.userImageSettings} source={imageSource} />
-            </View>
 
             <TouchableOpacity onPress={handleNextIcon} style={styles.arrowButtonIcon}>
               <Icon name="chevron-forward-outline" style={styles.arrowIcon} />
             </TouchableOpacity>
           </View>
 
-          <View style={styles.details}>
-            <Text style={styles.nameUserSettings}>{userData.nameUser || 'Usuário'}</Text>
-          </View>
+          <Text style={styles.nameUserSettings}>{userData.nameUser || 'Usuário'}</Text>
 
-          <View style={styles.descriptionContainer}>
             <TextInput
               style={styles.descriptionInput}
               placeholder="Adicione uma descrição..."
@@ -181,15 +177,14 @@ const SettingsScreen = ({ route }) => {
               onBlur={updateDescription}
             />
             <Text style={styles.characterCount}>{tempDescription.length}/200</Text>
-          </View>
-        </View>
 
+        </View>
         <View>
-          <TouchableOpacity style={styles.logOutbutton} onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.logOutbuttonText}>Sair</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
+      <TouchableOpacity style={styles.logOutbutton} onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.logOutbuttonText}>Sair da Conta</Text>
+          </TouchableOpacity>
       <Menu userData={userData} />
     </View>
   );

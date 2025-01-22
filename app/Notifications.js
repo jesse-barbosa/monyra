@@ -52,8 +52,8 @@ const NotificationsScreen = ({ route }) => {
   };
 
   return (
-    <SafeAreaView style={{ ...styles.container, paddingTop: 40 }}>
-      <ScrollView>
+    <View style={{ ...styles.container, paddingTop: 40 }}>
+      <ScrollView style={styles.scrollview}>
         <Text style={styles.title}>Recentes</Text>
         <View style={styles.transfers}>
           {transactions.length > 0 ? (
@@ -138,7 +138,7 @@ const NotificationsScreen = ({ route }) => {
         </Modal>
       </ScrollView>
       <Menu userData={userData} />
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -113,14 +113,14 @@ const LoginScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handlePress}>
+      </ScrollView>
+      <TouchableOpacity style={styles.button} onPress={handlePress}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
         <Text style={styles.goRegister}>
           Não tem uma conta?
           <Text style={styles.link} onPress={() => navigation.navigate('Register')}> Crie uma</Text>
         </Text>
-      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

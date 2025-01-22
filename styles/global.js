@@ -5,12 +5,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#D9EDFF',
-    justifyContent: 'center',
+  },
+  scrollview: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
   },
   title: {
     marginTop: 5,
     marginBottom: 10,
-    marginHorizontal: 20,
     color: '#2E4053',
     fontWeight: 'bold',
     fontSize: 26,
@@ -26,7 +28,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputs: {
-    marginTop: 'auto',
+    marginVertical: 'auto',
     width: '100%',
   },
   inputContainer: {
@@ -35,14 +37,14 @@ const styles = StyleSheet.create({
     borderColor: '#B0C4DE',
     borderRadius: 15,
     paddingHorizontal: 10,
-    backgroundColor: '#E6E6FA',
+    backgroundColor: '#ECF6FF',
     width: '100%',
     marginBottom: 10,
   },
   input: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#E6E6FA',
+    backgroundColor: '#ECF6FF',
     borderRadius: 15,
     fontSize: 16,
     marginHorizontal: 10,
@@ -51,21 +53,51 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 15,
   },
-  addCard: {
+  editButton: {
+    marginTop: 20,
+    width: '100%',
+    backgroundColor: '#E6E6FA',
+    borderRadius: 10,
+    paddingVertical: 15,
+    borderWidth: 2,
+    borderColor: '#2E4053',
+    alignItems: 'center',
+  },
+  editButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2E4053',
+  },
+  closeButton: {
+    marginTop: 10,
+    width: '100%',
+    backgroundColor: '#2E4053',
+    borderRadius: 10,
+    paddingVertical: 15,
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    fontSize: 16,
+    color: '#FFFFFF',
+  },
+  addGoal: {
     marginVertical: 15,
     padding: 14,
     borderRadius: 10,
-    backgroundColor: '#B0C4DE',
+    borderWidth: 2,
+    borderColor: '#2E4053',
+    borderStyle: 'dashed',
   },
-  addContent: {
+  addGoalContent: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  addIcon: {
+  addGoalIcon: {
     marginRight: 5,
+    color: '#2E4053',
   },
-  addText: {
+  addGoalText: {
     fontSize: 16,
     color: '#2E4053',
     fontWeight: '500',
@@ -101,9 +133,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
   },
   label: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#5D5D5D',
+    color: '#2E4053',
     opacity: 0.5,
   },
   value: {
@@ -134,56 +166,56 @@ const styles = StyleSheet.create({
   categoryIcon: {
     fontSize: 16,
   },
-  editButton: {
-    marginTop: 20,
-    width: '100%',
-    backgroundColor: '#E6E6FA',
-    borderRadius: 10,
-    paddingVertical: 15,
-    borderWidth: 2,
-    borderColor: '#2E4053',
+  
+  /* Login/Registro */
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  editButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2E4053',
-  },
-  closeButton: {
-    marginTop: 10,
-    width: '100%',
-    backgroundColor: '#2E4053',
-    borderRadius: 10,
-    paddingVertical: 15,
-    alignItems: 'center',
-  },
-  closeButtonText: {
-    fontSize: 16,
-    color: '#FFFFFF',
-  },
-  logOutbutton: {
-    borderRadius: 15,
-    backgroundColor: '#FF4E4E',
     padding: 20,
-    marginTop: 'auto',
-    marginHorizontal: 'auto',
-    width: '80%',
+  },
+  goRegister: {
+    textAlign: 'center',
+    marginBottom: 10,
+    color: '#808080',
+  },
+  link: {
+    color: '#2E4053',
+    fontWeight: 'bold',
+  },
+  options: {
+    marginTop: 100,
+    width: '100%',
     marginBottom: 20,
   },
-  logOutbuttonText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: 'bold',
+  optionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    width: '100%',
+    marginBottom: 20,
   },
+  option: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+  },
+  optionText: {
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: '500',
+    opacity: 0.4,
+  },
+
   /* Menu */
   menu: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#2E4053',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    marginHorizontal: 20,
+    padding: 15,
+    marginHorizontal: 15,
     marginBottom: 10,
     borderRadius: 25,
   },
@@ -201,10 +233,10 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: '#8BB2D4',
     padding: 20,
-    marginTop: 'auto',
     marginHorizontal: 'auto',
-    width: '80%',
-    marginBottom: 20,
+    width: '90%',
+    marginTop: 'auto',
+    marginBottom: 15,
     borderWidth: 1,
     borderBottomWidth: 4,
     borderRightWidth: 4,
@@ -219,13 +251,12 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    paddingHorizontal: 25,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
 
   /* Tela inicial */
-  titleAppHome: {
+  titleApp: {
     color: '#2E4053',
     fontWeight: 'bold',
     fontSize: 32,
@@ -233,69 +264,57 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontFamily: 'serif',
   },
-  usernameHome: {
+  username: {
     color: '#2E4053',
     fontSize: 18,
     fontWeight: '400',
     opacity: 0.5,
   },
-  userIconHome: {
+  userIcon: {
     width: 50,
     height: 50,
   },
-  balanceContainerHome: {
-    marginVertical: 20,
-    paddingHorizontal: 20,
-  },
-  balanceHome: {
+  balance: {
     backgroundColor: '#2E4053',
     borderRadius: 20,
-    paddingHorizontal: 40,
-    paddingVertical: 45,
+    marginTop: 20,
+    paddingVertical: 40,
+    paddingHorizontal: 25,
   },
-  balanceTitleHome: {
-    color: '#FFFFFF',
+  balanceTitle: {
+    color: '#fff',
     fontSize: 20,
-    fontWeight: '600',
     opacity: 0.7,
     fontFamily: 'monospace',
   },
-  balanceValueHome: {
-    color: '#FFFFFF',
-    fontSize: 34,
+  balanceValue: {
+    color: '#fff',
+    fontSize: 42,
     fontWeight: 'bold',
   },
-  operationsHome: {
+  operations: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginVertical: 10,
+    marginTop: 20,
   },
-  operationHome: {
+  operation: {
     width: 100,
     height: 95,
     backgroundColor: '#2E4053',
-    marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    borderTopLeftRadius: 16,
-    borderBottomRightRadius: 16,
+    borderRadius: 16,
   },
-  operationIconHome: {
+  operationIcon: {
     marginBottom: 5,
     color: '#FFFFFF',
   },
-  descOperationHome: {
-    textAlign: 'center',
-    fontSize: 14,
-    fontWeight: '400',
+  descOperation: {
     color: '#FFFFFF',
     opacity: 0.4,
   },
 
   cardsHome: {
-    paddingHorizontal: 20,
-    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -304,6 +323,7 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 15,
     padding: 15,
+    marginVertical: 20,
     alignItems: 'flex-start',
   },
   cardTotalHome: {
@@ -320,23 +340,13 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
 
-  goalsSectionTitleHome: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-  },
-  goalsHome: {
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-  },
-  goalHome: {
+  goal: {
     backgroundColor: '#B0C4DE',
     padding: 20,
     marginBottom: 10,
     borderRadius: 15,
   },
-  goalTitleHome: {
+  goalTitle: {
     marginTop: 8,
     marginBottom: 16,
     fontSize: 18,
@@ -344,7 +354,7 @@ const styles = StyleSheet.create({
     color: '#2E4053',
     opacity: 0.8,
   },
-  goalRemainingValueHome: {
+  goalRemainingValue: {
     fontSize: 16,
     marginLeft: 'auto',
     fontWeight: '500',
@@ -358,7 +368,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
-  /* Tela Analytics */
+  /* Tela de Análises */
   optionContainerAnalytics: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -369,7 +379,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 50,
     borderRadius: 20,
-    backgroundColor: '#E6E6FA',
+    backgroundColor: '#B0C4DE',
   },
   selectedOptionAnalytics: {
     backgroundColor: '#2E4053',
@@ -383,13 +393,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  secondaryTitle: {
-    color: '#2E4053',
-    fontWeight: 'bold',
-    fontSize: 24,
-    lineHeight: 32,
-    paddingVertical: 10,
   },
   dropdown: {
     width: 150,
@@ -413,9 +416,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 32,
   },
-  transfers: {
-    padding: 20,
-  },
   transferCard: {
     backgroundColor: '#B0C4DE',
     borderRadius: 17,
@@ -432,17 +432,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   transferTitle: {
-    fontSize: 16,
-    marginTop: 7,
-    marginBottom: 7,
+    marginVertical: 7,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2E4053',
+    opacity: 0.8,
   },
   transferText: {
-    opacity: 0.6,
+    opacity: 0.7,
+    color: '#2E4053',
+
   },
   transferDate: {
-    opacity: 0.5,
+    opacity: 0.6,
+    color: '#2E4053',
   },
-
   pieChartContainer: {
     alignItems: 'center',
     marginVertical: 5,
@@ -462,15 +466,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     zIndex: 10,
   },
-  monthSelectorContainer: {
-    paddingHorizontal: 20,
-    marginTop: 20,
-    alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-    borderRadius: 10,
-    paddingVertical: 10,
-  },
   monthScrollView: {
+    marginVertical: 20,
     alignItems: 'center',
   },
   monthButton: {
@@ -495,56 +492,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 18,
   },
-  selectIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  userImageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  userImageSettings: {
-    width: 200,
-    height: 200,
-    marginHorizontal: 'auto',
-  },
-  nameUserSettings: {
-    textAlign: 'center',
-    fontSize: 28,
-    marginTop: 26,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-    color: '#666666',
-  },
-  arrowButtonIcon: {
-    padding: 10,
-  },
-  arrowIcon: {
-    fontSize: 40,
-    color: '#2E4053',
-  },
 
-  headerTransfer: {
-    flexDirection: 'row',
-    paddingHorizontal: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
+  /* Tela para Transferir */
   valueTransfer: {
     textAlign: 'center',
     color: '#2E4053',
     fontWeight: 'bold',
     fontSize: 32,
     lineHeight: 32,
-    marginBottom: 60,
-  },
-  main: {
-    paddingHorizontal: 20,
+    marginVertical: 30,
   },
   keyboard: {
     width: 340,
+    marginTop: 30,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
@@ -560,56 +520,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#333',
   },
-  dataText: {
-    textAlign: 'center',
-    marginTop: 20,
-    color: '#666',
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  goRegister: {
-    textAlign: 'center',
-    marginBottom: 20,
-    color: '#808080',
-  },
-  link: {
-    color: '#2E4053',
-    fontWeight: 'bold',
-  },
-  options: {
-    marginTop: 100,
-    width: '100%',
-    marginBottom: 20,
-  },
-  optionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: '#B0C4DE',
-    borderRadius: 15,
-    paddingHorizontal: 10,
-    width: '100%',
-    marginBottom: 20,
-  },
-  option: {
-    flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    borderRadius: 15,
-  },
-  optionText: {
-    fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    opacity: 0.4,
-  },
+
   headerCreateGoal: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginVertical: 20,
   },
   imageFormGoal: {
     height: 260,
@@ -624,9 +539,10 @@ const styles = StyleSheet.create({
   },
   cardViewGoal: {
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
-    marginVertical: 'auto',
+    backgroundColor: '#B0C4DE',
+    marginVertical: 60,
     paddingVertical: 10,
+    paddingHorizontal: 30,
     justifyContent: 'space-evenly',
   },
   goalBarProgress: {
@@ -664,7 +580,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: 'flex-start',
     paddingVertical: 15,
-    borderColor: '#ccc',
+    borderColor: '#2E4053',
     borderBottomWidth: 2,
     borderRadius: 10,
     marginBottom: 15,
@@ -677,21 +593,39 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
     paddingVertical: 5,
-    backgroundColor: '#e6e6e6',
+    backgroundColor: '#A9B8C9',
     borderRadius: 8,
     paddingHorizontal: 10,
     height: '100%',
     minWidth: '95%',
     overflow: 'hidden',
   },
-  scrollView: {
-    maxHeight: 120,
-    flexGrow: 1,
-  },
+
   /* Página de Configurações */
-  descriptionContainer: {
-    marginVertical: 25,
-    paddingHorizontal: 20,
+  selectIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  userImageSettings: {
+    width: 200,
+    height: 200,
+    marginHorizontal: 'auto',
+  },
+  nameUserSettings: {
+    textAlign: 'center',
+    fontSize: 28,
+    marginVertical: 20,
+    fontWeight: '700',
+    letterSpacing: 1.2,
+    color: '#2E4053',
+  },
+  arrowButtonIcon: {
+    padding: 10,
+  },
+  arrowIcon: {
+    fontSize: 40,
+    color: '#2E4053',
   },
   descriptionInput: {
     height: 130,
@@ -700,12 +634,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     textAlignVertical: 'top',
     backgroundColor: '#B0C4DE',
+    color: '#2E4053',
+    fontWeight: '600',
   },
   characterCount: {
     textAlign: 'right',
     marginTop: 5,
     color: '#999',
     paddingRight: 10,
+  },
+  logOutbutton: {
+    borderRadius: 15,
+    backgroundColor: '#FF4E4E',
+    padding: 20,
+    marginTop: 'auto',
+    marginHorizontal: 'auto',
+    width: '90%',
+    marginBottom: 20,
+  },
+  logOutbuttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 
   /* DataText */

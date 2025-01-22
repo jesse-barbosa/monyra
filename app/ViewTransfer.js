@@ -146,7 +146,7 @@ const ViewTransferScreen = ({ route }) => {
 
   return (
     <View style={{ ...styles.container, paddingTop: 40 }}>
-      <View style={styles.header}>
+      <View style={{...styles.header, paddingHorizontal: 20}}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>

@@ -74,7 +74,7 @@ const RegisterStep2Screen = ({ navigation, route }) => {
           {options.map((option) => (
             <View style={styles.optionContainer} key={option.id}>
               <TouchableOpacity
-                style={[styles.option, { backgroundColor: selectedOption === option.id ? '#292929' : '#F2F2F2' }]}
+                style={[styles.option, { backgroundColor: selectedOption === option.id ? '#8BB2D4' : '#EBEBEB' }]}
                 onPress={() => handleOptionPress(option.id)}>
                 <Text style={[styles.optionText, { color: selectedOption === option.id ? '#fff' : '#000' }]}>{option.label}</Text>
               </TouchableOpacity>

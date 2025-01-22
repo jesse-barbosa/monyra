@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Dimensions, FlatList, Modal, Button } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { View, Text, ScrollView, TouchableOpacity, Dimensions, FlatList, Modal, Image } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { API_URL } from '../apiConfig';
 import Menu from './components/Menu';
@@ -31,7 +30,7 @@ const AnalyticsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { userData } = route.params || {};
   const [transactions, setTransactions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState('expenses');
+  const [selectedOption, setSelectedOption] = useState('gains');
   const [chartType, setChartType] = useState('pie');
   const [hoveredCategory, setHoveredCategory] = useState('');
   const scrollViewRef = useRef(null);
@@ -191,23 +190,23 @@ const AnalyticsScreen = ({ route }) => {
 
   return (
     <View style={{...styles.container, paddingTop: 40}}>
-      <ScrollView>
+      <ScrollView style={styles.scrollview}>
         <View style={styles.optionContainerAnalytics}>
-          <TouchableOpacity
-            style={[styles.optionButtonAnalytics, selectedOption === 'expenses' && styles.selectedOptionAnalytics]}
-            onPress={() => setSelectedOption('expenses')}
-          >
-            <Text style={styles.optionTextAnalytics}>Gastos</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             style={[styles.optionButtonAnalytics, selectedOption === 'gains' && styles.selectedOptionAnalytics]}
             onPress={() => setSelectedOption('gains')}
           >
             <Text style={styles.optionTextAnalytics}>Ganhos</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.optionButtonAnalytics, selectedOption === 'expenses' && styles.selectedOptionAnalytics]}
+            onPress={() => setSelectedOption('expenses')}
+          >
+            <Text style={styles.optionTextAnalytics}>Gastos</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.header}>
-          <Text style={styles.secondaryTitle}>Análise de {selectedOption === 'expenses' ? 'Gastos' : 'Ganhos'}</Text>
+          <Text style={styles.title}>Análise de {selectedOption === 'expenses' ? 'Gastos' : 'Ganhos'}</Text>
           <Dropdown
             style={styles.dropdown}
             data={[
@@ -269,7 +268,6 @@ const AnalyticsScreen = ({ route }) => {
             <Text style={styles.dataText}>Nenhum dado encontrado para este mês.</Text>
           )
         )}
-        <View style={styles.monthSelectorContainer}>
         <FlatList
         ref={scrollViewRef}
         horizontal
@@ -312,9 +310,8 @@ const AnalyticsScreen = ({ route }) => {
           index,
         })}
       />
-        </View>
         <View style={styles.transfers}>
-          <Text style={styles.secondaryTitle}>Suas Transações</Text>
+          <Text style={styles.title}>Suas Transações</Text>
           {(filteredTransactions).length > 0 ? (
             <View>
               {filteredTransactions.map((transaction, index) => (
@@ -330,9 +327,9 @@ const AnalyticsScreen = ({ route }) => {
                       </View>
                       <View style={styles.transferIcon}>
                       {transaction.typeTransaction === 'expense' ? (
-                        <Icon name="arrow-circle-o-down" size={24} color="black" />
+                        <Image source={require('../assets/img/icons/arrowDown.png')} style={styles.transferIcon} />
                       ) : (
-                        <Icon name="arrow-circle-o-up" size={24} color="black" />
+                        <Image source={require('../assets/img/icons/arrowUp.png')} style={styles.transferIcon} />
                       )}
                       </View>
                     </View>

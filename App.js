@@ -11,7 +11,6 @@ import Settings from './app/Settings';
 import Transfer from './app/Transfer';
 import ViewTransfer from './app/ViewTransfer';
 import CreateGoal from './app/CreateGoal';
-import CreateGoalStep2 from './app/CreateGoalStep2';
 import ViewGoal from './app/ViewGoal';
 
 const Stack = createStackNavigator();
@@ -30,7 +29,6 @@ export default function App() {
         <Stack.Screen name="Transfer" component={Transfer} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="ViewTransfer" component={ViewTransfer} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="CreateGoal" component={CreateGoal} options={{ headerShown: false, animationEnabled: false, }} />
-        <Stack.Screen name="CreateGoalStep2" component={CreateGoalStep2} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="ViewGoal" component={ViewGoal} options={{ headerShown: false, animationEnabled: false, }} />
       </Stack.Navigator>
     </NavigationContainer>

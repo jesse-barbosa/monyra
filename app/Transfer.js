@@ -79,68 +79,67 @@ const TransferScreen = ({ route }) => {
 
   return (
     <View style={{...styles.container, paddingTop: 40,}}>
-      <View style={styles.main}>
-        <View style={styles.headerTransfer}>
-          <View style={styles.title}>
-            <Text style={styles.valueTransfer}>R$ {inputValue}</Text>
-          </View>
-        </View>
-        <View style={styles.inputs}>
-          <View style={styles.inputContainer}>
-              {operation === 'expense' ? (
-              <Picker
-              selectedValue={category}
-              style={styles.picker}
-              onValueChange={(itemValue) => setCategoryValue(itemValue)}
-              >
-              <Picker.Item label="Selecione uma categoria" value="" />
-                <Picker.Item label="Moradia" value="Moradia" />
-                <Picker.Item label="Alimentação" value="Alimentação" />
-                <Picker.Item label="Transporte" value="Transporte" />
-                <Picker.Item label="Saúde" value="Saúde" />
-                <Picker.Item label="Educação" value="Educação" />
-                <Picker.Item label="Lazer" value="Lazer" />
-                <Picker.Item label="Vestuário" value="Vestuário" />
-                <Picker.Item label="Economia ou Investimentos" value="Economia" />
+      <ScrollView style={styles.scrollview}>
+            <View style={styles.title}>
+              <Text style={styles.valueTransfer}>R$ {inputValue}</Text>
+            </View>
+          <View style={styles.inputs}>
+            <View style={styles.inputContainer}>
+                {operation === 'expense' ? (
+                <Picker
+                selectedValue={category}
+                style={styles.picker}
+                onValueChange={(itemValue) => setCategoryValue(itemValue)}
+                >
+                <Picker.Item label="Selecione uma categoria" value="" />
+                  <Picker.Item label="Moradia" value="Moradia" />
+                  <Picker.Item label="Alimentação" value="Alimentação" />
+                  <Picker.Item label="Transporte" value="Transporte" />
+                  <Picker.Item label="Saúde" value="Saúde" />
+                  <Picker.Item label="Educação" value="Educação" />
+                  <Picker.Item label="Lazer" value="Lazer" />
+                  <Picker.Item label="Vestuário" value="Vestuário" />
+                  <Picker.Item label="Economia ou Investimentos" value="Economia" />
+                </Picker>
+              ) : (
+                <Picker
+                selectedValue={category}
+                style={styles.picker}
+                onValueChange={(itemValue) => setCategoryValue(itemValue)}
+                >
+                <Picker.Item label="Selecione uma categoria" value="" />
+                  <Picker.Item label="Salário ou Remunerações" value="Remunerações" />
+                  <Picker.Item label="Investimentos (rendimentos)" value="Rendimentos" />
+                  <Picker.Item label="Empreendimentos" value="Empreendimentos" />
+                  <Picker.Item label="Benefícios" value="Benefícios" />
               </Picker>
-            ) : (
-              <Picker
-              selectedValue={category}
-              style={styles.picker}
-              onValueChange={(itemValue) => setCategoryValue(itemValue)}
-              >
-              <Picker.Item label="Selecione uma categoria" value="" />
-                <Picker.Item label="Salário ou Remunerações" value="Remunerações" />
-                <Picker.Item label="Investimentos (rendimentos)" value="Rendimentos" />
-                <Picker.Item label="Empreendimentos" value="Empreendimentos" />
-                <Picker.Item label="Benefícios" value="Benefícios" />
-            </Picker>
-            )}
+              )}
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                maxLength={30}
+                style={styles.input}
+                placeholder="Descrição (opcional)"
+                onChangeText={setDescription}
+                value={description}
+              />
+            </View>
           </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              maxLength={30}
-              style={styles.input}
-              placeholder="Descrição (opcional)"
-              onChangeText={setDescription}
-              value={description}
-            />
-          </View>
-        </View>
-          <View style={styles.keyboard}>
-            {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0'].map((item, index) => (
-              <TouchableOpacity key={index} style={styles.key} onPress={() => handleKeyPress(item)}>
-                <Text style={styles.keyText}>{item}</Text>
+            <View style={styles.keyboard}>
+              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0'].map((item, index) => (
+                <TouchableOpacity key={index} style={styles.key} onPress={() => handleKeyPress(item)}>
+                  <Text style={styles.keyText}>{item}</Text>
+                </TouchableOpacity>
+              ))}
+              <TouchableOpacity style={styles.key} onPress={() => handleKeyPress('⌫')}>
+                <Image source={require('../assets/img/icons/close-circle.png')} style={styles.keyText}/>
               </TouchableOpacity>
-            ))}
-            <TouchableOpacity style={styles.key} onPress={() => handleKeyPress('⌫')}>
-              <Image source={require('../assets/img/icons/close-circle.png')} style={styles.keyText}/>
-            </TouchableOpacity>
-          </View>
-      </View>
+            </View>
+
+      </ScrollView>
       <TouchableOpacity style={styles.button} onPress={handlePress}>
-        <Text style={styles.buttonText}>Confirmar</Text>
-      </TouchableOpacity>
+          <Text style={styles.buttonText}>Confirmar</Text>
+        </TouchableOpacity>
     </View>
   );
 };

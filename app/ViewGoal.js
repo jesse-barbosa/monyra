@@ -105,19 +105,23 @@ const ViewGoalScreen = ({ route }) => {
 
   return (
     <View style={{ ...styles.container, paddingTop: 40 }}>
+      <ScrollView style={styles.scrollview}>
       <View style={styles.header}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
+          <Ionicons name="arrow-back" size={24} color="#000" />
+        </TouchableOpacity>
         <TextInput
-          style={styles.title} // Estilo pode ser alterado conforme necessário
+          style={styles.title}
           value={nameGoal}
           onChangeText={handleChangeNameGoal}
-          placeholder="Nome da Meta" // Placeholder para o campo de nome
+          placeholder="Nome da Meta"
         />
         <TouchableOpacity onPress={deleteGoal} style={styles.iconButton}>
           <Ionicons name="trash" size={24} color="#FF3838" />
         </TouchableOpacity>
       </View>
 
-      <View style={{ ...styles.cardViewGoal, paddingHorizontal: 30 }}>
+      <View style={styles.cardViewGoal}>
         <View style={styles.field}>
           <Text style={styles.label}>Total acumulado:</Text>
           <TextInput
@@ -152,7 +156,7 @@ const ViewGoalScreen = ({ route }) => {
           </Picker>
         </View>
 
-        <View style={styles.fieldDescription}>
+        <View style={styles.field}>
           <Text style={styles.label}>Descrição:</Text>
           <ScrollView horizontal={true} style={styles.scrollView}>
             <TextInput
@@ -179,11 +183,11 @@ const ViewGoalScreen = ({ route }) => {
           progress={amountSaved / (amountSaved + goal.amountRemaining)}
           width={345} 
           height={20} 
-          color="#642de8" 
+          color="#2E4053" 
           style={{ ...styles.goalBarProgress, marginTop: 20 }} 
         />
       </View>
-
+      </ScrollView>
       <TouchableOpacity
         style={[styles.button, { opacity: isModified ? 1 : 0.5 }]}
         onPress={saveGoal}

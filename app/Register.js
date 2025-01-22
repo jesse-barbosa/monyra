@@ -91,14 +91,14 @@ const RegisterScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+      </ScrollView>
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
           <Text style={styles.buttonText}>Criar</Text>
         </TouchableOpacity>
-        <Text style={styles.goLogin}>
+        <Text style={styles.goRegister}>
           Já tem uma conta?
             <Text style={styles.link} onPress={() => navigation.navigate('Login')}> Entrar</Text>
         </Text>
-      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

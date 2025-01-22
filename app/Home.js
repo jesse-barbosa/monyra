@@ -15,6 +15,7 @@ const HomeScreen = ({ route }) => {
   const [userGoals, setUserGoals] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [balance, setBalance] = useState(userData?.balanceUser || 0);
+  const [balanceVisible, setBalanceVisible] = useState(true);
   const [selectedGoal, setSelectedGoal] = useState(null);
   const [isGoalModalVisible, setGoalModalVisible] = useState(false);
   const [userIcon, setUserIcon] = useState(userData?.iconUser || 'default');
@@ -175,40 +176,46 @@ const HomeScreen = ({ route }) => {
       <ScrollView style={styles.scrollview}>
         <View style={styles.header}>
           <View style={styles.titles}>
-            <Text style={styles.titleAppHome}>Monyra</Text>
-            {userData && <Text style={styles.usernameHome}>{userData.nameUser}</Text>}
+            <Text style={styles.titleApp}>Monyra</Text>
+            {userData && <Text style={styles.username}>{userData.nameUser}</Text>}
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('Settings', { userData })}>
-            <Image style={styles.userIconHome} source={imageSource} />
+            <Image style={styles.userIcon} source={imageSource} />
           </TouchableOpacity>
         </View>
-        <View style={styles.balanceContainerHome}>
-          <View style={styles.balanceHome}>
-            <Text style={styles.balanceTitleHome}>Saldo Total</Text>
-            <Text style={styles.balanceValueHome}>{formatCurrency(balance)}</Text>
+        <View style={styles.balance}>
+            <Text style={styles.balanceTitle}>Saldo Total</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Text style={styles.balanceValue}>{balanceVisible ? formatCurrency(balance) : '****'}</Text>
+              <TouchableOpacity 
+                onPress={() => setBalanceVisible(!balanceVisible)}
+                style={{ marginLeft: 'auto', paddingHorizontal: 10 }}
+              >
+                <Icon name={balanceVisible ? "eye-off-outline" : "eye-outline"} size={24} color="#fff" />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View style={styles.operationsHome}>
+        <View style={styles.operations}>
           <TouchableOpacity
-            style={styles.operationHome}
+            style={styles.operation}
             onPress={() => navigation.navigate('Transfer', { userData, operation: 'gain' })}
           >
-            <Icon name="arrow-up-outline" size={30} color="#000" style={styles.operationIconHome} />
-            <Text style={styles.descOperationHome}>Ganho</Text>
+            <Icon name="arrow-up-outline" size={30} color="#000" style={styles.operationIcon} />
+            <Text style={styles.descOperation}>Ganho</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.operationHome}
+            style={styles.operation}
             onPress={() => navigation.navigate('Transfer', { userData, operationHome: 'expense' })}
           >
-            <Icon name="arrow-down-outline" size={30} color="#000" style={styles.operationIconHome} />
-            <Text style={styles.descOperationHome}>Gasto</Text>
+            <Icon name="arrow-down-outline" size={30} color="#000" style={styles.operationIcon} />
+            <Text style={styles.descOperation}>Gasto</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.operationHome}
+            style={styles.operation}
             onPress={() => navigation.navigate('CreateGoal', { username: userData.nameUser, email: userData.email })}
           >
-            <Icon name="add-circle-outline" size={30} color="#000" style={styles.operationIconHome} />
-            <Text style={styles.descOperationHome}>Adicionar</Text>
+            <Icon name="add-circle-outline" size={30} color="#000" style={styles.operationIcon} />
+            <Text style={styles.descOperation}>Adicionar</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.cardsHome}>
@@ -221,19 +228,16 @@ const HomeScreen = ({ route }) => {
             <Text style={styles.cardTypeHome}>Gastos</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.goalsSectionTitleHome}>
-          <Text style={styles.secondaryTitle}>Metas</Text>
-        </View>
-        <View style={styles.goalsHome}>
+          <Text style={styles.title}>Metas</Text>
           {userGoals.length > 0 ? (
             userGoals.map((goal) => (
-              <View key={goal.codGoal} style={styles.goalHome}>
+              <View key={goal.codGoal} style={styles.goal}>
                 <TouchableOpacity onPress={() => openGoalModal(goal)}>
-                  <Text style={styles.goalTitleHome}>{goal.nameGoal}</Text>
-                  <Text style={styles.goalRemainingValueHome}>R${goal.amountRemaining.toFixed(2)}</Text>
+                  <Text style={styles.goalTitle}>{goal.nameGoal}</Text>
+                  <Text style={styles.goalRemainingValue}>R${goal.amountRemaining.toFixed(2)}</Text>
                   <Progress.Bar
                     progress={goal.amountSaved / (goal.amountSaved + goal.amountRemaining)}
-                    width={305}
+                    width={325}
                     height={8}
                     color="#2E4053"
                     unfilledColor="#C7C7C7"
@@ -286,16 +290,15 @@ const HomeScreen = ({ route }) => {
               </View>
             </View>
           </Modal>
-          <View style={styles.addCard}>
+          <View style={styles.addGoal}>
             <TouchableOpacity
               onPress={() => navigation.navigate('CreateGoal', { username: userData.nameUser, email: userData.email })}
-              style={styles.addContent}
+              style={styles.addGoalContent}
             >
-              <Icon name="add-circle" size={24} color="#000" style={styles.addIcon} />
-              <Text style={styles.addText}>Adicionar Meta</Text>
+              <Icon name="add-circle" size={24} color="#000" style={styles.addGoalIcon} />
+              <Text style={styles.addGoalText}>Adicionar Meta</Text>
             </TouchableOpacity>
           </View>
-        </View>
       </ScrollView>
       <Menu userData={userData} />
     </View>
