@@ -31,9 +31,13 @@ Usando npm:
 - 4.1 Crie um arquivo chamado "apiConfig.js" na pasta "monyra"
 - 4.2 Adicione a seguinte linha ao arquivo "apiConfig.js":
 
-    export const API_URL = 'http://(SEU_IP)/monyra/api';
+    export const API_URL = 'http://(SEU_IP)/Monyra/classes/ManipularDados.php';
 
     Obs.: Não esqueça de substituir (SEU_IP) pelo seu IP real
+    Exemplo: 
+        
+        export const API_URL = 'http://192.168.1.100/Monyra/classes/ManipularDados.php';
+    
     Se você não sabe seu IP, você pode descobrir com o comando:
 
     ipconfig
