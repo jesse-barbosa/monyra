@@ -27,11 +27,11 @@ export default function App() {
         <Stack.Screen name="Analytics" component={Analytics} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="Notifications" component={Notifications} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false, animationEnabled: false,}} />
-        <Stack.Screen name="Transfer" component={Transfer} options={{ headerTitle: "Transferir", animationEnabled: false, }} />
+        <Stack.Screen name="Transfer" component={Transfer} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="ViewTransfer" component={ViewTransfer} options={{ headerShown: false, animationEnabled: false, }} />
-        <Stack.Screen name="CreateGoal" component={CreateGoal} options={{ headerTitle: "Criar meta", animationEnabled: false, }} />
-        <Stack.Screen name="CreateGoalStep2" component={CreateGoalStep2} options={{ headerTitle: "Criar meta", animationEnabled: false, }} />
-        <Stack.Screen name="ViewGoal" component={ViewGoal} options={{ headerTitle: "Visualizar", headerShown: true, animationEnabled: false, }} />
+        <Stack.Screen name="CreateGoal" component={CreateGoal} options={{ headerShown: false, animationEnabled: false, }} />
+        <Stack.Screen name="CreateGoalStep2" component={CreateGoalStep2} options={{ headerShown: false, animationEnabled: false, }} />
+        <Stack.Screen name="ViewGoal" component={ViewGoal} options={{ headerShown: false, animationEnabled: false, }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
