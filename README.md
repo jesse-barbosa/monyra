@@ -27,22 +27,33 @@ Usando npm:
     cd monyra
     npm install
 
-## 4. Inicie o Expo  
+## 4. Arquivo de configuração da API
+- 4.1 Crie um arquivo chamado "apiConfig.js" na pasta "monyra"
+- 4.2 Adicione a seguinte linha ao arquivo "apiConfig.js":
+
+    export const API_URL = 'http://(SEU_IP)/monyra/api';
+
+    Obs.: Não esqueça de substituir (SEU_IP) pelo seu IP real
+    Se você não sabe seu IP, você pode descobrir com o comando:
+
+    ipconfig
+
+## 5. Inicie o Expo  
 Você pode iniciar o projeto diretamente com o comando:  
 
     npx expo start
 
-## 5. Baixe o aplicativo Expo Go no seu celular  
+## 6. Baixe o aplicativo Expo Go no seu celular  
 Para visualizar o aplicativo no dispositivo, você precisará do aplicativo Expo Go.  
 
 - [Baixe o Expo Go para Android](https://play.google.com/store/apps/details?id=host.exp.exponent)  
 - [Baixe o Expo Go para iOS](https://apps.apple.com/app/expo-go/id982107779)  
 
-## 6. Execute o aplicativo no seu dispositivo  
+## 7. Execute o aplicativo no seu dispositivo  
 Após iniciar o Expo, um QR Code será gerado no terminal ou na janela do navegador que abrirá automaticamente.  
 
-6.1 Abra o aplicativo Expo Go no seu dispositivo.
-6.2 Escaneie o QR Code exibido para carregar o aplicativo.
+7.1 Abra o aplicativo Expo Go no seu dispositivo.
+7.2 Escaneie o QR Code exibido para carregar o aplicativo.
 
 Agora o aplicativo React Native deve rodar no seu dispositivo
 
